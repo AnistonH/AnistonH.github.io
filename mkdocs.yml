@@ -13,11 +13,9 @@ nav:
     - ME/profile.md
     - ME/contact.md
     - ME/account.md
-    - ME/qq-groups.md
     - ME/description.md
     - ME/ability.md
     - ME/experience.md
-    - ME/daily-necessities.md
     - ME/support.md
   - 开发:
     - DEC/index.md
@@ -107,7 +105,7 @@ repo_name: AnistonH.github.io
 # [bottom-left corner]
 # [版权说明]
 # https://squidfunk.github.io/mkdocs-material/setup/setting-up-the-footer/#copyright-notice
-copyright: 侯霖钰 CC-BY-4.0
+copyright: 侯霖钰 AnistonH
 # [bottom-right corner]
 extra:
   # [添加社交网络图标和链接]
@@ -118,18 +116,9 @@ extra:
     - name: GitHub | AnistonH
       icon: fontawesome/brands/github
       link: https://github.com/AnistonH
-    - name: Bilibili | 侯霖钰619
+    - name: Bilibili | 邓紫棋山西分棋
       icon: fontawesome/brands/bilibili
-      link: https://space.bilibili.com/24502827
-    - name: 小杰答疑群 QQ 796233390
-      icon: fontawesome/brands/qq
-      link: https://AnistonH.github.io/ME/qq-groups/
-    - name: 小杰水群 QQ 824114857
-      icon: fontawesome/brands/qq
-      link: https://AnistonH.github.io/ME/qq-groups/
-    - name: 小红书 | 侯霖钰
-      icon: fontawesome/solid/images
-      link: https://www.xiaohongshu.com/user/profile/61be0cc10000000021024369
+      link: https://space.bilibili.com/527117890
     - name: 打赏支持
       icon: fontawesome/solid/mug-saucer
       link: https://AnistonH.github.io/ME/support/
