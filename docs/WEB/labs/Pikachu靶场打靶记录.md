@@ -1,0 +1,1077 @@
+﻿
+@[TOC]
+# 一、Pikachu靶场介绍
+Pikachu是一个带有漏洞的Web应用系统，在这里包含了常见的web安全漏洞。 如果你是一个Web渗透测试学习人员且正发愁没有合适的靶场进行练习，那么Pikachu可能正合你意。
+
+
+**漏洞类型列表如下**
+
+
+ - Burt Force(暴力破解漏洞) 
+ - XSS(跨站脚本漏洞) 
+ - CSRF(跨站请求伪造) 
+ - SQL-Inject(SQL注入漏洞)
+ - RCE(远程命令/代码执行) 
+ - Files Inclusion(文件包含漏洞) 
+ - Unsafe file downloads(不安全的文件下载) 
+ - Unsafe file uploads(不安全的文件上传) 
+ - Over Permisson(越权漏洞) 
+ - ../../../(目录遍历) 
+ - I can see your ABC(敏感信息泄露) 
+ - PHP反序列化漏洞 
+ - XXE(XML External Entity attack) 
+ - 不安全的URL重定向 
+ - SSRF(Server-Side Request Forgery) 
+ - More...(找找看?..有彩蛋!) 
+ - 管理工具里面提供了一个简易的xss管理后台,供你测试钓鱼和捞 cookie~
+
+# 二、打靶记录
+（此文所用环境为Java17 + phpstudy + Burp Suite V2023.10.2 + pikachu）
+## 1 暴力破解
+Burte Force（暴力破解）概述：
+“暴力破解”是一攻击具手段，在web攻击中，一般会使用这种手段对应用系统的认证信息进行获取。 其过程就是使用大量的认证信息在认证接口进行尝试登录，直到得到正确的结果。 为了提高效率，暴力破解一般会使用带有字典的工具来进行自动化操作。
+理论上来说，大多数系统都是可以被暴力破解的，只要攻击者有足够强大的计算能力和时间，所以断定一个系统是否存在暴力破解漏洞，其条件也不是绝对的。 我们说一个web应用系统存在暴力破解漏洞，一般是指该web应用系统没有采用或者采用了比较弱的认证安全策略，导致其被暴力破解的“可能性”变的比较高。 这里的认证安全策略, 包括：
+1.是否要求用户设置复杂的密码；
+2.是否每次认证都使用安全的验证码（想想你买火车票时输的验证码～）或者手机otp；
+3.是否对尝试登录的行为进行判断和限制（如：连续5次错误登录，进行账号锁定或IP地址锁定等）；
+4.是否采用了双因素认证；
+...等等。
+千万不要小看暴力破解漏洞,往往这种简单粗暴的攻击方式带来的效果是超出预期的!
+### 1x01 基于表单的暴力破解
+1. 在“Username”和“Password”中输入任意字符，点击Login
+![请添加图片描述](https://img-blog.csdnimg.cn/337a38c438b14b7a8b4d8f31bf85b9ed.jpeg)
+2. 在Burp Suite中抓包，如图，将所抓数据包发送至Intruder模块![请添加图片描述](https://img-blog.csdnimg.cn/4c0b98c9ba3d493daccb577234ba043b.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/ee3a831c73264776a60d4dea50eca929.jpeg)
+3. 攻击方式选择Cluster Bomb	![请添加图片描述](https://img-blog.csdnimg.cn/bf32fa62f6f347fdb0387070c8bd33b6.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/e75a3df7d4754eccae8554adc4e0b12e.jpeg)
+4. 将Payload设置为“Runtime file”，并添加相应字典，如图为我使用的简易字典![请添加图片描述](https://img-blog.csdnimg.cn/060fe116a38e45b4bb9723d36e384ab6.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/675b2645848b4c9cb99372eb81f77be7.jpeg)
+5. 在Setting界面将Grep全部删除，之后通过长度判断是否爆破成功即可![请添加图片描述](https://img-blog.csdnimg.cn/3690eb6a6ffa44e19aa794041b99ddf2.jpeg)
+6. 开始爆破，选择按照长度排序，发现“admin” “123455”为一组账号密码，且在原网页尝试登陆成功![请添加图片描述](https://img-blog.csdnimg.cn/c934bb93166149109be1c11478d56f8e.jpeg)
+### 1x02 验证码绕过(on server)
+1. 测试发现，输入随意账号密码，错误验证码会提示“验证码输入错误哦！”。
+输入随意账号密码，正确验证码会提示“username or password is not exists～”。
+故输入随机账号密码，输入正确的验证码，用Burp Suite抓包，![请添加图片描述](https://img-blog.csdnimg.cn/93a7d4a0da2c4d64ae6143bd36841cfe.jpeg)
+2. 将该数据包发送至Intruder模块，测试发现将验证码修改为第一次提交原网页更新后的验证码之后，即刻随意修改账号密码并可成功提交，这是因为验证码在后台没有做相应的过期操作，致使该验证码在多次提交后仍未被销毁，故用户可绕过验证码不断提交请求![请添加图片描述](https://img-blog.csdnimg.cn/a5f32a89bb3f4efcb15b323f8c13f7f3.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/6a7123cf67cf46f291868838835ddcdf.jpeg)
+3. 此时情况变得与1x01一致，故重复1x01过程，完成爆破
+### 1x03 验证码绕过(on client)
+1. 测试发现，输入随意账号密码，错误验证码会提示“验证码输入错误哦！”。
+输入随意账号密码，正确验证码会提示“username or password is not exists～”。
+故输入随机账号密码，输入正确的验证码，用Burp Suite抓包![请添加图片描述](https://img-blog.csdnimg.cn/3cad0209748a4823be071a37a5436fad.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/9a055d44ee3d443781e50c681a6b5094.jpeg)
+2. 将此数据包发送至Repeater重放器中![请添加图片描述](https://img-blog.csdnimg.cn/f398f71acc514c53ac28f4cf3ff7f4c6.jpeg)
+3. 测试发现，不修改验证码，只修改账号密码仍可将数据包发送出去，且相应页面提示为“username or password is not exists～”，故发现，**此处的验证码只是在前端限制发送行为，当我们通过抓包绕过前端的发送行为时，此验证码就失去了作用**，因此我们将此数据包直接转发到Intruder模块，如图设置，重复“0x01”步骤，即可成功爆破
+![请添加图片描述](https://img-blog.csdnimg.cn/6589675acb1f4f429434430fcc2c6599.jpeg)
+
+### 1x04 token防爆破?
+1. 提交随意账户和密码，提交数据![请添加图片描述](https://img-blog.csdnimg.cn/e9467db0f2484d7e921c07ddf68f780c.jpeg)
+2. 用Burp Suite抓包，发送至Intruder模块![请添加图片描述](https://img-blog.csdnimg.cn/ed205bf39c234c01b1d12e9d73cec794.jpeg)
+3. 爆破类型设置为“Pitchfork”，此爆破方法为，再爆破时分别使用对应的字典对变量进行同时替换，也就是说username字典的第一个账户对应password字典的第二个账户，诸如此类。并将如下图1、2、3添加选项。
+![请添加图片描述](https://img-blog.csdnimg.cn/04d3a7e243d541199443ad7c6e36912b.jpeg)
+4. 分别将“Payload Set”1、2设置为“Runtime file”，并添加相应字典文件![请添加图片描述](https://img-blog.csdnimg.cn/fe65232fa1904fe9a777f57834b90603.jpeg)
+5. 由于此数据包中包含token，所以我们需要将Payload set 3 设置每次从上次响应数据包中获取token。操作如下：在“Setting”选项卡下“Grep-Extract”中添加(Add)，在弹出界面中搜索token，找到如图位置，选中token数值，并点击下方“OK”。当然，我们可以把“Grep-Match”中字符删除并添加“username or password is not exists”等字样。![请添加图片描述](https://img-blog.csdnimg.cn/7729afc037494b7cac4a791e83f5af85.jpeg)
+6. 在Payload选项卡下将第三项（token）设置为“Recursive grep”（递归grep），并填写第一次数据包中的token![请添加图片描述](https://img-blog.csdnimg.cn/d47165157157440b81630807ba9e16f1.jpeg)
+7. 点击爆破，此时若有报错“recursive grep payloads cannot be used with multiple request threads”则将并发数改为1即可。![请添加图片描述](https://img-blog.csdnimg.cn/ad230d677a8344f08a5e5ee2f72b03ef.jpeg)
+理解：token值是服务器发回来的随机值，并且是在上一次响应中发回来的，之后在这次的提交过程中token会和其他数据一起提交至服务器验证，故我们可以用Burp保存每次发回来的token用于下一次的提交。
+“1.将token以"type= 'hidden’”的形式输出在表单中;”
+“2.在提交的认证的时候一起提交，并在后台对其进行校验;”
+“3.但由于其token值输出在了前端源码中，容易被获取，因此也就失去了防暴力破解的意义”
+## 2 Cross-Site Scripting
+XSS（跨站脚本）概述
+Cross-Site Scripting 简称为“CSS”，为避免与前端叠成样式表的缩写"CSS"冲突，故又称XSS。一般XSS可以分为如下几种常见类型：
+    1.反射性XSS;
+    2.存储型XSS;
+    3.DOM型XSS;
+
+XSS漏洞一直被评估为web漏洞中危害较大的漏洞，在OWASP TOP10的排名中一直属于前三的江湖地位。
+XSS是一种发生在前端浏览器端的漏洞，所以其危害的对象也是前端用户。
+形成XSS漏洞的主要原因是程序对输入和输出没有做合适的处理，导致“精心构造”的字符输出在前端时被浏览器当作有效代码解析执行从而产生危害。
+因此在XSS漏洞的防范上，一般会采用“对输入进行过滤”和“输出进行转义”的方式进行处理:
+  输入过滤：对输入进行过滤，不允许可能导致XSS攻击的字符输入;
+  输出转义：根据输出点的位置对输出到前端的内容进行适当转义;
+
+你可以通过“Cross-Site Scripting”对应的测试栏目，来进一步的了解该漏洞。
+
+**跨站脚本漏洞测试流程:**
+①在目标站点上找到输入点,比如查询接口,留言板等;
+②输入一组”特殊字符+唯一识别字符”, 点击提交后,查看返回的源码，是否有做对应的处理;
+③通过搜索定位到唯一字符，结合唯一字符前后语法确认是否可以构造执行js的条件 (构造闭合) ;
+④提交构造的脚本代码(以及各种绕过姿势)，看是否可以成功执行，如果成功执行则说明存在XSS漏洞;
+
+**提示：**
+1.一般查询接口容易出现反射型XSS ,留言板容易出现存储型XSS ;
+2.由于后台可能存在过滤措施，构造的script可能会被过滤掉,而无法生效或者环境限制了执行(浏览器) ;
+3.通过变化不同的script ,尝试绕过后台过滤机制;
+
+### 2x01 反射型xss(get)
+1. 我们进入靶场界面，在输入框中输入;"’<>9999测试一下，输出“who is ;"’<>9999,i don't care!”![请添加图片描述](https://img-blog.csdnimg.cn/94e54de499b04ae5bc9a1e73408be385.jpeg)
+2. 我们查看网站源代码，搜索“123999”，发现“;"’<>9999”字符串直接嵌入在了网页的源代码中，也没有被删除，故猜测我们输入一个有特定功能的JavaScript语句可能也会被返回来。![请添加图片描述](https://img-blog.csdnimg.cn/bccc2b15df044897a3208e8e674d4d0c.jpeg)
+3. 故我们尝试在输入框输入一些会使浏览器做出某些应答的代码，如`<script>alert('123')</script>`。但是这时会出现的问题是该输入框有输入最大字符串长度的限制，不过这也不是问题，我们在开发者工具中将该输入框的限制由20改为20000，继续输入。![请添加图片描述](https://img-blog.csdnimg.cn/93f6191b4f1f4a44a5ee5e2094b37e95.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/a3064b4c4436455ea7e7a85a93c709cf.jpeg)
+4. 输入会点击“submit”，在相应回来的页面中，确实弹出了“123”的窗口。![请添加图片描述](https://img-blog.csdnimg.cn/0b81c61e05fa415ca1b6557a03ced18f.jpeg)
+5. 故我们可以发现此网站存在XSS漏洞，但是该xss漏洞为反射性漏洞，也就是说是暂时的，会随着页面的刷新而消失，但是该反射性为get型，其提交的数据保存在URL中，也就是说，每当我们再一次访问此时的URL，依旧会弹出“123”弹窗。
+### 2x02 反射性xss(post)
+1. 我们先点一下提示![请添加图片描述](https://img-blog.csdnimg.cn/0af6c28dd4da4f348f407f3b81b89ba1.jpeg)
+2. 听从提示，账户admin，密码123456 登录。登陆后界面如图所示：![请添加图片描述](https://img-blog.csdnimg.cn/d69954088cfb46b3825a564072167168.jpeg)
+3. 与“2x01 反射型xss(get)”一样，我们提交`<script>alert('123')</script>`,点击提交，弹出如下界面：![请添加图片描述](https://img-blog.csdnimg.cn/9b4fef6eec594984b0b7be35e2d32bb7.jpeg)
+4. 说明xss漏洞存在，但是观察此URL，发现提交信息并没有反映在URL中，而这也是POST与GET的区别:
+**GET和POST典型区别:**
+GET是以url方式提交数据;POST是以表单方式在请求体里面提交;
+GET方式的XSS漏洞更加容易被利用, 一般利用的方式是将带有跨站脚本的URL伪装后发送给目标，而POST方式由于是以表单方式提交,无法直接使用URL方式进行攻击
+
+
+### 2x03 存储型xss
+1. 存储型XSS漏洞跟反射型形成的原因一样,不同的是存储型XSS下攻击者可以将脚本注入到后台存储起来，构成更加持久的危害,因此存储型XSS也称“永久型”XSS。
+我们尝试提交“、123”，发现在刷新后，该字符串也会一直存在在网页中。![请添加图片描述](https://img-blog.csdnimg.cn/faad0c563de44321b0ba65cee3ba89c0.jpeg)
+2. 故我们在留言板中输入`<script>alert('123')</script>`，提交。发现成功弹出123，我们关闭后，发现网页中的留言列表中保存了我们提交的脚本代码（因为一些原因没有显示出来，但是可以通过“删除”按钮判断）。
+![请添加图片描述](https://img-blog.csdnimg.cn/7084d21c86c14be5842a766023dcf75f.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/69742933e9da447d94867b5d5d4bfd1a.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/fd2e2eea915e47429d36fe178aa04828.jpeg)
+3. 我们尝试刷新页面，发现与前两节不同的是依旧会弹出窗口，这是因为页面刷新后，网页仍会再次加载一下我我们之前提交的脚本，故仍会弹出弹窗。
+### 2x04 DOM型xss
+在打靶场前，我们先熟悉一下什么是DOM，[点我查看W3School的DOM解释](https://www.w3school.com.cn/js/js_htmldom.asp)，HTML DOM 方法是我们能够（在 HTML 元素上）执行的动作，HTML DOM 属性是您能够设置或改变的 HTML 元素的值。[具体修改语句击此处查看](https://www.w3school.com.cn/js/js_htmldom_document.asp)
+通过JavaScript,可以重构整个HTML文档。您可以添加、移除、改变或重排页面上的项目。要改变页面的某个东西，JavaScript就需要获得对HTML文档中所有元素进行访问的入口。这个入口，连同对HTML元素进行添加、移动、改变或移除的方法和属性，都是通过文档对象模型来获得的(DOM)所以，你可以把DOM理解为JS访问HTML的标准编程接口。DOM是纯前端的操作
+1. 我们在DOM型xss的输入框中随便输入字符串，显示结果为“what do you see?”，（此处我们以12345为例）![请添加图片描述](https://img-blog.csdnimg.cn/be69c51edb254b57807368307647f1da.jpeg)
+
+2. 打开网页源代码，搜索“what do you see?” 相应代码如下所示：
+```php
+            <div id="xssd_main">
+                <script>
+                    function domxss()
+                    {
+                        var str = document.getElementById("text").value;
+                        document.getElementById("dom").innerHTML = "<a href='"+str+"'>what do you see?</a>";
+                    }
+                    //试试：'><img src="#" onmouseover="alert('xss')">
+                    //试试：' onclick="alert('xss')">,闭合掉就行
+                </script>
+                <!--<a href="" onclick=('xss')>-->
+                <input id="text" name="text" type="text"  value="" />
+                <input id="button" type="button" value="click me!" onclick="domxss()" />
+                <div id="dom"></div>
+            </div>
+```
+3. 此时，`document.getElementById("dom").innerHTML = "<a href='"+str+"'>what do you see?</a>";`
+此语句为我们的分析对象，可以看出我们提交的字符串被赋给了“str”，故判断我们在输入框输入的东西被拼接在“+str+”处。所以我们要去尝试把这里的a标签闭合，并弹出一个弹窗。我们用`#‘`来闭合前面的单引号，用`>`来闭合前面的<。
+所以我们输入：`#' onclick="alert(123)">`
+此时此处的完整代码为：
+```php
+<a href='#' onclick="alert(123)">'>what do you see?</a>
+```
+点击提交后页面如图所示：![请添加图片描述](https://img-blog.csdnimg.cn/b7dea28e6add4042a667ca443e13229c.jpeg)
+4. 这时候我们点击what do you see?，弹窗成功。![请添加图片描述](https://img-blog.csdnimg.cn/81a9fb03728f4810ae7a70fa0f93e1aa.jpeg)
+### 2x05 DOM型xss
+与上一关的区别就是这次是从url中获取我们输入的text参数的，这就类似反射型，其他同上，构造闭合即可。
+先贴出网页源代码：
+
+```php
+            <div id="xssd_main">
+                <script>
+                    function domxss(){
+                        var str = window.location.search;
+                        var txss = decodeURIComponent(str.split("text=")[1]);
+                        var xss = txss.replace(/\+/g,' ');
+                        //alert(xss);
+
+                        document.getElementById("dom").innerHTML = "<a href='"+xss+"'>就让往事都随风,都随风吧</a>";
+                    }
+                    //试试：'><img src="#" onmouseover="alert('xss')">
+                    //试试：' onclick="alert('xss')">,闭合掉就行
+                </script>
+                <!--<a href="" onclick=('xss')>-->
+                <form method="get">
+                <input id="text" name="text" type="text"  value="" />
+                <input id="submit" type="submit" value="请说出你的伤心往事"/>
+                </form>
+                <div id="dom"></div>
+            </div>
+```
+ - 输入框输入`#' onclick="alert('123')">`，之后依次点击，弹窗成功。（注意观察URL）![请添加图片描述](https://img-blog.csdnimg.cn/81b24ca47ccb446b87dd2097fbd6bdc2.jpeg)
+ ### 2x06 xss盲打
+ 盲打是一种攻击场景，也就是说只有后台会看到前端输入的内容。从前端无法判断是否存在XSS。
+我们直接往里面插XSS代码，然后等待,可能会有惊喜！由于是后端,可能安全考虑不太严格。当管理员登录时，就会被攻击到。
+ - 我们先在输入框输入`<script>alert('123')</script>`制造一个弹窗![请添加图片描述](https://img-blog.csdnimg.cn/df5cc2729aa44792b6333e1f22657d32.jpeg)
+ - 点击提示，靶场提示我们登录后台看有什么情况发生，我们登录，账号admin，密码123456![请添加图片描述](https://img-blog.csdnimg.cn/2fe045770e324896a1485f59490c302c.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/808b406fba61484fa381763d9ad5b4e6.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/0fc4abeccb7b45748a1686c704f0d629.jpeg)
+ - 如上图，弹窗成功，且我们的提交内容会一直保留在后台，每当我们刷新后台界面，都会再一次弹窗。
+这便是xss盲打，攻击者并不知道会不会作用，代码是否会在后台输出，但如果成功攻击，也就…………
+ ### 2x07 xss之过滤
+ XSS绕过-过滤-转换
+ - 前端限制绕过，直接抓包重放，或者修改html前端代码
+ - 大小写，比如: `<SCRIPT> aLeRT(111)</sCRIpt>`
+ - 拼凑: `<scri<script> pt> alert(111)</scri</script> pt>`
+ - 使用注释进行干扰: `<scri<!--test--> pt> alert(111)</sc <--test--> ript>`
+
+个人理解，后台会对`<script>`之类的特殊字符做限制，不会让其输出值后端以确保安全，但是此类标签可以各种编码，编码后后台不一定会进行过滤，而当浏览器对该编码进行识别时，会翻译成正常的标签，从而执行。但是在使用编码时需要注意编码在输出点是否会被正常识别和翻译。
+我们要做的便是绕过此类限制，对于通配符或正则表达式等限制方式，我们有时候可以去通过大小写、拼凑、使用注释干扰等手段干扰其对`<script>`的判断。
+ **举例：**
+
+```javascript
+< img src=x onerror="alert('123')"
+```
+我们对“alert(‘123’ )”进行URL编码，结果为alert(%E2%80%98123%E2%80%99%20)
+但是这样依旧不行，因为这些编码不会被正常解码。
+1. 在xss过滤的输入框中输入代码:`<script>12..`提交后查看网页源代码，如下图：![请添加图片描述](https://img-blog.csdnimg.cn/d8686d634bdc40498101f9131492d5e3.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/1c84f7b293954b02abe7bb38206bd4d4.jpeg)
+2. 我们发现，我们输入的`<script>`字样并没有被输入在源代码中，也就是说，该字样被过滤了，
+我们现在尝试用大小写去过滤：`<scRIpt>alert('123')</sCRIpt>`提交之后成功弹窗。查看源代码，scipt也确实输出来在了其中。![请添加图片描述](https://img-blog.csdnimg.cn/b201aa990f1348d1bd5541cd64a02ff4.jpeg)![请添加图片描述](https://img-blog.csdnimg.cn/e93b704ca0904865b1aa3c11deca62ca.jpeg)
+3. 尝试拼凑，发现依旧被过滤，而注释干扰也同样不成功，这说明有些干扰能绕过过滤而有些不能，这取决于该网站的过滤措施。过滤干扰的方法千奇百怪，这一节只是简单阐述了这三种。
+ ### 2x08 xss之htmlspecialchars
+ 在完成此节的攻击前，我们先来了解一下htmlspecialchars()函数
+ htmlspecialchars()函数把预定义的字符转换为HTML实体。
+ 预定义的字符是:
+
+> &(和号)成为&
+"(双引号)成为"
+'(单引号)成为'
+<(小于)成为<
+‘>’(大于)成为>
+
+可用的引号类型:
+
+> ENT_ COMPAT -默认。仅编码双引号。
+ENT QUOTES -编码双引号和单引号。
+ENT NOQUOTES -不编码任何引号。
+
+**语法：htmlspecialchars(string,flags,character-set,double_encode)**
+| 参数 | 描述 |
+|--|--|
+| string | 必需。规定要转换的字符串。 |
+| flags | 可选。规定如何处理引号、无效的编码以及使用哪种文档类型。可用的引号类型：	ENT_COMPAT - 默认。仅编码双引号。	ENT_QUOTES - 编码双引号和单引号。	ENT_NOQUOTES - 不编码任何引号。 |
+| character-set | 可选。一个规定了要使用的字符集的字符串。 |
+| double_encode | 可选。布尔值，规定了是否编码已存在的 HTML 实体。 |
+
+提示：如需把特殊的 HTML 实体转换回字符，请使用 htmlspecialchars_decode() 函数。
+1. 我们还是先输入一段字符串去尝试一下123abc’“<>#$%，提交后查看网页源代码。![请添加图片描述](https://img-blog.csdnimg.cn/75493c74bbc747f5acc2ffa9b78346db.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/b7ee3dc26adf46ac87c8a49639f5704d.jpeg)
+2. 我们发现，除了单引号外，其他的特殊字符都被进行了编码。所以我们输入`q' onclick='alert(123)'`第一个单引号是对前面进行闭合。输入后点击发现成功弹窗。![请添加图片描述](https://img-blog.csdnimg.cn/8faaf26a1fb44e2394beec3de1ebcd59.jpeg)
+这是因为此处的htmlspecialchars()函数的第二个参数“可用的引号类型”并没有正确选择，若选择成“ENT QUOTES -编码双引号和单引号”情况应该会好很多。
+ ### 2x09 xss之href输出
+ 1. 打开xss之herf输出，输入Javascript:alert(123)，不含有特殊字符。![请添加图片描述](https://img-blog.csdnimg.cn/ed85ff84e28d4cee84bcb168385ac04b.jpeg)
+2. 我们看一看网页源代码，如图![请添加图片描述](https://img-blog.csdnimg.cn/01510f4c21dc46ba85edfda1dc557d93.jpeg)
+3. 发现我们的代码嵌入了源代码中，点击后会被执行，出现弹窗。
+
+> 查资料得：在这里我们可以做出相应防范，只允许http,https，其次在进行htmlspecialchars处理。
+
+ ### 2x10 xss之js输出
+ 1. 我们在网页内随便输入一些东西，然后进源代码里看一看，这里以abc为例。![请添加图片描述](https://img-blog.csdnimg.cn/eb29c73c6792443fb44fbb653ee6a508.jpeg)
+2. 同样，我们尝试去构造闭合，输入`x'</script><script>alert('xss')</script>`，发现成功弹窗![请添加图片描述](https://img-blog.csdnimg.cn/98e43f232c8c41a098ad83d5884f91c8.jpeg)
+## 3 CSRF
+**CSRF(跨站请求伪造)概述**
+Cross-site request forgery 简称为“CSRF”，在CSRF的攻击场景中攻击者会伪造一个请求（这个请求一般是一个链接），然后欺骗目标用户进行点击，用户一旦点击了这个请求，整个攻击就完成了。所以CSRF攻击也成为"one click"攻击。 很多人搞不清楚CSRF的概念，甚至有时候会将其和XSS混淆,更有甚者会将其和越权问题混为一谈,这都是对原理没搞清楚导致的。
+这里列举一个场景解释一下，希望能够帮助你理解。
+
+场景需求：
+小黑想要修改大白在购物网站tianxiewww.xx.com上填写的会员地址。先看下大白是如何修改自己的密码的：**登录---修改会员信息，提交请求---修改成功**。
+所以小黑想要修改大白的信息，他需要拥有：1，登录权限 2，修改个人信息的请求。
+但是大白又不会把自己xxx网站的账号密码告诉小黑，那小黑怎么办？
+
+于是他自己跑到www.xx.com上注册了一个自己的账号，然后修改了一下自己的个人信息（比如：E-mail地址），他发现修改的请求是：
+【http://www.xxx.com/edit.php?email=xiaohei@88.com&Change=Change】
+于是，他实施了这样一个操作：把这个链接伪装一下，在小白登录xxx网站后，欺骗他进行点击，小白点击这个链接后，个人信息就被修改了,小黑就完成了攻击目的。
+
+为啥小黑的操作能够实现呢。有如下几个关键点：
+1.www.xxx.com这个网站在用户修改个人的信息时没有过多的校验，导致这个请求容易被伪造;
+因此，我们判断一个网站是否存在CSRF漏洞，其实就是判断其对关键信息（比如密码等敏感信息）的操作(增删改)是否容易被伪造。
+
+2.小白点击了小黑发给的链接，并且这个时候小白刚好登录在购物网上;
+如果小白安全意识高，不点击不明链接，则攻击不会成功，又或者即使小白点击了链接，但小白此时并没有登录购物网站，也不会成功。
+因此，要成功实施一次CSRF攻击，需要“天时，地利，人和”的条件。
+当然，如果小黑事先在xxx网的首页如果发现了一个XSS漏洞，则小黑可能会这样做： 欺骗小白访问埋伏了XSS脚本（盗取cookie的脚本）的页面，小白中招，小黑拿到小白的cookie，然后小黑顺利登录到小白的后台，小黑自己修改小白的相关信息。
+所以跟上面比一下，就可以看出CSRF与XSS的区别：CSRF是借用户的权限完成攻击，攻击者并没有拿到用户的权限，而XSS是直接盗取到了用户的权限，然后实施破坏。
+
+因此，网站如果要防止CSRF攻击，则需要对敏感信息的操作实施对应的安全措施，防止这些操作出现被伪造的情况，从而导致CSRF。比如：
+
+ - 对敏感信息的操作增加安全的token；
+ - 对敏感信息的操作增加安全的验证码；
+ - 对敏感信息的操作实施安全的逻辑流程，比如修改密码时，需要先校验旧密码等。
+### 3x01 CSRF(get) 
+1. 先以Vince的身份登录网站![请添加图片描述](https://img-blog.csdnimg.cn/84880b92ea87485387bb8af3d2d17857.jpeg)
+2. 登陆好后尝试修改个人信息，这里我们把住址改为“abc”
+
+![请添加图片描述](https://img-blog.csdnimg.cn/b03f0f585a8145879db96f7c45d10ec2.jpeg)![请添加图片描述](https://img-blog.csdnimg.cn/318297aefcaa4f0187a8bc63ea32c89c.jpeg)
+
+ 1. 查看Burp中抓到的数据包，数据为`GET /pikachu/vul/csrf/csrfget/csrf_get_edit.php?sex=boy&phonenum=18626545453&add=abc&email=vince%40pikachu.com&submit=submit`![请添加图片描述](https://img-blog.csdnimg.cn/415b9ce33da0438c8357da1e13485159.jpeg)
+ 2. 我们发现，关键数据容易被修改，所以我们将其改为URL，并将地址修改为123，`http://127.0.0.1/pikachu/vul/csrf/csrfget/csrf_get_edit.php?sex=boy&phonenum=18626545453&add=123&email=vince%40pikachu.com&submit=submit`
+将此URL发送给Vince，现在我们模拟Vince的操作，我们在浏览器中打开此链接，发现地址被修改为了123![请添加图片描述](https://img-blog.csdnimg.cn/6fed302eb6854475b3c6ceac0e63d130.jpeg)
+ 3. 当然，如果此时Vince退出了登录，则点击链接后个人信息也不会被修改。这也验证了CSRF的两个条件：
+		1 网站对敏感信息的修改没有做限制，也没有token等元素存在(请求可以被伪造)
+		2 被攻击者在此网站为登陆状态
+
+		
+
+> ==查资料后发现还有一点==：确认凭证的有效期（这个问题会提高CSRF被利用的概率）虽然退出或者关闭了浏览器，但cookie仍然有效，或者session并没有过期，导致CSRF攻击变得简单。
+### 3x02 CSRF(post) 
+1. 与上一小节，我们先登录，并将地址修改为abc![请添加图片描述](https://img-blog.csdnimg.cn/ecb3ab72e74c4ba3891affb3092158d9.jpeg)
+2. 在Burp中进行抓包，因为此时为post请求，我们无法用URL去提交请求，所以我们应该用抓包信息修改后伪造一个表单![请添加图片描述](https://img-blog.csdnimg.cn/aba219faaaae4bf1b2af2081471e4e74.jpeg)
+3. 在此数据包上右键，选择“Engagement tools”--“Generate CSRF PoC”，并修改地址为12345（表单）![请添加图片描述](https://img-blog.csdnimg.cn/899009e0b23e4ac1a9e85738d85ed6b7.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/01ad1be9cb5240a5b71027c29ff13ac2.jpeg)
+4. 此处我们也可以修改表单后自己弄成url，但是这里就直接用Burp的工具了。点击“Test in browser”，点击“copy”![请添加图片描述](https://img-blog.csdnimg.cn/de79dd57aaa34878956d5fdc431fe065.jpeg)
+5. 将此网址发送给Vince，Vince点击后个人信息会被修改。
+![请添加图片描述](https://img-blog.csdnimg.cn/a94542da7a8449cd8a9fb8da451900b2.jpeg)
+### 3x03 CSRF Token
+1. 我们依旧是先用Vince的身份登录，并且依旧是将其地址修改为“qwe”![请添加图片描述](https://img-blog.csdnimg.cn/232577e632a343ed893b226ccda20aff.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/892d4e3317c04a21a06b9dfd37bb3956.jpeg)
+2. 我们用Burp抓包，发现抓到的数据包中存在token,响应回来的数据包也存在token。![请添加图片描述](https://img-blog.csdnimg.cn/29a4fc5a0cc84a77a3b96a6c0a235f57.jpeg)![请添加图片描述](https://img-blog.csdnimg.cn/4dbcc71c6918431ea6e839450d231dff.jpeg)
+3. 因此，我们将此数据包发送至重放器，并将第2步中响应回来的token复制给此数据包，并将地址改为usa，发送。![请添加图片描述](https://img-blog.csdnimg.cn/717632e812a445478a0b3ab9f853c35d.jpeg)
+4. 可以看到，Vince的地址被修改![请添加图片描述](https://img-blog.csdnimg.cn/62540d07a2eb42a4855ae0291239cddd.jpeg)
+> 在CSRF，我们发现在get请求提交的基础上增加了Token，当我们刷新页面时Token值会发生变化，这样也就完全防止了GRSF漏洞的产生。
+
+> CSRF与XSS的区别
+CSRF是借用户的权限完成攻击，攻击者并没有拿到用户的权限，而XSS可以通过盗取cookie来直接获取用户权限来实施攻击。
+
+## 4 SQL-Inject
+在owasp发布的top10排行榜里，注入漏洞一直是危害排名第一的漏洞，其中注入漏洞里面首当其冲的就是数据库注入漏洞。
+一个严重的SQL注入漏洞，可能会直接导致一家公司破产！
+SQL注入漏洞主要形成的原因是在数据交互中，前端的数据传入到后台处理时，没有做严格的判断，导致其传入的“数据”拼接到SQL语句中后，被当作SQL语句的一部分执行。 从而导致数据库受损（被脱裤、被删除、甚至整个服务器权限沦陷）。
+在构建代码时，一般会从如下几个方面的策略来防止SQL注入漏洞：
+1.对传进SQL语句里面的变量进行过滤，不允许危险字符传入；
+2.使用参数化（Parameterized Query 或 Parameterized Statement）；
+3.还有就是,目前有很多ORM框架会自动使用参数化解决注入问题,但其也提供了"拼接"的方式,所以使用时需要慎重!
+
+
+==SQL Inject 漏洞攻击流程==
+**01：注入点探测**
+     自动方式：使用web漏洞扫描工具，自动进行注入点发现
+     手动方式：手工构造sql inject测试语句进行注入点发现
+**02：信息收集**
+     通过注入点取期望得到的数据
+  （1） 环境信息：数据库类型，数据库版本，操作系统版本，用户信息等
+  （2）数据库信息：数据库名称，数据库表，表字段，字段内容，甚至加密的内容也可能会被破解
+**03：获取权限**
+获取操作系统权限：通过数据库执行shell，上传木马
+
+==常见的注入点类型==
+数字型：
+
+```sql
+user_ id= $id
+```
+字符型：
+
+```sql
+user. id= '$id' 
+```
+搜索型：
+
+```sql
+text LIKE '%{$_ GET['search']}%'"
+```
+
+### 4x01 数字型注入（post）
+1. 我们随便选择一个数字并提交，发现url中并没有传参，说明我们的请求是以表单的形式发送。![请添加图片描述](https://img-blog.csdnimg.cn/f64525302d9a476bb612c3030914a9d5.jpeg)
+2. 我们可以看到，返回来的数据是由姓名和邮箱两部分组成，我们在Burp里面抓包，如图：![请添加图片描述](https://img-blog.csdnimg.cn/b4fcf70866fa434a8e0f950ba3f02031.jpeg)
+
+
+3. 我们将此数据包发送至Repeater模块，并在输入点构造payload：1 or 1=1，因为任何id取1=1都为真，所以这样会把所有信息都罗列出来![请添加图片描述](https://img-blog.csdnimg.cn/9860e1242c0349849b0f28015793ffac.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/a612644eb9054da09329b9ef0f294191.jpeg)
+### 4x02 字符型注入（get）
+1. 我们随便输入一段字符，此处以“qwer”为例，发现我们的请求是在url中提交的，，而若我们以vince为例，发现正确返回了数据，而且仍是由姓名和邮箱两部分构成![请添加图片描述](https://img-blog.csdnimg.cn/774f6f5a8446439fa1616e723af4d9c0.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/ef531f91b60049b0a91c047476a7e591.jpeg)
+2. 字符型注入，我们猜测sql语句如下：
+
+```sql
+select 字段1，字段2 from 表名 where username = '111';
+```
+后台接收应该是：`$uname=$_GET['username']`
+（其实这部分我看不懂，都是复制粘贴的）
+与xss一样，我们要去构造合法闭合，前面的单引号我们也以单引号闭合，后面的单引号我们用#注释掉，所以我们输入的代码为`a' or 1=1#`
+提交后发现所有的数据都列了出来：![请添加图片描述](https://img-blog.csdnimg.cn/7a7467b7d3584b9db2afd0f586fe4463.jpeg)
+### 4x03 搜索型注入
+1. 我们尝试输入a进行搜索，发现请在在url里发送，且返回了所有带a的用户![请添加图片描述](https://img-blog.csdnimg.cn/17e6e364a87148d8a6b6871c3c383f98.jpeg)
+2. 由于提示为%%，所以我们猜测
+
+```sql
+select from 表名 where username like ' %k% ';
+ ```
+ 我们依旧是尝试去构造闭合：
+我们输入`abc%'or 1=1 #`，用%’去与前面的%‘构造闭合，而后面的内容用#注释掉
+此时完整语句为：
+```sql
+select from 表名 where username like ' %abc%'or 1=1 #% ';
+```
+输入后发现所有数据都被列出![请添加图片描述](https://img-blog.csdnimg.cn/613822825e2f4ac3817a055608b1c92c.jpeg)
+由此发现，关键在于猜测后台是如何进行拼接的并尝试去构造闭合。
+### 4x04 xx型注入
+1. 我们进入后端，访问\WWW\pikachu\vul\sqli\sqli_x.php，其中代码如下：
+
+```php
+if(isset($_GET['submit']) && $_GET['name']!=null){
+    //这里没有做任何处理，直接拼到select里面去了
+    $name=$_GET['name'];
+    //这里的变量是字符型，需要考虑闭合
+    $query="select id,email from member where username=('$name')";
+    $result=execute($link, $query);
+    if(mysqli_num_rows($result)>=1){
+        while($data=mysqli_fetch_assoc($result)){
+            $id=$data['id'];
+            $email=$data['email'];
+            $html.="<p class='notice'>your uid:{$id} <br />your email is: {$email}</p>";
+        }
+    }else{
+
+        $html.="<p class='notice'>您输入的username不存在，请重新输入！</p>";
+    }
+}
+```
+所以我们还是尝试去构造闭合，后端为
+
+```sql
+select id,email from member where username=('$name')
+```
+我们应该输入`a') or 1=1 #`
+![请添加图片描述](https://img-blog.csdnimg.cn/680891fe521e4b709cf50b3af1d3b227.jpeg)
+成功返回了所有数据。
+### 4x05 SQL Injec漏洞手工测试：基于unionl联合查询的信息获取
+union联合查询：可以通过联合查询来查询指定的数据。需要注意的是**联合查询的字段数必须和主查询一致！！**
+用法：`select username,password from user where id=1 union select 字段1 ,字段2 from 表名`
+1. 我们先登录并进入pikachu数据库
+![请添加图片描述](https://img-blog.csdnimg.cn/0d151066e22443c3bfd66881b7d369e4.jpeg)
+2. 主查询字段2个（id,email） 联合查询字段三个（username,pw,sex）将会报错，我们输入`select id, email from member where username-'kobe' union select username, pw, sex from member where id = 1;`结果如下：
+![请添加图片描述](https://img-blog.csdnimg.cn/124fdd658081423bbdc97c21e3c92dee.jpeg)
+3. 我们尝试去猜测字段数，我们用`x' union select 1,2,3#`，此处的1 2 3表示字段，此时仍会报错，我们尝试`x' union select 1,2#`，发现没有报错，说明字段数为2。![请添加图片描述](https://img-blog.csdnimg.cn/f88879b7a602466fb752b16b9e714b44.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/6d2b2fc9c39745c78e26ff0a8b1f0920.jpeg)
+4. 确认字段后，我们使用联合查询，`x' union select database(),version()#`，如图，我们查询出了数据库名称和数据库版本。![请添加图片描述](https://img-blog.csdnimg.cn/bcae751783b24583b1ce6e7dab1ba9e3.jpeg)
+
+> >**mysql知识点：**
+select version(); //查询数据库版本
+select database(); //查询当前的数据库名称
+select user(); //查询当前登录的用户
+order by x //对查询的结果进行排序，默认数字0-9，字母a-z union select //联合查询，必须与主查询的字段个数保持一致。
+>
+> >**information_schema**
+在mysql中，自带的information_schema数据库里面存放了大量的重要信息。具体如下：
+如果存在注入点的话，我们可以尝试对该数据库进行访问，从而获取更多的信息。
+SCHEMATA表：提供了当前mysql实例中所有数据库的信息。
+TABLES表：提供了表的信息（包括视图）。详细描述了某个表属于哪个 schema，表类型，表引擎，创建时间等信息。
+COLUMNS表：提供了表中字段的信息。
+### 4x06 "insert/update"注入
+
+> 我们的这个攻击是在MYSQL中使用一些指定的函数来制造报错，从而从报错信息中获取设定的信息select/insert/update/delete都可以使用报错来获取信息。而这样攻击成功的条件就是后台没有屏蔽数据库报错信息，在语法发生错误时会输出在前端。
+
+1. 根据提示，我们先进行注册，我填写的注册信息如下图所示：![请添加图片描述](https://img-blog.csdnimg.cn/8619e3a1035f4c4eb169355159e45636.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/1236efad013a4216ab6af8d6ad14b2e2.jpeg)
+2. 我们用Burp抓包，如下图所示：![请添加图片描述](https://img-blog.csdnimg.cn/02622fda08e74d9180b159061fc7f3f2.jpeg)
+3.  我们先在注册页面尝试一下，我们把必填项填好：在用户里填入’，密码随便填写，提交，结果如图所示 ![请添加图片描述](https://img-blog.csdnimg.cn/b58d7c9ac8de43b7be64e0827eecf2bf.jpeg)
+4. 该报错页面说明我们的单引号被拼接在了sql语句中，我们先登录之前注册号的账户
+登陆好后我们去修改个人信息，
+
+> 这里先了解一下updatexml()函数的用法。
+> **语法**：updatexml(xml document, XPathing, new_value)
+> 第一个参数：XML_document是String格式，为XML文档对象的名称，也就是表中的字段名
+> 第二个参数：XPath_string (Xpath格式的字符串)
+> 第三个参数：new_value，String格式，替换查找到的符合条件的数据
+> 其中XPath必须是有效的，否则会发生错误
+
+因为直接在XPath处输入database()会返回错误值，所以我们concat(0x7e, database())，其中0x7e表示符号~，concat()会将逗号前后两部分进行一个拼接。
+所以这里我们将性别修改为`' and updatexml(1, concat(0x7e, database()), 0) #'`
+输入后发现成功将数据库的名称返回来了![请添加图片描述](https://img-blog.csdnimg.cn/d5c9c222a7bc4d8ab6e1fe2817ce1894.jpeg)
+同理可以把database()改为其他函数来获得更多数据库信息。
+
+### 4x07 "delete"注入
+1. 提示说：“删除留言的的时候,好像有点问题”。
+我们随便输入一条留言“abc”![请添加图片描述](https://img-blog.csdnimg.cn/eebd7d7bad0d47d8b45a595223fc85eb.jpeg)
+2. 点击删除并用Burp抓包看一看，如图，是GET传参，我们将其发送到Repeater模块。![请添加图片描述](https://img-blog.csdnimg.cn/800a5a305a864bf383664c506ad41a57.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/ab312ba5450c435b816e815c3b80e60d.jpeg)
+3. 我们在id=处输入`1 or updatexml(1, concat(0x7e, database()), 0)`，再将此段代码转换为特殊字符的url编码。
+
+![请添加图片描述](https://img-blog.csdnimg.cn/3e88a0eb7da64c6196a68566f69d2ed9.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/761a607413794599bd025cd9225c0e4c.jpeg)
+4. 我们将数据包发送，发现成功的返回了信息。![请添加图片描述](https://img-blog.csdnimg.cn/67846a4c3e804edda1abb847ff9e4488.jpeg)
+### 4x08 "http header"注入
+首先来了解一下什么是"http header"注入
+
+有些时候，后台开发人员为了验证客户端头信息（比如常用的cookie验证）, 或者通过http header头信息获取客户端的一些资料，比如useragent、accept字段等，会对客户端的http header信息进行获取并使用SQL进行处理， 如果此时没有足够的安全考虑则可能会导致基于http header的SQL注入漏洞。
+1. 我们先进行登录 admin/123456![请添加图片描述](https://img-blog.csdnimg.cn/e181f397ddcd469d8b19e0d13af0ba1f.jpeg)
+2. 在抓到的数据包中，我们发现了user agent等项目![请添加图片描述](https://img-blog.csdnimg.cn/582f9b01aa014ec4beb4bf5da72fd057.jpeg)
+3. 我们将此数据包发送至重放器，并将user agent内容修改为`' or updatexml(1,concat(0x7e, database()), 0) or '`，发送后发现成功返回了数据![请添加图片描述](https://img-blog.csdnimg.cn/fe01503e599c479c82d06737c973503b.jpeg)
+### 4x09 盲注(base on boolian)
+首先了解下盲注的概念
+
+（1）盲注就是在sql注入过程中，sql语句执行select之后，可能由于网站代码的限制或者apache等解析器配置了不回显数据，造成在select数据之后不能回显到前端页面。此时，我们需要利用一些方法进行判断或者尝试，这个判断的过程称之为盲注。
+
+通俗的讲就是在前端页面没有显示位，不能返回sql语句执行错误的信息，输入正确和错误返回的信息都是一致的，这时候我们就需要使用页面的正常与不正常显示来进行sql注入。
+
+（2）**盲注又分为布尔类型和时间类型**
+
+什么情况下使用布尔类型的盲注？
+
+ - 没有返回SQL执行的错误信息
+ - 错误与正确的输入，返回的结果只有两种
+
+什么情况下使用时间类型的盲注？
+
+ - 页面上没有显示位和SQL语句执行的错误信息，正确执行和错误执行的返回界面一样，此时需要使用时间类型的盲注。
+
+时间型盲注与布尔型盲注的语句构造过程类似，通常在布尔型盲注表达式的基础上使用IF语句加入延时语句来构造，由于时间型盲注耗时较大，通常利用脚本工具来执行，在手工利用的过程中较少使用。
+
+1. 本题为布尔型，我们输入`kobe' or 1=1#`，显示“您输入的username不存在，请重新输入！”。再试试`kobe' or 1=2#`，显示如下：![请添加图片描述](https://img-blog.csdnimg.cn/67541b95496e4f59b2a7cdc9eb66bb7f.jpeg)
+2. 可见，只有我们输入的条件为真时，才能输出正确信息。
+这次我们输入`kobe' and length(database())=1#`，显示您输入的username不存在.......
+再把1换成2，以此类推，发现=7的时候，输出了正确信息![请添加图片描述](https://img-blog.csdnimg.cn/19c9fd96f9d748e892587ffaa3347a1c.jpeg)
+3. 那么，我们就知道了数据库长度为7，同理，更换其他函数来测试其他数据
+
+### 4x10 盲注(base on time)
+本题为基于时间类型的盲注
+
+此种类型适用于无论输入是否正确，都返回相同数据，我们无法判断自己输入的条件是否为真，所以在后面加了一个时间限制
+
+1. 先像上题那样，输入`kobe' and length(database())=7#`![请添加图片描述](https://img-blog.csdnimg.cn/ee4ee6c7a15f41ad92ed4e803d85901d.jpeg)
+2. 试试其他语句，我们发现 ，无论输入什么，回显的都是这句话，所以，我们这时就可以使用时间盲注了
+输入kobe' and if(length(database())=7, sleep(1),5)#
+意思为：若length(database())=7正确，延迟1秒返回：若不正确，延迟5秒返回
+我们去测试，发现返回的虽然都是那句I don't care who you are!
+但条件正确和不正确的回显时间不同，以此来判断哪个是正确条件
+### 4x11 宽字节注入
+还是先了解一下宽字节的原理
+
+先了解一下什么是窄、宽字节已经常见宽字节编码：
+
+ - 当某字符的大小为一个字节时，称其字符为窄字节.
+ - 当某字符的大小为两个字节时，称其字符为宽字节.
+ - 所有英文默认占一个字节，汉字占两个字节
+
+常见的宽字节编码：GB2312,GBK,GB18030,BIG5,Shift_JIS等
+
+宽字节注入指的是 mysql 数据库在使用宽字节（GBK）编码时，会认为两个字符是一个汉字（前一个ascii码要大于128（比如%df），才到汉字的范围），而且当我们输入单引号时，mysql会调用转义函数，将单引号变为’，其中\的十六进制是%5c,mysql的GBK编码，会认为%df%5c是一个宽字节，也就是’運’，从而使单引号闭合（逃逸），进行注入攻击。
+
+1. 我们随便输入一个用户123，用bp抓包发现其是post类型的，再send to Repeater，然后将name修改为如下代码（注意f后面有个单引号）`1%df' union select 1,2#`
+![请添加图片描述](https://img-blog.csdnimg.cn/5d031ada8d0c40c8bb4ee50b715b769b.jpeg)
+2. 如上图，我们得到了需要的信息。
+## 5 RCE
+**RCE(remote command/code execute)概述**
+RCE漏洞，可以让攻击者直接向后台服务器远程注入操作系统命令或者代码，从而控制后台系统。
+远程系统命令执行
+一般出现这种漏洞，是因为应用系统从设计上需要给用户提供指定的远程命令操作的接口
+比如我们常见的路由器、防火墙、入侵检测等设备的web管理界面上
+一般会给用户提供一个ping操作的web界面，用户从web界面输入目标IP，提交后，后台会对该IP地址进行一次ping测试，并返回测试结果。 而，如果，设计者在完成该功能时，没有做严格的安全控制，则可能会导致攻击者通过该接口提交“意想不到”的命令，从而让后台进行执行，从而控制整个后台服务器
+
+现在很多的甲方企业都开始实施自动化运维,大量的系统操作会通过"自动化运维平台"进行操作。 在这种平台上往往会出现远程系统命令执行的漏洞,不信的话现在就可以找你们运维部的系统测试一下,会有意想不到的"收获"-_-
+
+远程代码执行
+同样的道理,因为需求设计,后台有时候也会把用户的输入作为代码的一部分进行执行,也就造成了远程代码执行漏洞。 不管是使用了代码执行的函数,还是使用了不安全的反序列化等等。
+因此，如果需要给前端用户提供操作类的API接口，一定需要对接口输入的内容进行严格的判断，比如实施严格的白名单策略会是一个比较好的方法。
+你可以通过“RCE”对应的测试栏目，来进一步的了解该漏洞。
+### 5x01 exec "ping"
+1. 打开界面，我们先尝试去ping一下127.0.0.1，这个是我现在的本地地址![请添加图片描述](https://img-blog.csdnimg.cn/9ef9ae2a71194811adf0491015aab8ed.jpeg)
+
+2. 结果为一段乱码，不过乱码是因为编码方式有问题，只要ping出东西就ok
+我们进一步尝试，输入127.0.0.1 & ipconfig![请添加图片描述](https://img-blog.csdnimg.cn/5e56649943804ab496bf8a360b6c46af.jpeg)
+3. 可以发现，这里除了可以提交目标IP地址外，还可以通过一些拼接的符号执行其他的命令。
+### 5x02 exec "eval"
+1. 随意输入字符，返回文字（eval函数可以把字符串当成 PHP 代码来执行）![请添加图片描述](https://img-blog.csdnimg.cn/209b3b5a480a49e3bf9bbe09d257a44f.jpeg)
+
+因此我们输入phpinfo();
+发现返回来以下页面：![请添加图片描述](https://img-blog.csdnimg.cn/8f10729317214193b7afb8102f525c59.jpeg)
+
+> 这里学习一个php函数
+system("")执行外部程序，并且显示输出。
+如system(“ipconfig”)
+
+## 6 File Inclusion
+File Inclusion(文件包含漏洞)概述
+文件包含，是一个功能。在各种开发语言中都提供了内置的文件包含函数，其可以使开发人员在一个代码文件中直接包含（引入）另外一个代码文件。 比如 在PHP中，提供了：
+include(),include_once()
+require(),require_once()
+这些文件包含函数，这些函数在代码设计中被经常使用到。
+大多数情况下，文件包含函数中包含的代码文件是固定的，因此也不会出现安全问题。 但是，有些时候，文件包含的代码文件被写成了一个变量，且这个变量可以由前端用户传进来，这种情况下，如果没有做足够的安全考虑，则可能会引发文件包含漏洞。 攻击着会指定一个“意想不到”的文件让包含函数去执行，从而造成恶意操作。 根据不同的配置环境，文件包含漏洞分为如下两种情况：
+1.本地文件包含漏洞：仅能够对服务器本地的文件进行包含，由于服务器上的文件并不是攻击者所能够控制的，因此该情况下，攻击者更多的会包含一些固定的系统配置文件，从而读取系统敏感信息。很多时候本地文件包含漏洞会结合一些特殊的文件上传漏洞，从而形成更大的威力。
+2.远程文件包含漏洞：能够通过url地址对远程的文件进行包含，这意味着攻击者可以传入任意的代码，这种情况没啥好说的，准备挂彩。
+因此，在web应用系统的功能设计上尽量不要让前端用户直接传变量给包含函数，如果非要这么做，也一定要做严格的白名单策略进行过滤。
+你可以通过“File Inclusion”对应的测试栏目，来进一步的了解该漏洞。
+![请添加图片描述](https://img-blog.csdnimg.cn/bcadc7e110114eb7b5aba5820fe83e20.png)
+
+> 通过Include（）或require（）语句，可以将PHP文件的内容插入到另一个PHP文件（在服务器执行它之前）。
+include和require语句是相同的，除了错误处理方面：
+require会生成致命错误（E_COMPILE ERROR）并停止脚本执行
+include只生成警告（E WARNING），并且脚本会继续执行
+### 6x01 File Inclusion（Local）
+1. 我们先随便选择一个选项，这里以kobe为例![请添加图片描述](https://img-blog.csdnimg.cn/196b68076aed4a6abc92da9b555663bd.jpeg)
+2. 观察url发现，url中包含有file1.php
+这些文件一般都是后台存的文件，我们在前端发送一个请求，然后后台返回来这个文件，那么我们当然可以去修改这个文件的路径，比如将其改成一些固定的配置文件例如../../../../Windows/System32/drivers/etc/hosts。
+可以发现，配置文件就暴露在我们面前了。![请添加图片描述](https://img-blog.csdnimg.cn/e271908480a9481abcd11ababa30d7c1.jpeg)
+### 6x02 File Inclusion（remote）
+> 远程文件包含漏洞形式和本地文件包含漏洞差不多，在远程包含漏洞中，攻击者可以通过访问外部地址来加载远程代码。
+远程包含漏洞前提，如果使用的是include和require函数，则需要php.ini配置如下（php5.4.34）：
+allow_url_fopen=on //默认打开
+allow_url_include=on //默认关闭
+写入一句话木马，危害极大
+
+若是phpstudy，则包含方式如下图所示![请添加图片描述](https://img-blog.csdnimg.cn/866a34e65706420a8b7da2ada3321447.jpeg)
+1. 我们依旧是随便选择一个选项，提交查看url![请添加图片描述](https://img-blog.csdnimg.cn/f97493cdc7ec4be7b16cdac768c0ef3c.jpeg)
+2. 其中url提交的是一个目标文件的路径，我们可以改成一个远端的路径，读取远程文件。
+我们在浏览器地址栏中输入一下地址（其中的127.0.0.1等根据个人情况自行补全）`/pikachu/test/yijuhua.txt`
+运行后成功在后台生成了yijuhua.php![请添加图片描述](https://img-blog.csdnimg.cn/33c86b32c3dd476a9712172a7726f362.jpeg)
+## 7 Unsafe filedownload
+**不安全的文件下载概述**
+文件下载功能在很多web系统上都会出现，一般我们当点击下载链接，便会向后台发送一个下载请求，一般这个请求会包含一个需要下载的文件名称，后台在收到请求后会开始执行下载代码，将该文件名对应的文件response给浏览器，从而完成下载。如果后台在收到请求的文件名后,将其直接拼进下载文件的路径中而不对其进行安全判断的话，则可能会引发不安全的文件下载漏洞。
+此时如果攻击者提交的不是一个程序预期的的文件名，而是一个精心构造的路径(比如../../../etc/passwd),则很有可能会直接将该指定的文件下载下来。从而导致后台敏感信息(密码文件、源代码等)被下载。
+所以，在设计文件下载功能时，如果下载的目标文件是由前端传进来的，则一定要对传进来的文件进行安全考虑。 切记：所有与前端交互的数据都是不安全的，不能掉以轻心！
+你可以通过“Unsafe file download”对应的测试栏目，来进一步的了解该漏洞。
+
+### 7x01  unsafe filedownload
+1. 我们在此页面，点击球员名字，就可以下载其对应的图片，如这里我们点击kobe的名字，观察下载链接：
+
+```php
+http://127.0.0.1/pikachu/vul/unsafedownload/execdownload.php?filename=kb.png
+```
+在其最后有kb.png字样，这说明我们点击此图片后，前端向后端发送了下载kb.png的请求，然后后端提供给前端照片![请添加图片描述](https://img-blog.csdnimg.cn/86453c46f0f24b6cb941af2e0a237213.jpeg)
+2. 我们可以尝试讲此时的链接的“kb.png”改为“mbl.png”，发现下载后的照片是其对应的“斯蒂芬 马布里”而非“科比”。
+
+> 查看其它资料得知：我们可以直接修改filename的值去下载其他图片，我们还可以使用目录遍历的方式去修改链接下载敏感文件。
+防范措施：
+1.对传入的文件名进行严格的过滤和限定
+2.对文件下载的目录进行严格的限定
+## 8 Unsafe fileupload
+不安全的文件上传漏洞概述
+文件上传功能在web应用系统很常见，比如很多网站注册的时候需要上传头像、上传附件等等。当用户点击上传按钮后，后台会对上传的文件进行判断 比如是否是指定的类型、后缀名、大小等等，然后将其按照设计的格式进行重命名后存储在指定的目录。 如果说后台对上传的文件没有进行任何的安全判断或者判断条件不够严谨，则攻击着可能会上传一些恶意的文件，比如一句话木马，从而导致后台服务器被webshell。
+所以，在设计文件上传功能时，一定要对传进来的文件进行严格的安全考虑。比如：
+
+ - 验证文件类型、后缀名、大小;
+ - 验证文件的上传方式;
+ - 对文件进行一定复杂的重命名;
+ - 不要暴露文件上传后的路径;
+ - 等等...
+
+> 文件上传漏洞测试流程：
+1，对文件上传的地方按照要求上传文件，查看返回结果(路径，提示等);
+2 ，尝试上传不同类型的“恶意"文件，比如xx.php文件,分析结果;
+3，查看html源码，看是否通过js在前端做了上传限制，可以绕过;
+4 ，尝试使用不同方式进行绕过:黑白名单绕过/MIME类型绕过/目录0x00截断绕过等;
+5，猜测或者结合其他漏洞(比如敏感信息泄露等)得到木马路径,连接测试。
+
+ ### 8x01 client check
+ 
+1. 我们先尝试随便上传一个非图片格式的文件，发现上传失败“上传的文件不符合要求，请重新选择！”![请添加图片描述](https://img-blog.csdnimg.cn/8493e03b020a40b4bdc0272f68b42efb.jpeg)
+2. 上传其他类型的文件不被允许，这很可能是在前端做了限制，所以我们F12看一下![请添加图片描述](https://img-blog.csdnimg.cn/1996608b43fd413ab68f44aea02a3abd.jpeg)
+
+```php
+<input class="uploadfile" type="file" name="uploadfile" onchange="checkFileExt(this.value)">
+```
+3. 我们再看一下源代码clientcheck.php，发现其只允许jpg、png、gif三种格式。
+
+```php
+<script>
+    function checkFileExt(filename)
+    {
+        var flag = false; //状态
+        var arr = ["jpg","png","gif"];
+        //取出上传文件的扩展名
+        var index = filename.lastIndexOf(".");
+        var ext = filename.substr(index+1);
+        //比较
+        for(var i=0;i<arr.length;i++)
+        {
+            if(ext == arr[i])
+            {
+                flag = true; //一旦找到合适的，立即退出循环
+                break;
+            }
+        }
+        //条件判断
+        if(!flag)
+        {
+            alert("上传的文件不符合要求，请重新选择！");
+            location.reload(true);
+        }
+    }
+</script>
+```
+4. 我们在前端F12，将`onchange="checkFileExt(this.value)"`改为`onchange=""`，再上传非图片格式文件，发现上传成功![请添加图片描述](https://img-blog.csdnimg.cn/5efffda80a06483c89ebe6948ff930d7.jpeg)
+5. 再或者，我们可以在开发者工具中停用JaveScript，也可以起到效果。![请添加图片描述](https://img-blog.csdnimg.cn/f47236c1b0064a4eadf752cfb4e10bb3.jpeg)
+### 8x02 MIME type
+
+> MIME（多用途互联网邮件扩展类型），是设定某种扩展名的文件用一种应用程序来打开的方式类型，当该扩展文件被访问的时候，浏览器会自动使用指定应用程序来打开。多用于指定一些客户端自定义的文件名，以及一些媒体文件打开方式。
+每个MIME类型由两部分组成，前面是数据的大类别，例如声音audio、图像image等，后面定义具体的种类，常见的MIME类型，比如：
+超文本标记语言文本.html texthtml
+普通文本.txt text/plain
+RTF文本.rtf application/rtf
+GIF图形.gif image/gif
+JPEG图形.ipeg.jpg image/jpeg
+
+> 通过使用PHP的全局数组$_ FILES ,你可以从客户计算机向远程服务器上传文件。
+第一个参数是表单的input name，第二个下标可以是"name", “type”, “size”, “tmp_ name” 或"error"
+1. 我们先尝试去上传一个图片，发现可以成功上传。这时候我们再尝试上传php文件，发现上传失败。
+![请添加图片描述](https://img-blog.csdnimg.cn/4371c62c88714cea86d48ca94b71efe3.jpeg)
+2. 我们打开Burp抓包，先上传一个图片看一看![请添加图片描述](https://img-blog.csdnimg.cn/fad8dd58575545e2968020a4428d4b3c.jpeg)
+3. 我们再上传一个php看一看![请添加图片描述](https://img-blog.csdnimg.cn/7fca6ce913154043a589569081242d74.jpeg)
+4. 因此，我们将上传php文件的包发送到repeater，将application/octet-stream修改为image/png。发现成功上传。![请添加图片描述](https://img-blog.csdnimg.cn/2ed572274dcd452ea959f0ac94b07728.jpeg)
+5. 通过http头的修改绕过了MINE type验证成功乱搞。之后就是访问传参，通过一句话木马控制服务器。
+### 8x03 getimagesize
+> getimagesize()：它是php提供的，通过对目标文件的16进制进行读取，通过该文件的前面几个字符串，来判断文件类型。
+getmagesize()返回结果中有文件大小和文件类型。
+固定的图片文件，十六进制的头部的前面的几个字符串基本上是一样的，比如说png格式的图片，所有png格式的图片前面的十六进制都是一样的。
+
+思路：我们就是要通过伪造十六进制的头部字符串来绕过getimagesize()函数，从而达到上传的效果。
+
+> 图片木马的制作:
+方法1 :直接伪造头部GIF89A
+方法2.CMD: copy /b test.png + muma.php ccc.png
+方法3.使用GIMP (开源的图片修改软件) , 通过增加备注,写入执行命令
+
+1. 这里我们用第二种方法：我们先在桌面准备好1.jpg和2.php，之后在桌面打开cmd输入`copy /b 1.jpg + 2.php 3.jpg`
+我们成功的得到了3.jpg，这张图片可以正常打开浏览，但其实其中已经隐藏了一个php文件，我们可以通过文件大小验证![请添加图片描述](https://img-blog.csdnimg.cn/7e92ae8306e34213a585b952f06c734c.jpeg)
+2. 再次尝试上传，发现成功上传。
+
+> 我们结合本地文件包含漏洞，上传图片路径，注意相对路径的问题，要在前面加上unsafeupload。
+
+**总结防范措施：**
+不要在前端使用JS实施上传限制策略
+通过服务端对上传文件进行限制:
+1.进行多条件组合检查:比如文件的大小，路径，扩展名,文件类型，文件完整性
+2.对上传的文件在服务器上存储时进行重命名(制定合理的命名规则)
+3.对服务器端上传文件的目录进行权限控制(比如只读)， 限制执行权限带来的危害
+
+## 9  Over Permission
+如果使用A用户的权限去操作B用户的数据，A的权限小于B的权限，如果能够成功操作，则称之为越权操作。 越权漏洞形成的原因是后台使用了不合理的权限校验规则导致的。
+一般越权漏洞容易出现在权限页面（需要登录的页面）增、删、改、查的的地方，当用户对权限页面内的信息进行这些操作时，后台需要对当前用户的权限进行校验，看其是否具备操作的权限，从而给出响应，而如果校验的规则过于简单则容易出现越权漏洞。
+因此，在在权限管理中应该遵守：
+1.使用最小权限原则对用户进行赋权;
+2.使用合理（严格）的权限校验规则;
+3.使用后台登录态作为条件进行权限判断,别动不动就瞎用前端传进来的条件;
+
+> 平行越权: A用户和B用户属于同一级别用户,但各自不能操作对方个人信息, A用户如果越权操作B用户的个人信息的情况称为平行越权操作
+垂直越权。A用户权限高于B用户 , B用户越权操作A用户的权限的情况称为垂直越权。
+越权漏洞属于逻辑漏洞,是由于权限校验的逻辑不够严谨导致。
+每个应用系统其用户对应的权限是根据其业务功能划分的,而每个企业的业务又都是不一样的。
+因此越权漏洞很难通过扫描工具发现出来,往往需要通过手动进行测试。
+
+
+### 9x01 水平越权
+ - 我们先根据提示进行登录，点击查看个人信息。![请添加图片描述](https://img-blog.csdnimg.cn/648e70d408614027be84b95ae1c107ce.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/f5ebd76520ef4f8f8678bcaa907087cd.jpeg)
+ - 通过Burp发现，当我们点击按钮时，向后台提供了一个get请求。提供了当前用户的用户名，然后后台将其信息返回到前台。![请添加图片描述](https://img-blog.csdnimg.cn/e3cab1d72b4d44b29aa9c30672a31d19.jpeg)
+ - 我们将这个数据包发送至Repeater模块。并且将其中的lili改为lucy，点击发送。![请添加图片描述](https://img-blog.csdnimg.cn/592e4e5f4e304ec780d432a06f190945.jpeg)
+ - 可以看到，lili和lucy的权限是同一级别，但是我们用lili的权限得到了lucy的信息。
+### 9x02 垂直越权
+ - 点击提示，“这里有两个用户admin/123456,pikachu/000000,admin是超级boss”
+说明admin是管理员账户，而pikachu是普通账户。
+我们分别登录admin和pikachu，发现admin有添加用户等权限（第一张为admin，第二张为pikachu）![请添加图片描述](https://img-blog.csdnimg.cn/5cb4d9b97e424397a85cfa9bd6cfc8a9.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/830fc3ee9aea44fda9f143a31bdfab0e.jpeg)
+ - 先登录超级管理员，去执行只有管理员才可以操作的新增账号的功能，用burp抓包。退出登录。登录普通用户，执行新增账号操作。如果成功，则存在垂直越权漏洞。
+ - 登录管理员admin![请添加图片描述](https://img-blog.csdnimg.cn/e284458d0e744d81b9af827b0332fde9.jpeg)
+ - 添加用户，这里以abc用户为例![请添加图片描述](https://img-blog.csdnimg.cn/016a8e40a63748c494b3f7f070bac520.jpeg)
+ - 用Burp抓包，并发送到Repeater模块中![请添加图片描述](https://img-blog.csdnimg.cn/8171faa1ffcc40d9b0881b65551ad88f.jpeg)
+ - 这时候我们退出登录，再登录pikachu普通用户，在Burp中找到登录普通用户时的数据包，并将普通用户的cookie复制（cookie就是普通用户的登录态），粘贴在重发器中admin账户所对应的cookie位置。![请添加图片描述](https://img-blog.csdnimg.cn/fdd9d8d1bb4e4f8ea5e679e41f466a9e.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/82d10853afbf4e2cb1b2e3176affb782.jpeg)
+ - 现在就相当于使用普通用户登录，然后实现添加用户操作，我们点击发送。回到页面刷新，我们看到又有一个abc用户。![请添加图片描述](https://img-blog.csdnimg.cn/e2943c3d50694d66b65f94eb44765178.jpeg)
+ - 通过上述操作，我们成功用pikachu普通权限执行了只有admin管理员权限才能执行的操作，说明存在垂直越权漏洞。
+## 10 ../../
+**目录遍历漏洞概述**
+在web功能设计中,很多时候我们会要将需要访问的文件定义成变量，从而让前端的功能便的更加灵活。当用户发起一个前端的请求时，便会将请求的这个文件的值(比如文件名称)传递到后台，后台再执行其对应的文件。在这个过程中，如果后台没有对前端传进来的值进行严格的安全考虑，则攻击者可能会通过“../”这样的手段让后台打开或者执行一些其他的文件。从而导致后台服务器上其他目录的文件结果被遍历出来，形成目录遍历漏洞。
+看到这里,你可能会觉得目录遍历漏洞和不安全的文件下载，甚至文件包含漏洞有差不多的意思，是的，目录遍历漏洞形成的最主要的原因跟这两者一样，都是在功能设计中将要操作的文件使用变量的方式传递给了后台，而又没有进行严格的安全考虑而造成的，只是出现的位置所展现的现象不一样，因此，这里还是单独拿出来定义一下。
+需要区分一下的是,如果你通过不带参数的url（比如：http://xxxx/doc）列出了doc文件夹里面所有的文件，这种情况，我们成为敏感信息泄露。 而并不归为目录遍历漏洞。（关于敏感信息泄露你你可以在"i can see you ABC"中了解更多）
+### 10x01 目录遍历
+ - 我们先点击超链接
+![请添加图片描述](https://img-blog.csdnimg.cn/4ff6bbb2b2274b36addb17103778ce36.jpeg)
+ - 这是前端向后台发送了一个文件名。我们可以修改文件名。例如修改成../dir.php上级目录下的dir.php，便可以访问到上一级的dir.php  (**这里应该是两个点**)
+## 11 敏感信息泄露
+**敏感信息泄露概述**
+
+由于后台人员的疏忽或者不当的设计，导致不应该被前端用户看到的数据被轻易的访问到。 比如：
+ - 通过访问url下的目录，可以直接列出目录下的文件列表;
+ - 输入错误的url参数后报错信息里面包含操作系统、中间件、开发语言的版本或其他信息;
+ - 前端的源码（html,css,js）里面包含了敏感信息，比如后台登录地址、内网接口信息、甚至账号密码等;
+ 
+类似以上这些情况，我们成为敏感信息泄露。敏感信息泄露虽然一直被评为危害比较低的漏洞，但这些敏感信息往往给攻击者实施进一步的攻击提供很大的帮助,甚至“离谱”的敏感信息泄露也会直接造成严重的损失。 因此,在web应用的开发上，除了要进行安全的代码编写，也需要注意对敏感信息的合理处理。
+### 11x01 I can see your ABC
+1. 我们在页面上右键查看网站源代码，发现在某个注释中藏有测试账号![请添加图片描述](https://img-blog.csdnimg.cn/7aec2757e99045a09bc324ef44511a1d.jpeg)
+![请添加图片描述](https://img-blog.csdnimg.cn/1aa48b170c0b45f384d5dc217c034bc2.jpeg)
+2. 也可以在不登陆状态直接访问abc.php从而绕过登录。![请添加图片描述](https://img-blog.csdnimg.cn/c70c2eb31a5f41e887a40ee028f3d9f4.jpeg)
+## 12 PHP反序列化
+在理解这个漏洞前,你需要先搞清楚php中serialize()，unserialize()这两个函数。
+
+序列化serialize()
+序列化说通俗点就是把一个对象变成可以传输的字符串,比如下面是一个对象:
+
+```php
+class S{
+        public $test="pikachu";
+    }
+    $s=new S(); //创建一个对象
+    serialize($s); //把这个对象进行序列化
+    序列化后得到的结果是这个样子的:O:1:"S":1:{s:4:"test";s:7:"pikachu";}
+        O:代表object
+        1:代表对象名字长度为一个字符
+        S:对象的名称
+        1:代表对象里面有一个变量
+        s:数据类型
+        4:变量名称的长度
+        test:变量名称
+        s:数据类型
+        7:变量值的长度
+        pikachu:变量值
+```
+反序列化unserialize()
+就是把被序列化的字符串还原为对象,然后在接下来的代码中继续使用。
+
+```php
+	$u=unserialize("O:1:"S":1:{s:4:"test";s:7:"pikachu";}");
+    echo $u->test; //得到的结果为pikachu
+```
+序列化和反序列化本身没有问题,但是如果反序列化的内容是用户可以控制的,且后台不正当的使用了PHP中的魔法函数,就会导致安全问题
+
+```php
+		常见的几个魔法函数:
+        __construct()当一个对象创建时被调用
+
+        __destruct()当一个对象销毁时被调用
+
+        __toString()当一个对象被当作一个字符串使用
+
+        __sleep() 在对象在被序列化之前运行
+
+        __wakeup将在序列化之后立即被调用
+
+        漏洞举例:
+
+        class S{
+            var $test = "pikachu";
+            function __destruct(){
+                echo $this->test;
+            }
+        }
+        $s = $_GET['test'];
+        @$unser = unserialize($a);
+
+        payload:O:1:"S":1:{s:4:"test";s:29:"<script>alert('xss')</script>";}
+```
+### 12x01 PHP反序列化漏洞
+1. 我们先尝试输入任意内容，发现都会返回来一句话![请添加图片描述](https://img-blog.csdnimg.cn/1caf7dc01a9743fb99e4ea4fe89ad64f.jpeg)
+源代码如下：\pikachu\vul\unserilization\unser.php
+
+```php
+$html='';
+if(isset($_POST['o'])){
+    $s = $_POST['o'];
+    if(!@$unser = unserialize($s)){
+        $html.="<p>大兄弟,来点劲爆点儿的!</p>";
+    }else{
+        $html.="<p>{$unser->test}</p>";
+    }
+
+}
+```
+
+3. 输入`O:1:"S":1:{s:4:"test";s:29:"<script>alert('abc')</script>";}`，成功弹窗![请添加图片描述](https://img-blog.csdnimg.cn/8549d1163c124a5eb85dbfa40a6f6910.jpeg)
+
+> 注：PBW的文档中说如果我们想要弹窗返回cookie，修改payload为：
+> `O:1:"S":1:{s:4:"test";s:39:"<script>alert(document.cookie)</script>";}`
+
+
+这一小节中，表单接收序列化后的数据之后会进行传递，当输入的值为序列后的值时，unserialize会对其进行反序列化，然后输出显示$html。
+## 13 XXE
+XXE -"xml external entity injection"
+既"xml外部实体注入漏洞"。
+概括一下就是"攻击者通过向服务器注入指定的xml实体内容,从而让服务器按照指定的配置进行执行,导致"问题"
+也就是说服务端接收和解析了来自用户端的xml数据,而又没有做严格的安全控制,从而导致xml外部实体注入。
+
+具体的关于xml实体的介绍,网络上有很多,自己动手先查一下。
+现在很多语言里面对应的解析xml的函数默认是禁止解析外部实体内容的,从而也就直接避免了这个漏洞。
+以PHP为例,在PHP里面解析xml用的是libxml,其在≥2.9.0的版本中,默认是禁止解析xml外部实体内容的。
+
+本章提供的案例中,为了模拟漏洞,通过手动指定LIBXML_NOENT选项开启了xml外部实体解析。
+
+> ==XML：==
+> XML 指可扩展标记语言（EXtensible Markup Language）
+XML 是一种标记语言，很类似 HTML
+XML 的设计宗旨是传输数据，而非显示数据
+XML 标签没有被预定义。您需要自行定义标签。
+XML 被设计为具有自我描述性。
+XML 是 W3C 的推荐标准
+
+==XML 和 HTML 之间的差异==
+
+ - XML 被设计用来传输和存储数据，其焦点是数据的内容。
+ - HTML 被设计用来显示数据，其焦点是数据的外观
+
+提示要求“先把XML声明、DTD文档类型定义、文档元素这些基础知识自己看一下”
+
+```php
+第一部分：XML声明部分
+<?xml version="1.0"?>
+ 
+第二部分：文档类型定义 DTD
+<!DOCTYPE note[ 
+<!--定义此文档是note类型的文档-->
+<!ENTITY entity-name SYSTEM "URI/URL">
+<!--外部实体声明-->
+]>
+ 
+第三部分：文档元素
+<note>
+<to>Dave</to>
+<from>Tom</from>
+<head>Reminder</head>
+<body>You are a good man</body>
+</note>
+```
+DTD：Document Type Definition即文档类型定义，用来为XML文档定义语义约束。
+
+```php
+1.DTD内部声明
+<!DOCTYPE 根元素[元素声明]>
+2. DTD外部引用
+<!DOCTYPE根元素名称SYSTEM “"外部DTD的URI" >
+3.引用公共DTD
+<!DOCTYPE根元素名称PUBLIC "DTD标识名” “公用DTD的URI” >
+```
+如果一个接口支持接收xml数据，且没有对xml数据做任何安全上的措施，就可能导致XXE漏洞。
+simplexml load string()函数转换形式良好的XML字符串为SimpleXMLElement对象
+XXE漏洞发生在应用程序解析XML输入时，没有禁止外部实体的加载，导致攻击者可以构造一个恶意的XML。
+
+```php
+file:///path/to/file.ext
+http://url
+php://filter/read=convert.base64-encode/resource=conf.php
+```
+### 13x01 XXE漏洞
+1. 我们先尝试一下 **内部实体**，输入：
+
+```php
+<?xml version="1.0"?> 
+<!DOCTYPE ANY [    
+<!ENTITY xxe "abc" > ]> 
+<a>&xxe;</a>
+```
+返回来abc：
+
+![请添加图片描述](https://img-blog.csdnimg.cn/ef199c6e11274d8fba64bd317f640490.jpeg)
+2. 我们再尝试一下 **外部实体**，输入：
+
+```php
+<?xml version="1.0"?>
+<!DOCTYPE ANY [
+     <!ENTITY xxe SYSTEM "file:///c:/windows/win.ini"> ]>
+<a>&xxe;</a>
+```
+返回数据如图：![请添加图片描述](https://img-blog.csdnimg.cn/e530e919dfc84a5a8b98bb776e2d0aee.jpeg)
+## 14 URL重定向
+不安全的url跳转
+
+不安全的url跳转问题可能发生在一切执行了url地址跳转的地方。
+如果后端采用了前端传进来的(可能是用户传参,或者之前预埋在前端页面的url地址)参数作为了跳转的目的地,而又没有做判断的话
+就可能发生"跳错对象"的问题。
+
+url跳转比较直接的危害是:
+-->钓鱼,既攻击者使用漏洞方的域名(比如一个比较出名的公司域名往往会让用户放心的点击)做掩盖,而最终跳转的确实钓鱼网站
+
+### 14x01 不安全的URL跳转
+1. 在页面中有四句话，其中第一句和第二句没有反应，第三句返回到了URL重定向概述界面，第四句有回显，而且url多了个“url=i”
+2. 我们进如开发者模式，如下
+![请添加图片描述](https://img-blog.csdnimg.cn/8e8f0692859f470ab35d2dedfa890c86.jpeg)
+我们将第四局的`i`改为`https://www.baidu.com/`，点击后成功跳转百度。![请添加图片描述](https://img-blog.csdnimg.cn/c8ff9378d427423f9bb7c882fbf53cf6.jpeg)![请添加图片描述](https://img-blog.csdnimg.cn/d9fa7a7fcdc447849af5dd744ba21626.jpeg)
+
+## 15 SSRF
+SSRF(Server-Side Request Forgery:服务器端请求伪造)
+其形成的原因大都是由于服务端**提供了从其他服务器应用获取数据的功能**,但又没有对目标地址做严格过滤与限制
+
+导致攻击者可以传入任意的地址来让后端服务器对其发起请求,并返回对该目标地址请求的数据
+
+数据流:攻击者----->服务器---->目标地址
+
+根据后台使用的函数的不同,对应的影响和利用方法又有不一样
+
+```php
+PHP中下面函数的使用不当会导致SSRF:
+file_get_contents()
+fsockopen()
+curl_exec()
+```
+如果一定要通过后台服务器远程去对用户指定("或者预埋在前端的请求")的地址进行资源请求,则请做好目标地址的过滤。
+### 15x01 SSRF（curl）
+
+>==**提示说“先了解一下php中curl相关函数的用法吧”，那我们就了解一下**==
+> **curl_close()    关闭一个cURL会话。 curl_copy_handle()    复制一个cURL句柄和它的所有选项。** 
+> curl_errno()    返回最后一次的错误号。
+> curl_error()    返回一个保护当前会话最近一次错误的字符串。 
+> curl_escape()   返回转义字符串，对给定的字符串进行URL编码。 
+> **curl_exec()    执行一个cURL会话。** 
+> curl_file_create() 创建一个 CURLFile 对象。 
+> curl_getinfo()    获取一个cURL连接资源句柄的信息。
+> **curl_init()   初始化一个cURL会话**。
+> curl_multi_add_handle()    向curl批处理会话中添加单独的curl句柄。
+> curl_multi_close()    关闭一组cURL句柄。
+> curl_multi_exec()    运行当前 cURL句柄的子连接。
+> curl_multi_getcontent()   如果设置了CURLOPT_RETURNTRANSFER，则返回获取的输出的文本流。
+> curl_multi_info_read()   获取当前解析的cURL的相关传输信息。 
+> curl_multi_init()    返回一个新cURL批处理句柄。
+> curl_multi_remove_handle()    移除curl批处理句柄资源中的某个句柄资源。
+> curl_multi_select()    等待所有cURL批处理中的活动连接。 
+> curl_multi_setopt()   设置一个批处理cURL传输选项。
+> curl_multi_strerror()    返回描述错误码的字符串文本。 
+> curl_pause() 暂停及恢复连接。
+> curl_reset()    重置libcurl的会话句柄的所有选项。 
+> curl_setopt_array()   为cURL传输会话批量设置选项。
+> **curl_setopt()    设置一个cURL传输选项。** 
+> curl_share_close()   关闭cURL共享句柄。
+> curl_share_init()    初始化cURL共享句柄。 
+> curl_share_setopt()   设置一个共享句柄的cURL传输选项。 
+> curl_strerror()    返回错误代码的字符串描述。 
+> curl_unescape()   解码URL编码后的字符串。 
+> curl_version()    获取cURL版本信息。
+
+1. 我们点击超链接，发现返回了一首诗，同时URL中发生了变化
+![请添加图片描述](https://img-blog.csdnimg.cn/91ef0f2b9d1e4902abcb220a365ad8f0.jpeg)
+URL：`http://127.0.0.1/pikachu/vul/ssrf/ssrf_curl.php?url=http://127.0.0.1/pikachu/vul/ssrf/ssrf_info/info1.php`
+2. 我们将`url=`后面的内容修改为`https://www.baidu.com/`，发现成功返回了百度页面![请添加图片描述](https://img-blog.csdnimg.cn/b15eebdc155547e3acfbd5b1793a54f9.jpeg)
+3. 我们还可以**file协议**，查看本地文件：`url=file:///c:/windows/win.ini`![请添加图片描述](https://img-blog.csdnimg.cn/83a32f3f3118478b9d7c9838d8f82802.jpeg)
+4. 我们看一下后端\pikachu\vul\ssrf\ssrf_curl.php
+
+```php
+if(isset($_GET['url']) && $_GET['url'] != null){
+
+    //接收前端URL没问题,但是要做好过滤,如果不做过滤,就会导致SSRF
+    $URL = $_GET['url'];
+    $CH = curl_init($URL);
+    curl_setopt($CH, CURLOPT_HEADER, FALSE);
+    curl_setopt($CH, CURLOPT_SSL_VERIFYPEER, FALSE);
+    $RES = curl_exec($CH);
+    curl_close($CH) ;
+//ssrf的问是:前端传进来的url被后台使用curl_exec()进行了请求,然后将请求的结果又返回给了前端。
+//除了http/https外,curl还支持一些其他的协议curl --version 可以查看其支持的协议,telnet
+//curl支持很多协议，有FTP, FTPS, HTTP, HTTPS, GOPHER, TELNET, DICT, FILE以及LDAP
+    echo $RES;
+
+}
+```
+### 15x02 SSRF(file_get_content)
+提示说：“先了解一下file_get_contents()相关函数的用法吧”，那我们就再了解一下其用法
+
+> file_get_contents() 函数将指定 URL 的文件读入一个字符串并返回。
+> 该函数是用于把文件的内容读入到一个字符串中的首选方法。如果服务器操作系统支持，还会使用内存映射技术来增强性能。
+
+> >  ==函数结构==:  file_get_contents(path,include_path,context,start,max_length)
+> path：要读取的路径或链接。
+>  include_path：是否在路径中搜索文件，搜索则设为 1，默认为 false。
+> context：修改流的行为，如超时时间，GET / POST 等。
+> start：开始读文件的位置。
+> max_length：读取文件的字节数。 
+> 
+> >  ==file_get_contents 和 curl 区别：==
+>curl 支持更多协议，有http、https、ftp、gopher、telnet、dict、file、ldap；模拟 Cookie登录，爬取网页；FTP 上传下载。
+> fopen / file_get_contents 只能使用 GET 方式获取数据。
+> curl 可以进行 DNS 缓存，同一个域名下的图片或其它资源只需要进行一次DNS查询。
+> curl 相对来说更加快速稳定，访问量高的时候首选 curl，缺点就是相对于 file_get_contents配置繁琐，file_get_contents 适用与处理小访问的应用。
+
+1. 我们还是点击链接，发现这次的URL中变成了?file=，完整链接如下：
+
+```php
+http://127.0.0.1/pikachu/vul/ssrf/ssrf_fgc.php?file=http://127.0.0.1/pikachu/vul/ssrf/ssrf_info/info2.php
+```
+![请添加图片描述](https://img-blog.csdnimg.cn/a3dd8e26d33b4a7e9cb38c97932ef615.jpeg)
+2. 我们尝试去修改，`file:///c:/windows/win.ini`，发现成功返回![请添加图片描述](https://img-blog.csdnimg.cn/2d16a57295964897962e099787caaf84.jpeg)3. 我们再来看看后端长什么样子：\pikachu\vul\ssrf\ssrf_fgc.php
+
+```php
+//读取PHP文件的源码:php://filter/read=convert.base64-encode/resource=ssrf.php
+//内网请求:http://x.x.x.x/xx.index
+if(isset($_GET['file']) && $_GET['file'] !=null){
+    $filename = $_GET['file'];
+    $str = file_get_contents($filename);
+    echo $str;
+}
+```
+3. 它和前面的逻辑是一样的，不同的是它这里使用file_get_contents函数进行文件的读取执行，而file_get_contents函数可以对本地文件进行读取，也可以对远程文件进行读取。
+
