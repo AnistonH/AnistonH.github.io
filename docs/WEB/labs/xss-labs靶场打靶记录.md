@@ -1,12 +1,14 @@
-﻿@[TOC]
+﻿[TOC]
+
+
 
 ## level-1 无过滤机制
 
 > http://127.0.0.1/xss-labs/level1.php?name=test
 
-1. 我们先看一看页面：![在这里插入图片描述](https://img-blog.csdnimg.cn/006600c761cb4b7f947392d61108d0ab.jpeg#pic_center)
-观察发现，URL中可以输入参数，而页面会回显参数以及参数的长度。
-2. 我们看一下页面源码，发现我们输入的内容会被直接拼接在页面中。![在这里插入图片描述](https://img-blog.csdnimg.cn/25f2769cb7454278a1cb5b4ffe5fe44e.jpeg#pic_center)
+1. 我们先看一看页面：观察发现，URL中可以输入参数，而页面会回显参数以及参数的长度。![1](./xss-labs靶场打靶记录.assets/1.jpg)
+
+2. 我们看一下页面源码，发现我们输入的内容会被直接拼接在页面中。![在这里插入图片描述](./xss-labs靶场打靶记录.assets/2.jpg)
 3. 因此我们将URL中的中的 “test” 修改为 “`<script>alert(1)</script>`，成功弹窗。
 4. 后端代码如下（我们输入的参数在被get到的时候没有经过特殊的过滤处理）：
 
@@ -20,8 +22,9 @@ echo "<h2 align=center>欢迎用户".$str."</h2>";
 ## level-2 闭合标签
 
 > http://127.0.0.1/xss-labs/level2.php?keyword=test
-1. 这一关有了输入框，我们先输入`<script>alert(1)</script>`试一试，发现没有成功![在这里插入图片描述](https://img-blog.csdnimg.cn/6d75b105079d454e90271a3e6d46c781.jpeg#pic_center)
-2. 我们在第一步的基础上进页面源码看一看：![在这里插入图片描述](https://img-blog.csdnimg.cn/dbc333f4af474b70a8ff53872f1e8ea4.jpeg#pic_center)
+
+1. 这一关有了输入框，我们先输入`<script>alert(1)</script>`试一试，发现没有成功![在这里插入图片描述](./xss-labs靶场打靶记录.assets/1-1706708019857-3.jpg)
+2. 我们在第一步的基础上进页面源码看一看：![在这里插入图片描述](./xss-labs靶场打靶记录.assets/2-1706708031890-7.jpg)
 3. 我们发现，在页面上输出的内容被转义了，但是value属性中的并没有被转移，但是问题是这里的js代码在标签属性值中，浏览器是无法执行的。因此我们想办法去闭合，我们输入`"><script>alert(1)</script>`，进行闭合，闭合之后的为“`<input name="keyword" value=""><script>alert(1)</script>">`”，成功弹窗。
 4. 我们看一看后端代码：（用 htmlspecialchars() 对输入的字符进行了转义）
 [点此学习 htmlspecialchars() 函数](https://www.runoob.com/php/func-string-htmlspecialchars.html)
@@ -43,17 +46,17 @@ echo "<h2 align=center>欢迎用户".$str."</h2>";
 
 > http://127.0.0.1/xss-labs/level3.php?writing=wait
 
-1. 我们依旧是先输入`<script>alert(1)</script>`，没有作用，查看网页源码，发现页面输出内容和 value 属性值都被转义了![请添加图片描述](https://img-blog.csdnimg.cn/ed64ae1559ca48c1b4cb0d0b037edf6d.jpeg)
+1. 我们依旧是先输入`<script>alert(1)</script>`，没有作用，查看网页源码，发现页面输出内容和 value 属性值都被转义了![请添加图片描述](./xss-labs靶场打靶记录.assets/1-1706708053988-12.jpg)
 2. 观察发现，上图中的单引号并没有被转义，我们将单引号闭合，并使用一种不需要尖括号等的JS方法，我们输入 `'onclink='alert(1)` ，成功弹窗。
 当我们输入之后的完整代码为：`<input name="keyword" value=' ' onclick='alert(1)'>`
 （也可以 `'onclick='javascript:alert(1)` ）
-3. 我们看一看后端源码：（确实是对两个地方都进行了转义）![请添加图片描述](https://img-blog.csdnimg.cn/fd6f1a9ae4894276b695aa75f61fc5d9.jpeg)
+3. 我们看一看后端源码：（确实是对两个地方都进行了转义）![请添加图片描述](./xss-labs靶场打靶记录.assets/2-1706708067440-17.jpg)
 
 ## level-4 双引号闭合+添加事件
 
 > http://127.0.0.1/xss-labs/level4.php?keyword=try harder!
 
-1. 我们依旧是 `<script>alert(1)</script>` 测试，查看网页源码，发现尖括号直接就没有了![](https://img-blog.csdnimg.cn/6d2bed3273d24416927b928d0ea3b3d9.jpeg#pic_center)
+1. 我们依旧是 `<script>alert(1)</script>` 测试，查看网页源码，发现尖括号直接就没有了![](./xss-labs靶场打靶记录.assets/1-1706708075329-19.jpg)
 2. 那我们还是像上一关一样，使用不需要尖括号的写法，但是上一关是单引号闭合，而这一关是双引号，那我们就改成 `"onclick="alert(1)` 或者 `"onclick="javascript:alert(1)` ，成功弹窗。
 3. 我们看一看后端代码：发现是使用 replace 对尖括号等进行了替换。
 
@@ -70,7 +73,7 @@ $str3 = str_replace("<", "", $str2);
 1. 我们还是 `<script>alert(1)</script>` ，然后看页面源码，发现 value 属性值变成了 `<scr_ipt>alert(1)</script>`（下划线）
  我们再尝试 `">onclick="alert(1)` ，查看页面源码， value 处成了 `value="">o_nclick="alert(1)"`（下划线）
     说明后端会对 script 和 onclick 进行过滤。
-    ![在这里插入图片描述](https://img-blog.csdnimg.cn/dea240782bec42d281026ebfe1d5c32d.jpeg#pic_center)
+    ![在这里插入图片描述](./xss-labs靶场打靶记录.assets/1-1706708086843-21.jpg)
 
  2. 查资料，得知应该用 a 标签绕过，使用 JS伪协议( `javascript:alert(1)` )绕过，简单说就是把 javascript:  后面的代码当成  javascript 来执行。
  3. 因此我们输入 `"><a href=javascript:alert(1)>` （用 "> 进行闭合），成功弹窗。
@@ -97,8 +100,8 @@ $str3 = str_replace("on", "o_n", $str2);
 
 
  4. 我们来解决上一步中产生的问题：为什么 `"Onfocus=javascript:alert()"` 不可以，但是 `" Onfocus=javascript:alert() "`可以（二者只是差了 alert() 后面的空格而已）。请看下图：
-![请添加图片描述](https://img-blog.csdnimg.cn/a245dece982f4baca718b953d54659a4.jpeg)
-![请添加图片描述](https://img-blog.csdnimg.cn/374fd4ad6fda462baa8b9efcb0b996a5.jpeg)
+![请添加图片描述](./xss-labs靶场打靶记录.assets/1-1706708101533-25.jpg)
+![请添加图片描述](./xss-labs靶场打靶记录.assets/2-1706708106743-27.jpg)
 看出区别了吧，没有空格的时候 alert() 后面的两个引号形成了闭合，而有空格的时候，则一切正常。
 
 5. 我们看一看后端代码：
@@ -114,8 +117,9 @@ $str3 = str_replace("on", "o_n", $str2);
 ## level-7 双写绕过
 
 > http://127.0.0.1/xss-labs/level7.php?keyword=move up!
+
 1. 我们依旧是尝试 `<script>alert()</script>`，结果直接把 `<script></script>` 给没了，这很可能是检测到 script 标签然后进行了替换，那我们就尝试双写绕过
-![请添加图片描述](https://img-blog.csdnimg.cn/22535d516b5547f6a6bdea12dd5987e3.jpeg)
+![请添加图片描述](./xss-labs靶场打靶记录.assets/1-1706708118234-29.jpg)
 2. 我们尝试一下内容：成功弹窗
 - `"> <a hrehreff=javasscriptcript:alert()>`
 - `"><scscriptript>alert(1)</sscriptcript>`
@@ -133,10 +137,11 @@ $str6 = str_replace("href", "", $str5);
 ## level-8 编码绕过
 
 > http://127.0.0.1/xss-labs/level8.php?keyword=nice try!
+
 1. 我们测试发现，大小写绕过 双写绕过 JS伪协议 ……各种东西都被限制了，然后我们输入内容之后点击 “友情链接” 会跳转，那我们就尝试在这里做动作。
 2. 查资料：我们能利用 href 的隐藏属性自动 Unicode 解码，我们可以插入一段 js 伪协议 `javascript:alert()`
-我们将其URL编码，得到：`&#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;&#58;&#97;&#108;&#101;&#114;&#116;&#40;&#41;`
-成功弹窗![在这里插入图片描述](https://img-blog.csdnimg.cn/93c758d92ef9490c91d44ca148ad346a.jpeg#pic_center)
+我们将其URL编码，得到：`&#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;&#58;&#97;&#108;&#101;&#114;&#116;![1](./xss-labs/8/1.jpg)&#40;&#41;`
+成功弹窗![在这里插入图片描述](./xss-labs靶场打靶记录.assets/1-1706708130445-31.jpg)
 
 
 3. 后台源代码分析。将 keyword 提交的变量转换为小写，替换关键字 script、on、src、data、href、"，然后输出在a标签的href属性中。
@@ -155,11 +160,11 @@ $str7 = str_replace('"', '&quot', $str6);
 > http://127.0.0.1/xss-labs/level9.php?keyword=not bad!
 
 
-1. 依旧是“友情链接”，那我们就把上一关的拿过来试一试，结果提示“您的链接不合法？有没有！”，链接合法，我们考虑一下 http 或者 https 协议，但是其实这里会有两种可能，一种是开头必须是 http 等字样，另一种是字符串中不管哪里有 http 等字样就行，看一看后端发现这一关是第二种情况，那就很舒服了（问一下  第一种情况怎么办）。![请添加图片描述](https://img-blog.csdnimg.cn/72346ce9029e48109181923325fd9192.jpeg)
+1. 依旧是“友情链接”，那我们就把上一关的拿过来试一试，结果提示“您的链接不合法？有没有！”，链接合法，我们考虑一下 http 或者 https 协议，但是其实这里会有两种可能，一种是开头必须是 http 等字样，另一种是字符串中不管哪里有 http 等字样就行，看一看后端发现这一关是第二种情况，那就很舒服了（问一下  第一种情况怎么办）。![请添加图片描述](./xss-labs靶场打靶记录.assets/1-1706708146065-36.jpg)
 
-2. 那我们先尝试一下`javascript:alert()http://www.baidu.com`但是这首先就不符合语法，应该在 http 前面加注释，（反正不执行，后端只是检测一下有没有这个字样）所以我们应该改成`javascript: alert(1) //http://www.baidu.com`![请添加图片描述](https://img-blog.csdnimg.cn/873d0e6133c54980828f2f179b4cb889.jpeg)
+2. 那我们先尝试一下`javascript:alert()http://www.baidu.com`但是这首先就不符合语法，应该在 http 前面加注释，（反正不执行，后端只是检测一下有没有这个字样）所以我们应该改成`javascript: alert(1) //http://ww![2](./xss-labs/9/2.jpg)w.baidu.com`![请添加图片描述](./xss-labs靶场打靶记录.assets/2-1706708157743-38.jpg)
 
-3. 但是输入之后并不行，怎么回事，看看页面源码，发现 href 中的 “ script ” 被插入了下划线![请添加图片描述](https://img-blog.csdnimg.cn/9fa3139472df4d918c3a08010776b8be.jpeg)
+3. 但是输入之后并不行，怎么回事，看看页面源码，发现 href 中的 “ script ” 被插入了下划线![请添加图片描述](./xss-labs靶场打靶记录.assets/3.jpg)
 4. 这应该是后端匹配到 script 然后做了替换，因为是在 href 里面，那我们就进行 Unicode 编码，（注意别把html给编码了）`javasc&#114;ipt:alert(1)//http://`
 5. 我们看一看后端代码：
 
@@ -192,9 +197,10 @@ $str7 = str_replace('"', '&quot', $str6);
 ## level-10 隐藏信息
 
 > http://127.0.0.1/xss-labs/level10.php?keyword=well done!
+
 1. 我们进网页源码看一看，发现有三个 input 标签被隐藏了，但是我们不知道这三个标签哪一个可以利用，那么根据他们的name构造传值，让它们的type改变，不再隐藏，谁出来了谁就能利用， `t_link" type='text'>//&t_history" type='text'>//&t_sort=" type='text'>//`试一试，发现第三个被修改了（或者是输入`a&t_link=aa&t_history=bb&t_sort=cc`回车后发现页面源码中之后 t_sort 被改动了）
-![请添加图片描述](https://img-blog.csdnimg.cn/5ea3098907914cf097592a12d4aeba58.jpeg)
-![请添加图片描述](https://img-blog.csdnimg.cn/44a88648193e4daa94ac5490f0ae9c6b.jpeg)
+![请添加图片描述](./xss-labs靶场打靶记录.assets/2-1706708188548-48.jpg)
+![请添加图片描述](./xss-labs靶场打靶记录.assets/2-1706708195588-50.jpg)
 2. 那我们呢就直接构造payload：`&t_sort=" type='text' onclick=javascript:alert(12)>//`，成功
 3. 看一看后端
 
@@ -222,14 +228,14 @@ $str7 = str_replace('"', '&quot', $str6);
 1. 我们看看页面源码，发现有四个被隐藏的 input 标签，相比于上一关多出了一个叫 t_ref 的标签，ref，有没有想到什么，当然是 referer。（并且这个标签值为第10关URL）
 > Referer  是  HTTP  请求header 的一部分，当浏览器（或者模拟浏览器行为）向web 服务器发送请求的时候，头信息里有包含  Referer  。比如我在www.google.com 里有一个www.baidu.com 链接，那么点击这个www.baidu.com ，它的header 信息里就有：Referer=http://www.google.com
 
-由此可以看出来吧。它就是表示一个来源。看下图的一个请求的 Referer  信息。![请添加图片描述](https://img-blog.csdnimg.cn/ac273b6fd3f344fab88a76bb34a39b97.jpeg)
+由此可以看出来吧。它就是表示一个来源。看下图的一个请求的 Referer  信息。![请添加图片描述](./xss-labs靶场打靶记录.assets/1-1706708215536-55.jpg)
 
 
 
 
-2. 既然如此，那我们就试试用 Burp 抓包，然后修改 referer，呃当然是先去第十关，在弹窗成功那儿（跳转11关的时候）抓包。如图为抓到的数据包：![请添加图片描述](https://img-blog.csdnimg.cn/0db3d9be8e0c4d8f821ac67bd0588889.jpeg)
+2. 既然如此，那我们就试试用 Burp 抓包，然后修改 referer，呃当然是先去第十关，在弹窗成功那儿（跳转11关的时候）抓包。如图为抓到的数据包：![请添加图片描述](./xss-labs靶场打靶记录.assets/2-1706708225123-60.jpg)
 
-3. 我们将数据包修改为`referer:&t_sort=" type='text' onclick=javascript:alert()>//`，然后放行，发现页面确实有了一个框，点击成功弹窗![请添加图片描述](https://img-blog.csdnimg.cn/94286fe10d48428386b109e935bdc0b3.jpeg)
+3. 我们将数据包修改为`referer:&t_sort=" type='text' onclick=javascript:alert()>//![3](./xss-labs/11/3.jpg)`，然后放行，发现页面确实有了一个框，点击成功弹窗![请添加图片描述](./xss-labs靶场打靶记录.assets/3-1706708615027-128.jpg)
 4. 最后我们来看下后端代码：发现确实是`$str11 = $_SERVER['HTTP_REFERER'];`
 
 ```php
@@ -253,9 +259,9 @@ $str7 = str_replace('"', '&quot', $str6);
 
 > http://127.0.0.1/xss-labs/level12.php?keyword=good job!
 
-1. 还是看页面源码，这次的又成了 t_ua ，UA，后面的值也一看就是UA，那我们启动Burp！![请添加图片描述](https://img-blog.csdnimg.cn/c8cb30fbf77a4fd38abca01ebd368567.jpeg)
-2. 如图为我们抓到的数据包：![请添加图片描述](https://img-blog.csdnimg.cn/79d371d7a3b94627a5547cf7978c1f1c.jpeg)
-3. 我们对 UA 的值进行修改：`"type="text" onmousemove="alert()`![请添加图片描述](https://img-blog.csdnimg.cn/e695329be21540b291f200b3648ffaf7.jpeg)
+1. 还是看页面源码，这次的又成了 t_ua ，UA，后面的值也一看就是UA，那我们启动Burp！![请添加图片描述](./xss-labs靶场打靶记录.assets/1-1706708271749-65.jpg)
+2. 如图为我们抓到的数据包：![请添加图片描述](./xss-labs靶场打靶记录.assets/2-1706708280856-70.jpg)
+3. 我们对 UA 的值进行修改：`"type="te![3](./xss-labs/12/3.jpg)xt" onmousemove="alert()`![请添加图片描述](./xss-labs靶场打靶记录.assets/3-1706708295322-72.jpg)
 4. 修改后放行，成功弹窗，我们看看后端代码：（`$str11 = $_SERVER['HTTP_USER_AGENT'];`）
 
 ```php
@@ -277,10 +283,11 @@ $str7 = str_replace('"', '&quot', $str6);
 ## level-13 cookie
 
 > http://127.0.0.1/xss-labs/level13.php?keyword=good job!
-1. 先看看前端代码，这次又换成了 t_cook ，呃，cookies？看一看 cookies ，长得确实很奇怪。那就还是 Burp 改包。![请添加图片描述](https://img-blog.csdnimg.cn/9ee4ca3b27514fe78dc99572a4c487b8.jpeg)
-![请添加图片描述](https://img-blog.csdnimg.cn/512e9f32bf4548a7856b040083edc9eb.jpeg)
-2. 我们在Burp抓到数据包之后，将 cookie 修改为`"type='text' onclick=javascript:alert(1)//`，如图：![请添加图片描述](https://img-blog.csdnimg.cn/6ed8cbc290f840e78cb391c6e90ba325.jpeg)
-3. 放行后果然有了一个框，也成功弹窗。![请添加图片描述](https://img-blog.csdnimg.cn/5f6fc0a4a91941b295eec48284ed7b29.jpeg)
+
+1. 先看看前端代码，这次又换成了 t_cook ，呃，cookies？看一看 cookies ，长得确实很奇怪。那就还是 Burp 改包。![请添加图片描述](./xss-labs靶场打靶记录.assets/4.jpg)
+![请添加图片描述](./xss-labs靶场打靶记录.assets/1-1706708331819-79.jpg)
+2. 我们在Burp抓到数据包之后，将 cookie 修改为`"type='text' onclick=javascript:![2](./xss-labs/13/2.jpg)alert(1)//`，如图：![请添加图片描述](./xss-labs靶场打靶记录.assets/2-1706708343842-81.jpg)
+3. 放行后果然有了一个框，也成功弹窗。![请添加图片描述](./xss-labs靶场打靶记录.assets/3-1706708356967-86.jpg)
 4. 看看后端代码：（`$str11 = $_COOKIE["user"];`）
 
 ```php
@@ -312,7 +319,7 @@ $str7 = str_replace('"', '&quot', $str6);
     <center>这关成功后不会自动跳转。成功者<a href=/xsschallenge/level15.php?src=1.gif>点我进level15</a></center>
 </body>
 ```
-2. （payload是一张图片马，考到了CTF中的杂项中隐写 Exif 隐藏信息）大致意思就是通过修改 iframe 调用的文件（ src ）来实现 xss 注入。上传的图片的 EXIF 中包含恶意代码，然后当图片被解析的时候，其中EXIF中的代码就会被执行。![请添加图片描述](https://img-blog.csdnimg.cn/15366b2c3ec24608a8572b99e5600511.jpeg)
+2. （payload是一张图片马，考到了CTF中的杂项中隐写 Exif 隐藏信息）大致意思就是通过修改 iframe 调用的文件（ src ）来实现 xss 注入。上传的图片的 EXIF 中包含恶意代码，然后当图片被解析的时候，其中EXIF中的代码就会被执行。![请添加图片描述](./xss-labs靶场打靶记录.assets/1-1706708369809-91.jpg)
 
 3. 去了解一下 EXIF 吧
 > exif是可交换图像文件格式（英语：Exchangeable image file format，官方简称Exif），是专门为数码相机的照片设定的，可以记录数码照片的属性信息和拍摄数据。
@@ -321,7 +328,7 @@ $str7 = str_replace('"', '&quot', $str6);
 
 > http://127.0.0.1/xss-labs/level15.php?src=1.gif
 
-1. 我们先尝试将 url 中的 1.gif 修改为 `<script>alert()</script>`，然后看看页面源码，发现除了有个`<!-- ngInclude: <script>alert()</script> -->`也没有别的东西了，那我们就搜一搜啥是 nginclude![在这里插入图片描述](https://img-blog.csdnimg.cn/3cb6598cf5c243eeb84f6ade9ad0a24e.jpeg#pic_center)
+1. 我们先尝试将 url 中的 1.gif 修改为 `<script>alert()</script>`，然后看看页面源码，发现除了有个`<!-- ngInclude: <script>alert()</script> -->`也没有别的东西了，那我们就搜一搜啥是 nginclude![在这里插入图片描述](./xss-labs靶场打靶记录.assets/1-1706708386607-96.jpg)
 
 
 > ng-include 指令用于包含外部的 HTML 文件。
@@ -329,11 +336,10 @@ $str7 = str_replace('"', '&quot', $str6);
 > ng-include 属性的值可以是一个表达式，返回一个文件名。
 > 默认情况下，包含的文件需要包含在同一个域名下。
 
-2. 那也就是说，我们只要使 ng-include 包含一个弹窗页面就行，而且“默认情况下，包含的文件需要包含在同一个域名下”。那我们就把第一关搬过来。（`http://127.0.0.1/xss-labs/level1.php?name=%3Cscript%3Ealert(1)%3C/script%3E`）![在这里插入图片描述](https://img-blog.csdnimg.cn/5c3dd21524b245ab9b83d80675690c5a.jpeg#pic_center)
+2. 那也就是说，我们只要使 ng-include 包含一个弹窗页面就行，而且“默认情况下，包含的文件需要包含在同一个域名下”。那我们就把第一关搬过来。（`http://127.0.0.1/xss-labs/level1.php?nam![2](./xss-labs/15/2.jpg)e=%3Cscript%3Ealert(1)%3C/script%3E`）![在这里插入图片描述](./xss-labs靶场打靶记录.assets/2-1706708396716-98.jpg)
 
 3. 而直接把上述内容替换 1.gif 回车后发现没有任何作用，这是因为没有加单引号，必须用单引号包围起来。
-回车后我们呢看到页面中确实有了整个第一关的东西，页面源码里面也包含了第一关的东西，但是依旧没有弹窗。![请添加图片描述](https://img-blog.csdnimg.cn/cd004853367f4b1e87e5f1b53eaae87b.jpeg)
-![请添加图片描述](https://img-blog.csdnimg.cn/8f675a9ed5d644aa94f3090466ff23d4.jpeg)
+回车后我们呢看到页面中确实有了整个第一关的东西，页面源码里面也包含了第一关的东西，但是依旧![3](./xss-labs靶场打靶记录.assets/3-1706708454118-107.jpg)没有弹窗。![请添加图片描述](./xss-labs靶场打靶记录.assets/4-1706708481226-111.jpg)
 4. 这种情况很可能是 script标签 被页面过滤掉了。那我们换一种方式：（注意，这里不能包涵那些直接弹窗的东西如`<script>`，但是可以包涵那些标签的东西比如`<a>`、`<input>`、`<img>`、`<p>`标签等等，这些标签是能需要我们手动点击弹窗的）
 方法一：`http://127.0.0.1/xss-labs/level1.php?name=a<img src=1 onerror=alert()>`
 方法二：`http://127.0.0.1/xss-labs/level1.php?name=<p onmousedown=alert()>AAA</p>`
@@ -353,13 +359,13 @@ echo '<body><span class="ng-include:' . htmlspecialchars($str) . '"></span></bod
 
 > http://127.0.0.1/xss-labs/level16.php?keyword=test
 
-1. 因为前面有 center 标签，我就想着先把它闭合掉，`</center><script>alert()</script>` 但是不管是 / 还是 script 都被过滤了：![在这里插入图片描述](https://img-blog.csdnimg.cn/c3d267fec6e64698a4f3fb3c44b39525.jpeg#pic_center)
-2. 那好，那我试一试上一关的`<img src=1 onerror=alert()>`，但是看起来空格也被弄了![请添加图片描述](https://img-blog.csdnimg.cn/423317d747744e9482c5666015d39ad5.jpeg)
+1. 因为前面有 center 标签，我就想着先把它闭合掉，`</center><script>alert(![1](./xss-labs/16/1.jpg))</script>` 但是不管是 / 还是 script 都被过滤了：![在这里插入图片描述](./xss-labs靶场打靶记录.assets/1-1706708573114-126.jpg)
+2. 那好，那我试一试上一关的`<img src=1 onerror![2](./xss-labs/16/2.jpg)=alert()>`，但是看起来空格也被弄了![请添加图片描述](./xss-labs靶场打靶记录.assets/2-1706708508635-113.jpg)
 
 > HTML提供了5种空格实体（space entity），它们拥有不同的宽度，非断行空格（`&nbsp;`）是常规空格的宽度，可运行于所有主流浏览器。其他几种空格（ `&ensp; &emsp; &thinsp; &zwnj;&zwj;`）在不同浏览器中宽度各异。
 
-3. 既然如此，那我们就直接把 **换行符** 给 URL 编码一下，%0A，用 %0A 替换空格，成功弹窗。至于为什么不是用空格 URL 编码，而是用换行符 这是因为用换行符替换空格效果一样 (在 html 中，不论加多少空格或者回车，都会被转成一个空格)![在这里插入图片描述](https://img-blog.csdnimg.cn/5afbaa21ba3e40fe8cdea3c99cbf1ee8.jpeg#pic_center)
-![在这里插入图片描述](https://img-blog.csdnimg.cn/ac72ab4a98404f4d9efbee3780f21841.jpeg#pic_center)
+3. 既然如此，那我们就直接把 **换行符** 给 URL 编码一下，%0A，用 %0A 替换空格，成功弹窗。至于为什么不是用空格 URL 编码，而是用换行符 这是因为用换行符替换空格效果一样 (在 html 中，不论加多少空格或者回车，都会被转成一个空格)![在这里插入图片描述](./xss-labs靶场打靶记录.assets/3-1706708520668-118.jpg)
+![在这里插入图片描述](./xss-labs靶场打靶记录.assets/4-1706708530857-122.jpg)
 4. 也就是说，我们最后输入的为 `<img%0Asrc=1%0Aonerror=alert()>`，成功弹窗。
 5. 看看后端代码：
 
@@ -378,7 +384,7 @@ echo '<body><span class="ng-include:' . htmlspecialchars($str) . '"></span></bod
 
 > http://127.0.0.1/xss-labs/level17.php?arg01=a&arg02=b
 
-1. 我们先看看页面源码，发现了一个 embed 标签 ，而且里面的 src 就是我们 URL 中的东西。![在这里插入图片描述](https://img-blog.csdnimg.cn/a2bbf8b0c6ad432493a6de401c5af6ec.jpeg#pic_center)
+1. 我们先看看页面源码，发现了一个 embed 标签 ，而且里面的 src 就是我们 URL 中的东西。![在这里插入图片描述](./xss-labs靶场打靶记录.assets/1-1706708552616-124.jpg)
 2. 那我们就尝试去闭合掉它，我们在URL的最后面加上 `" onmouseover='alert()'`，当鼠标移动到图片上面时成功弹窗。
 3. 了解一下 embed 标签：
 

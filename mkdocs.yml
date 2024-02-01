@@ -17,7 +17,7 @@ nav:
     - ME/support.md
   - 开发:
     - DEC/index.md
-    - C:
+    - C语言:
       - DEC/C/Alpha-数组.md
       - DEC/C/Alpha-函数.md
       - DEC/C/Alpha-指针.md
@@ -26,11 +26,15 @@ nav:
       - DEC/C/链表作业.md
       - DEC/C/文件操作作业.md
       - DEC/C/文件读写常用函数总结.md
+      - DEC/C/qsort()函数的使用.md
+      - DEC/C/Scanf 输入字符串遇到空格.md
+    - 其他:
+      - DEC/others/位运算总结.md
     - 数据结构:
       - DEC/Data-Structure/test.md
   - 网络安全:
     - WEB/index.md
-    - 培训:
+    - 培训任务:
       - WEB/peixun/pwn培训.md
       - WEB/peixun/reverse培训.md
     - 靶场:
@@ -39,11 +43,17 @@ nav:
       - WEB/labs/xss-labs靶场打靶记录.md
       - WEB/labs/Sqli-labs笔记.md
     - 其他:
-      - WEB/others/命令执行绕过大全.md
-      - WEB/others/深入理解group-by报错注入.md
       - WEB/others/HTML笔记.md
       - WEB/others/JavaScript笔记.md
       - WEB/others/CTFHub笔记.md
+      - WEB/others/group-by报错注入.md
+    - 转载:
+      - WEB/zhuan/命令执行绕过大全.md
+      - WEB/zhuan/SSH：连接时间超时.md
+      - WEB/zhuan/git-stash用法小结.md
+      - WEB/zhuan/dirsearch使用指南.md
+      - WEB/zhuan/DNS重绑定漏洞.md
+
   - 网站:
     # 访客打开网站第一个看到的是 docs/index.md
     # 构建网站时，不用管报错 "The following pages exist in the docs directory, but are not included in the "nav" configuration: index.md"
@@ -81,9 +91,19 @@ theme:
         icon: material/weather-sunny
         name: 切换至日间模式
   features:
+    - navigation.sections
     # 使用 Tab 来进行分类
+    # 即时预取 是一项新的实验性功能，一旦用户将鼠标悬停在链接上，它将开始获取页面。这将减少用户感知的加载时间，尤其是在慢速连接时，因为页面将在导航后立即可用。
+    - navigation.prefetch
+    - navigation.instant.prefetch
+    # 为了在使用即时导航时在慢速连接上提供更好的用户体验，可以启用进度指示器。它将显示在页面顶部，并在页面完全加载后隐藏。
+    - navigation.progress
+    - navigation.instant.progress
+    # 激活导航路径后，每个页面的标题上方都会呈现面包屑导航，这可能会让用户在屏幕较小的设备上访问文档时更容易定位。
+    - navigation.path
     # https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#navigation-tabs
     - navigation.tabs
+    # - navigation.tabs.sticky  粘性导航标签
     # 返回顶部的按钮，在上滑时出现
     # https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#back-to-top-button
     - navigation.top
