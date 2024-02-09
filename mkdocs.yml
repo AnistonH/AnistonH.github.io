@@ -42,17 +42,24 @@ nav:
       - WEB/labs/upload-labs靶场打靶记录.md
       - WEB/labs/xss-labs靶场打靶记录.md
       - WEB/labs/Sqli-labs笔记.md
+      - WEB/labs/CTFshow.md
     - 其他:
       - WEB/others/HTML笔记.md
       - WEB/others/JavaScript笔记.md
+      - WEB/others/PHP+MySQL博客.md
       - WEB/others/CTFHub笔记.md
+      - WEB/others/windterm连接kali.md
       - WEB/others/group-by报错注入.md
+      - WEB/others/information_schema.md
+      - WEB/others/sql注入-UDF提权.md
+      - WEB/others/mysql向日志文件写webshell.md
     - 转载:
       - WEB/zhuan/命令执行绕过大全.md
       - WEB/zhuan/SSH：连接时间超时.md
       - WEB/zhuan/git-stash用法小结.md
       - WEB/zhuan/dirsearch使用指南.md
       - WEB/zhuan/DNS重绑定漏洞.md
+      - WEB/zhuan/mysql 导入导出数据—load data 的用法.md
 
   - 网站:
     # 访客打开网站第一个看到的是 docs/index.md

@@ -1,8 +1,5 @@
-﻿[TOC]
-
-
-
-# 一、Pikachu靶场介绍
+﻿
+##  一、Pikachu靶场介绍
 
 Pikachu是一个带有漏洞的Web应用系统，在这里包含了常见的web安全漏洞。 如果你是一个Web渗透测试学习人员且正发愁没有合适的靶场进行练习，那么Pikachu可能正合你意。
 
@@ -833,35 +830,31 @@ class S{
 就是把被序列化的字符串还原为对象,然后在接下来的代码中继续使用。
 
 ```php
-	$u=unserialize("O:1:"S":1:{s:4:"test";s:7:"pikachu";}");
-    echo $u->test; //得到的结果为pikachu
+$u=unserialize("O:1:"S":1:{s:4:"test";s:7:"pikachu";}");
+echo $u->test; //得到的结果为pikachu
 ```
 序列化和反序列化本身没有问题,但是如果反序列化的内容是用户可以控制的,且后台不正当的使用了PHP中的魔法函数,就会导致安全问题
 
 ```php
-		常见的几个魔法函数:
-        __construct()当一个对象创建时被调用
+常见的几个魔法函数:
+__construct()当一个对象创建时被调用
+__destruct()当一个对象销毁时被调用
+__toString()当一个对象被当作一个字符串使用
+__sleep() 在对象在被序列化之前运行
+__wakeup将在序列化之后立即被调用
 
-        __destruct()当一个对象销毁时被调用
+漏洞举例:
 
-        __toString()当一个对象被当作一个字符串使用
+class S{
+    var $test = "pikachu";
+    function __destruct(){
+        echo $this->test;
+    }
+}
+$s = $_GET['test'];
+@$unser = unserialize($a);
 
-        __sleep() 在对象在被序列化之前运行
-
-        __wakeup将在序列化之后立即被调用
-
-        漏洞举例:
-
-        class S{
-            var $test = "pikachu";
-            function __destruct(){
-                echo $this->test;
-            }
-        }
-        $s = $_GET['test'];
-        @$unser = unserialize($a);
-
-        payload:O:1:"S":1:{s:4:"test";s:29:"<script>alert('xss')</script>";}
+payload:O:1:"S":1:{s:4:"test";s:29:"<script>alert('xss')</script>";}
 ```
 ### 12x01 PHP反序列化漏洞
 1. 我们先尝试输入任意内容，发现都会返回来一句话

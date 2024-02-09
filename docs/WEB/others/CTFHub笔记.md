@@ -26,7 +26,7 @@
 
 
 
-### **vim缓存:**
+### **vim缓存**
 ------
 
 在使用vim时会创建临时缓存文件，关闭vim时缓存文件则会被删除，当vim异常退出后，因为未处理缓存文件，导致可以通过缓存文件恢复原始文件内容。
@@ -58,24 +58,6 @@
 
 **DS_Store文件泄漏**
 .DS_Store是Mac下Finder用来保存如何展示 文件/文件夹 的数据文件，每个文件夹下对应一个。由于开发/设计人员在发布代码时未删除文件夹中隐藏的.DS_store，可能造成文件目录结构泄漏、源代码文件等敏感信息的泄露。
-
-
-
-
-
-
-
-
-
-
-
-### **.htaccess**
-
-------
-
-htaccess文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以帮我们实现：网页301重定向、自定义404错误页面、改变文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能
-
-
 
 
 
@@ -146,7 +128,7 @@ table_name : 表的名称
 
 
 
-### sqlmap
+### **sqlmap**
 
 ------
 
@@ -171,6 +153,67 @@ sqlmap可以在请求中伪HTTP的Referer头，当--level参数大于等于3时�
 绕过空格过滤的方法   /**/、()、%0a
 
 
+
+
+
+**sqlmap常用语法**
+
+
+-u 指定一个url连接，url中必须有？xx=xx 才行
+
+-l 后接一个log文件，可以是burp等的代理的log文件
+
+-m 后接一个txt文件，文件中是多个url，sqlmap会自动化的检测其中的所有url
+
+-r 可以将一个post请求方式的数据包保存在一个txt中，sqlmap会通过post方式检测目标
+
+--method=METHOD 指定是get方法还是post方法
+
+--data=DATA 指明参数是哪些
+
+--cookie=COOKIE 指定测试时使用的cookie
+
+--user-agent=AGENT 指定一个user-agent的值进行测试
+
+--random-agent 使用随机user-agent进行测试
+
+--referer=REFERER 指定http包中的refere字段
+
+-p TESTPARAMETER 知道测试的参数
+
+--level=LEVEL 设置测试的等级
+
+–string=STRING` 在基于布尔的注入时，有的时候返回的页面一次一个样，需要我们自己判断出标志着返回正确页面的标志，会根据页面的返回内容这个标志（字符串）判断真假，可以使用这个参数来制定看见什么字符串就是真。。
+
+--technique=TECH 指定所使用的技术（B:布尔盲注;E:报错注入;U:联合查询注入;S:文件系统，操作系统，注册表相关注入;T:时间盲注; 默认全部使用）
+
+–time-sec=TIMESEC` 在基于时间的盲注的时候，指定判断的时间，单位秒，默认5秒。
+
+–union-cols=UCOLS 联合查询的尝试列数
+
+--current-user 当前用户
+
+--current-db 当前数据库
+
+–is-dba 是否为dba
+
+–users 查询一共都有哪些用户
+
+–passwords 查询用户密码的哈希
+
+--dbs 目标服务器中有什么数据库
+
+--tables 目标数据库有什么表
+
+--columns 目标表中有什么列
+
+–dump 这个就不解释了
+
+–sql-query=QUERY` 执行一个sql语句。
+
+–sql-shell` 创建一个sql的shell。
+
+--os-shell 创建一个对方操作系统的shell，远程执行系统命令。
 
 
 
