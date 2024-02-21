@@ -8,7 +8,7 @@ ctf.show WEB模块的第3关是一个文件包含漏洞,`include()`函数包含�
 
 `php://input` 可以访问请求的原始数据,配合文件包含漏洞可以将post请求体中的内容当做文件内容执行,`enctype=multipart/form-data`时,`php:/input`将会无效
 
-![](./CTFshow.assets/1.png)
+![](./CTFshow-web.assets/1.png)
 
 
 
@@ -220,9 +220,9 @@ string: 'or'6]!r,b
 
 ​		上面的’ffifdyop‘字符串对应的 16 位原始二进制的字符串就是”`'or'6\xc9]\x99\xe9!r,\xf9\xedb\x1c`。“`\`”后面的 3 个字符连同“`\`”算一个字符，比如“`\xc9`”，所以上述一共 16 个。当然，像`\xc9`这种字符会显示乱码。
 
-​		然后我们可以用’ffifdyop‘带入，看一下实际的效果。![2](./CTFshow.assets/2.png)
+​		然后我们可以用’ffifdyop‘带入，看一下实际的效果。![2](./CTFshow-web.assets/2.png)
 
-![3](./CTFshow.assets/3.png)
+![3](./CTFshow-web.assets/3.png)
 
 ​		这里 32 位的 16 进制的字符串，两个一组就是上面的 16 位二进制的字符串。比如 27，这是 16 进制的，先要转化为 10 进制的，就是 39，39 在 ASC 码表里面就是`'`字符。6f 就是对应`o`。
 
@@ -329,7 +329,7 @@ if (mysqli_num_rows($result) > 0) {
 
    看看示例图片（结果中将会多出一行，其中password列为null，count（*）为统计和。）
 
-   ![4](./CTFshow.assets/4.png)
+   ![4](./CTFshow-web.assets/4.png)
 
 过滤空格的话用/**/进行绕过就行
 

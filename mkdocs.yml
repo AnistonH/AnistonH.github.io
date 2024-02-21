@@ -10,56 +10,68 @@ nav:
   - 我:
     - ME/index.md
     - ME/introduction.md
-    - ME/profile.md
-    - ME/contact.md
+    # - ME/profile.md
+    # - ME/contact.md
     - ME/account.md
     - ME/experience.md
     - ME/support.md
   - 开发:
     - DEC/index.md
     - C语言:
-      - DEC/C/Alpha-数组.md
-      - DEC/C/Alpha-函数.md
-      - DEC/C/Alpha-指针.md
-      - DEC/C/数组必做题.md
-      - DEC/C/期末必做题.md
-      - DEC/C/链表作业.md
-      - DEC/C/文件操作作业.md
-      - DEC/C/文件读写常用函数总结.md
-      - DEC/C/qsort()函数的使用.md
-      - DEC/C/Scanf 输入字符串遇到空格.md
-    - 其他:
-      - DEC/others/位运算总结.md
+      - Alpha:
+        - DEC/C/Alpha-数组.md
+        - DEC/C/Alpha-函数.md
+        - DEC/C/Alpha-指针.md
+        - DEC/C/数组必做题.md
+        - DEC/C/期末必做题.md
+      - 作业:  
+        - DEC/C/链表作业.md
+        - DEC/C/文件操作作业.md
+      - 知识点:
+        - DEC/C/位运算总结.md
+        - DEC/C/常考函数总结.md
+        - DEC/C/文件读写常用函数总结.md
+        - DEC/C/Scanf 输入字符串遇到空格.md
     - 数据结构:
       - DEC/Data-Structure/test.md
+
   - 网络安全:
     - WEB/index.md
-    - 培训任务:
-      - WEB/peixun/pwn培训.md
-      - WEB/peixun/reverse培训.md
     - 靶场:
       - WEB/labs/Pikachu靶场打靶记录.md
       - WEB/labs/upload-labs靶场打靶记录.md
       - WEB/labs/xss-labs靶场打靶记录.md
       - WEB/labs/Sqli-labs笔记.md
-      - WEB/labs/CTFshow.md
+      - CtfShow:
+        - WEB/labs/CTFshow-web.md
+        - WEB/labs/PHP特性总结.md
     - 其他:
-      - WEB/others/HTML笔记.md
+      - WEB/others/HTML学习笔记.md
+      - WEB/others/CTFHub技能树笔记.md
       - WEB/others/JavaScript笔记.md
-      - WEB/others/PHP+MySQL博客.md
-      - WEB/others/CTFHub笔记.md
+
       - WEB/others/windterm连接kali.md
       - WEB/others/group-by报错注入.md
       - WEB/others/information_schema.md
       - WEB/others/sql注入-UDF提权.md
       - WEB/others/mysql向日志文件写webshell.md
+      - WEB/others/PHP+MySQL博客(初级).md
+      - WEB/others/PHP+MySQL博客(高级).md
     - 转载:
       - WEB/zhuan/命令执行绕过大全.md
-      - WEB/zhuan/SSH：连接时间超时.md
+      - WEB/zhuan/SSH-连接时间超时.md
       - WEB/zhuan/git-stash用法小结.md
       - WEB/zhuan/dirsearch使用指南.md
       - WEB/zhuan/DNS重绑定漏洞.md
-      - WEB/zhuan/mysql 导入导出数据—load data 的用法.md
+      - WEB/zhuan/MySQL loaddata用法.md
+      - WEB/zhuan/Apache 换行解析漏洞.md
+    - 培训任务:
+      - WEB/peixun/pwn培训.md
+      - WEB/peixun/reverse培训.md
+
+  - 随笔:
+      - ESSAY/index.md
+      - ESSAY/jottings/2402.md
 
   - 网站:
     # 访客打开网站第一个看到的是 docs/index.md
@@ -131,7 +143,9 @@ theme:
     - content.code.copy
     # [点击按钮跳转至 GitHub 修改 Markdown 源文件]
     # https://squidfunk.github.io/mkdocs-material/setup/adding-a-git-repository/#code-actions
-    - content.action.edit
+    # - content.action.edit
+    # [点击按钮跳转查看 Markdown 源文件]
+    - content.action.view
   language: zh # 一些提示性的文字会变成中文
   icon:
     # [添加 GitHub 仓库]

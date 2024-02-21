@@ -1,3 +1,7 @@
+# MySQL loaddata用法
+
+
+
 ## **一、loaddata 导入数据的语法 load data infile**
 
 ### **基本语法**

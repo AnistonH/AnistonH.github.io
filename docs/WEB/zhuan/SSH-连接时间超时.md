@@ -1,6 +1,6 @@
-# SSH：连接时间超时
+# SSH:连接时间超时
 
-
+## 问题：
 
 > ssh: connect to host github.com port 22: Connection timed out
 

@@ -1,12 +1,22 @@
-## 博客系统
+# PHP+MySQL博客（初级）
 
-使用`html+php+mysql`，有登录，注册，注销功能。
+使用`html+php+mysql`，只有登录，注册，注销功能。
 
-
+> 此版本为初级版，功能为最基础功能。
+>
+> 更多功能请移步：[PHP+MySQL博客（高级）]
+>
+> 高级版功能如下：（html+php+mysql+css）
+>
+> 1. 登录注册
+> 2. 用户密码修改
+> 3. 头像上传及修改
+> 4. 发布文章、浏览文章
+> 5. 文章评论及回复
 
 ## connect.php
 
-```php+HTML
+```php
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -71,7 +81,7 @@ if ($conn2->connect_error) {
 
 ## denglu.php
 
-```php+HTML
+```php
 <?php
 include 'connect.php';
 $username = $_POST['username'];
@@ -119,7 +129,7 @@ if (isset($username) && isset($password)) {
 
 ## session.php
 
-```php+HTML
+```php
 <?php
 session_start();
 // echo $_SESSION['login'];
@@ -136,7 +146,7 @@ if ($_SESSION['login'] == true) {
 
 ## youxi.php
 
-```php+HTML
+```HTML
 <?php
 include "session.php";
 ?>
@@ -160,7 +170,7 @@ include "session.php";
 
 ## zhuce.php
 
-```php+HTML
+```php
 <!DOCTYPE html>
 <html lang="en">
 
@@ -233,7 +243,7 @@ echo "你注册的手机号码为：" . $phone . "<br>";
 
 ## zhuxiao.php
 
-```php+HTML
+```php
 <?php
 session_start();
 $_SESSION['login'] = "false";

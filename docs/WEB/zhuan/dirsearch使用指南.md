@@ -1,5 +1,7 @@
 # dirsearch 使用指南
 
+> **原文：[https://www.cnblogs.com/akaman98/articles/15958810.html](https://www.cnblogs.com/akaman98/articles/15958810.html)**
+
 基于 python 开发的 dirsearch 可替代 windows 平台上类似御剑之类的目录扫描工具
 
 该工具的原理其实就是根据字典文本构造 url 路径，然后构造请求报文逐个发送，只要响应报文的状态码符合条件（例如：301、200）那么就可以确定这个地址是可能存在目录的。项目在 github 上开源的，感兴趣可以大致看一下源码。
