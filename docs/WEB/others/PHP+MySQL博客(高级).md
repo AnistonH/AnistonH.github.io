@@ -968,7 +968,7 @@ if ($result->num_rows > 0) {
     }
 
     if (isset($row["phone"])) {
-        echo "用户: " . htmlspecialchars($row["phone"]) . "<br>";
+        echo "电话: " . htmlspecialchars($row["phone"]) . "<br>";
     } else {
         echo "用户信息中缺少'phone'字段。<br>";
     }

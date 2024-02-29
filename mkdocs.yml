@@ -33,7 +33,8 @@ nav:
         - DEC/C/文件读写常用函数总结.md
         - DEC/C/Scanf 输入字符串遇到空格.md
     - 数据结构:
-      - DEC/Data-Structure/test.md
+      - DEC/Data-Structure/时间复杂度.md
+      - DEC/Data-Structure/顺序表SeqList详解.md
 
   - 网络安全:
     - WEB/index.md
@@ -42,14 +43,16 @@ nav:
       - WEB/labs/upload-labs靶场打靶记录.md
       - WEB/labs/xss-labs靶场打靶记录.md
       - WEB/labs/Sqli-labs笔记.md
+      - WEB/labs/CTFHub技能树笔记.md
       - CtfShow:
-        - WEB/labs/CTFshow-web.md
-        - WEB/labs/PHP特性总结.md
+        - WEB/labs/CTFShow/CTFshow-web.md
+        - WEB/labs/CTFShow/CTFShow-信息泄露.md
+        - WEB/labs/CTFShow/CTFShow-爆破.md
+        - WEB/labs/CTFShow/PHP特性总结.md
     - 其他:
-      - WEB/others/HTML学习笔记.md
-      - WEB/others/CTFHub技能树笔记.md
-      - WEB/others/JavaScript笔记.md
 
+      - WEB/others/JavaScript笔记.md
+      # - WEB/others/PHP反序列化.md
       - WEB/others/windterm连接kali.md
       - WEB/others/group-by报错注入.md
       - WEB/others/information_schema.md

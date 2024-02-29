@@ -25,7 +25,7 @@ python3 dirsearch.py -u [target_url]  # 攻击目标url地址，可以用 -u 参
 ### 版本以及帮助命令
 
 ```
---version               显示程序版本号并退出
+--version        显示程序版本号并退出
 -h               显示帮助信息并退出
 ```
 
@@ -33,7 +33,7 @@ python3 dirsearch.py -u [target_url]  # 攻击目标url地址，可以用 -u 参
 
 ```
 -u               攻击目标url地址，可以指定多个，通过逗号分隔
--l                url列表文件，比如你可以建一个 targets.txt，里面包含需要攻击的网址
+-l               url列表文件，比如你可以建一个 targets.txt，里面包含需要攻击的网址
 -e               站点文件类型列表，如：php,asp，有默认配置：php,aspx,jsp,html,js，基本主流的格式都包含了
 -X               不需要扫描的站点文件类型列表
 -w               用指定爆破字典执行，若存在多个通过逗号分隔
