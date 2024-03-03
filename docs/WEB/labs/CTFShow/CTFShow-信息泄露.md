@@ -132,6 +132,18 @@ C:\Users\16032>nslookup -query=any flag.ctfshow.com 服务器:  public-dns-a.bai
 
 
 
+## Web 11-2 CDN绕过
+
+不知道为什么，bilibili上的视频中的Web 11和网站上的不一样，视频上的是要找到网站真实的ip地址，但是通过ping网站以及用各类工具网站都没有查到，最后将网址加上“www”然后用加了3w的进行ping，成功返回了真实的ip地址。
+
+这个就是说明，原网站是有3W的网站，然后一些cdn会每隔一段时间从原网站抓取一下静态的数据，然后当我们访问时访问的就是这些cdn加速服务器的ip
+
+**参考文章：**[干货-6种CDN绕过技术](https://www.freebuf.com/articles/others-articles/278391.html)
+
+
+
+
+
 ## web 16 PHP探针
 
 PHP探针实际上是一种Web脚本程序，主要是用来探测虚拟空间、服务器的运行状况，而本质上是通过PHP语言实现探测PHP服务器敏感信息的脚本文件，通常用于探测网站目录、服务器操作系统、PHP版本、数据库版本、CPU、内存、组件支持等，基本能够很全面的了解服务器的各项信息。

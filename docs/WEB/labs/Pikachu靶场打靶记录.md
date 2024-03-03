@@ -1088,7 +1088,7 @@ http://127.0.0.1/pikachu/vul/ssrf/ssrf_fgc.php?file=http://127.0.0.1/pikachu/vul
 2. 我们尝试去修改，`file:///c:/windows/win.ini`，发现成功返回3. 我们再来看看后端长什么样子：\pikachu\vul\ssrf\ssrf_fgc.php![2](./Pikachu靶场打靶记录.assets/2-1706710478198-349.jpg)
 
 ```php
-//读取PHP文件的源码:php://filter/read=convert.base64-encode/resource=ssrf.php
+//读取PHP文件的源码:php:///read=convert.base64-encode/resource=ssrf.php
 //内网请求:http://x.x.x.x/xx.index
 if(isset($_GET['file']) && $_GET['file'] !=null){
     $filename = $_GET['file'];
