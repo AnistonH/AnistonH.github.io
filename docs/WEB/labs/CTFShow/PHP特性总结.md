@@ -690,6 +690,28 @@ array(1) {
 
 
 
+PHP开始结束标签
+
+> `<?php ?>`：php默认的开始、结束标签 
+>
+> `<? ?>`：需要开启short_open_tag ，即short_open_tag = On。
+>
+>  `<% %>`：需要开启asp_tags ，即asp_tags = On。
+>
+>  `<?= ?>`：用于输出，等同于- 可以直接使用
+>
+>  `<%= %>`：用于输出，等同于- ，需要开启asp_tags ，才可以使用
+
+
+
+
+
+
+
+
+
+
+
 ### 10、is_numeric 与 hex2bin
 
  is_numeric 在 PHP5 中是可以识别十六进制的，hex2bin 参数不能带 0x

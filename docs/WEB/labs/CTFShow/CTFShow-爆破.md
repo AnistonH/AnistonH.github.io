@@ -1,4 +1,8 @@
-# CTFshow 爆破（21-28）
+# CTFshow 爆破
+
+**题目范围：Web21 - Web28**
+
+
 
 
 
@@ -60,6 +64,8 @@ if (isset($_GET['token'])) {
 
 
 #### 脚本
+
+**PS：不是我写的，我现在还没有学过python，就先整理了一下别人的。**
 
 ```python
 import hashlib

@@ -1,4 +1,10 @@
-# CTFshow 信息泄露（1-20）
+# CTFshow 信息泄露
+
+**题目范围：Web1 - Web20**
+
+
+
+
 
 ## web 2 源码
 
@@ -88,7 +94,7 @@ for i in list1:
 
 
 
-## ??web 11
+## ？web 11
 
 查询域名解析地址，基本格式：`nslookup host [server]`
 
