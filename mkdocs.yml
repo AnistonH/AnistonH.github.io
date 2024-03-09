@@ -35,8 +35,9 @@ nav:
     - 数据结构:
       - DEC/Data-Structure/复杂度.md
       - DEC/Data-Structure/顺序表SeqList详解.md
-      - 作业:  
-        - DEC/Data-Structure/HomeWork/第一章作业.md
+      - DEC/Data-Structure/三元组.md
+      - DEC/Data-Structure/单链表.md
+
       - 知识点:
         - DEC/Data-Structure/第一章：绪论.md
 
@@ -55,6 +56,7 @@ nav:
         - WEB/labs/CTFShow/CTFShow-RCE.md
         - WEB/labs/CTFShow/CTFShow-文件包含.md
         - WEB/labs/CTFShow/PHP特性总结.md
+        - WEB/labs/CTFShow/CTFShow-文件上传.md
     - 其他:
       - WEB/others/JavaScript笔记.md
       # - WEB/others/PHP反序列化.md
@@ -66,6 +68,7 @@ nav:
       - WEB/others/PHP+MySQL博客(初级).md
       - WEB/others/PHP+MySQL博客(高级).md
     - 转载:
+      - WEB/zhuan/HTTP报文.md
       - WEB/zhuan/SSH-连接时间超时.md
       - WEB/zhuan/git-stash用法小结.md
       - WEB/zhuan/dirsearch使用指南.md

