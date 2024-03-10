@@ -68,6 +68,7 @@ nav:
       - WEB/others/PHP+MySQL博客(初级).md
       - WEB/others/PHP+MySQL博客(高级).md
     - 转载:
+      - WEB/zhuan/文件头.md
       - WEB/zhuan/HTTP报文.md
       - WEB/zhuan/SSH-连接时间超时.md
       - WEB/zhuan/git-stash用法小结.md
@@ -81,8 +82,9 @@ nav:
 
   - 随笔:
       - ESSAY/index.md
-      - ESSAY/jottings/2402.md
       - ESSAY/jottings/2403.md
+      - ESSAY/jottings/2402.md
+      - ESSAY/jottings/2401.md
 
 
   - 网站:
