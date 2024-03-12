@@ -17,6 +17,7 @@ nav:
     - ME/support.md
   - 开发:
     - DEC/index.md
+    
     - C语言:
       - Alpha:
         - DEC/C/Alpha-数组.md
@@ -32,14 +33,19 @@ nav:
         - DEC/C/常考函数总结.md
         - DEC/C/文件读写常用函数总结.md
         - DEC/C/Scanf 输入字符串遇到空格.md
+
     - 数据结构:
       - DEC/Data-Structure/复杂度.md
-      - DEC/Data-Structure/顺序表SeqList详解.md
-      - DEC/Data-Structure/三元组.md
+      - DEC/Data-Structure/顺序表.md
+      - DEC/Data-Structure/Triplets.md
       - DEC/Data-Structure/单链表.md
+      - DEC/Data-Structure/Grade Management System.md
 
-      - 知识点:
-        - DEC/Data-Structure/第一章：绪论.md
+      - Alpha:
+        - DEC/Data-Structure/Alpha单链表.md
+
+
+
 
   - 网络安全:
     - WEB/index.md
