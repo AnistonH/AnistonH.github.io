@@ -20,7 +20,8 @@
 **             6: 修改学生信息            **
 **             7: 导出信息至文件          **
 **             8: 由文件导入信息          **
-**             9: 退出                    **
+**             9: 显示小组 LOGO          **
+**            10: 退出                    **
 **                                        **
 ********************************************
 ```
@@ -35,6 +36,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <windows.h>
 
 typedef struct Student {
     char name[50];
@@ -46,6 +48,8 @@ typedef struct Student {
 
 // 全局变量，指向链表头节点
 Student* head = NULL;
+
+int count = 0; // 统计数量
 
 // 插入学生信息
 void insertStudent() {
@@ -85,6 +89,7 @@ void insertStudent() {
     }
 
     printf("学生信息插入成功！\n");
+    count++;
 }
 
 // 删除学生信息
@@ -120,6 +125,7 @@ void deleteStudent() {
         free(prev);
 
         printf("学生信息删除成功！\n");
+        count--;
     }
     else {
         printf("未找到学号为%s的学生信息！\a\n", studentID);
@@ -354,6 +360,9 @@ void readFromFile() {
 
         if (fscanf(file, "Name: %s\n", newStudent->name) != 1)
             break;
+
+        count++;
+
         fscanf(file, "ID: %s\n", newStudent->ID);
         fscanf(file, "Score: ");
         for (int i = 0; i < 4; i++) {
@@ -415,13 +424,47 @@ void freeList() {
     head = NULL;
 }
 
+void logo() {
+    int time = 5;
+    while (time) {
+        printf("                                                                                                      \n");
+        printf("          JJJJJJJJJJJ     OOOOOOOOO     KKKKKKKKK    KKKKKKKEEEEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRR   \n");
+        printf("          J:::::::::J   OO:::::::::OO   K:::::::K    K:::::KE::::::::::::::::::::ER::::::::::::::::R  \n");
+        printf("          J:::::::::J OO:::::::::::::OO K:::::::K    K:::::KE::::::::::::::::::::ER::::::RRRRRR:::::R \n");
+        printf("          JJ:::::::JJO:::::::OOO:::::::OK:::::::K   K::::::KEE::::::EEEEEEEEE::::ERR:::::R     R:::::R\n");
+        printf("            J:::::J  O::::::O   O::::::OKK::::::K  K:::::KKK  E:::::E       EEEEEE  R::::R     R:::::R\n");
+        printf("            J:::::J  O:::::O     O:::::O  K:::::K K:::::K     E:::::E               R::::R     R:::::R\n");
+        printf("            J:::::J  O:::::O     O:::::O  K::::::K:::::K      E::::::EEEEEEEEEE     R::::RRRRRR:::::R \n");
+        printf("            J:::::j  O:::::O     O:::::O  K:::::::::::K       E:::::::::::::::E     R:::::::::::::RR  \n");
+        printf("            J:::::J  O:::::O     O:::::O  K:::::::::::K       E:::::::::::::::E     R::::RRRRRR:::::R \n");
+        printf("JJJJJJJ     J:::::J  O:::::O     O:::::O  K::::::K:::::K      E::::::EEEEEEEEEE     R::::R     R:::::R\n");
+        printf("J:::::J     J:::::J  O:::::O     O:::::O  K:::::K K:::::K     E:::::E               R::::R     R:::::R\n");
+        printf("J::::::J   J::::::J  O::::::O   O::::::OKK::::::K  K:::::KKK  E:::::E       EEEEEE  R::::R     R:::::R\n");
+        printf("J:::::::JJJ:::::::J  O:::::::OOO:::::::OK:::::::K   K::::::KEE::::::EEEEEEEE:::::ERR:::::R     R:::::R\n");
+        printf(" JJ:::::::::::::JJ    OO:::::::::::::OO K:::::::K    K:::::KE::::::::::::::::::::ER::::::R     R:::::R\n");
+        printf("   JJ:::::::::JJ        OO:::::::::OO   K:::::::K    K:::::KE::::::::::::::::::::ER::::::R     R:::::R\n");
+        printf("     JJJJJJJJJ            OOOOOOOOO     KKKKKKKKK    KKKKKKKEEEEEEEEEEEEEEEEEEEEEERRRRRRRR     RRRRRRR\n");
+        printf("                                                                                                      \n");
+        printf("                                                                                                      \n");
+
+        //printf("倒计时 %d 秒！", time--);
+        printf("\033[1;36;41m倒计时 %d 秒！\033[m\n", time--);
+        Sleep(1000);
+        system("cls");
+    }
+}
+
+
 int main() {
-    int choice;
+
+    logo();
 
     while (1) {
 
         printf("\n********************************************\n");
         printf("************** 学生成绩管理系统 ************\n");
+        printf("**                                        **\n");
+        printf("**          \033[1;36;41m当前系统中有 %d 份数据！\033[m       **\n", count);
         printf("**                                        **\n");
         printf("**             1: 插入学生信息            **\n");
         printf("**             2: 删除学生信息            **\n");
@@ -431,11 +474,12 @@ int main() {
         printf("**             6: 修改学生信息            **\n");
         printf("**             7: 导出信息至文件          **\n");
         printf("**             8: 由文件导入信息          **\n");
-        printf("**             9: 退出                    **\n");
+        printf("**             9: 显示小组 LOGO           **\n");
+        printf("**            10: 退出                    **\n");
         printf("**                                        **\n");
         printf("********************************************\n\n");
 
-
+        int choice;
         printf("请选择操作：");
         scanf("%d", &choice);
 
@@ -465,12 +509,16 @@ int main() {
             readFromFile();
             break;
         case 9:
+            system("cls");
+            logo();
+            break;
+        case 10:
             freeList();  // 释放链表内存
             exit(0);
 
         default:
             printf("无效的选择，请重新输入：\a");
-            scanf(" %d", &choice);
+            scanf("%d", &choice);
             break;
         }
 

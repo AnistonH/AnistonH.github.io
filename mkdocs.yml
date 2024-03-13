@@ -39,10 +39,11 @@ nav:
       - DEC/Data-Structure/顺序表.md
       - DEC/Data-Structure/Triplets.md
       - DEC/Data-Structure/单链表.md
+      - DEC/Data-Structure/双向链表.md
       - DEC/Data-Structure/Grade Management System.md
 
       - Alpha:
-        - DEC/Data-Structure/Alpha单链表.md
+        - DEC/Data-Structure/Alpha-链表.md
 
 
 
