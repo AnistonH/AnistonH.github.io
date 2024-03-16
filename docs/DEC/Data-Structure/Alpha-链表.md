@@ -1,10 +1,12 @@
 # Alpha 单链表
 
+> 编写于：2024-03-16
+
 ## 单链表的合并
 
 > 涉及：单链表的合并  删除重复数据  转置链表
 >
-> 这个题目我很可能是做复杂了，但是现在也想不到改怎么弄，所以也就先从小到大合并，然后删除重复数据，然后逆转元素了
+> 这个题目简单点做就是头插。复杂点做就先从小到大合并，然后删除重复数据，然后逆转元素了（去重也可以包含在合并中）。
 >
 > 另外说明一下，非注释的代码将合并和删除操作合二为一了，但是也一定要看看删除操作，后面的题目“合并递增有序链表”也是同样的操作
 
@@ -94,6 +96,116 @@ int main()
 ```
 
 #### 答案：
+
+##### 方法一：直接头插
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef int ElemType;
+//单链表
+typedef struct LNode {
+    ElemType data;
+    struct LNode* next;
+} LNode, * LinkList;
+
+//请完成该函数，实现A和B，按递减合并为C，并且A和B中相同的元素，只出现一次 
+int merge(LinkList A, LinkList B, LinkList C) {
+    LinkList pA = A->next;
+    LinkList pB = B->next;
+    LinkList pC = C;
+
+    LinkList temp = (LinkList)malloc(sizeof(LNode));
+    temp->next = NULL;
+
+    while (pA && pB) {
+        if (pA->data < pB->data) {
+            temp = pA->next;
+            pA->next = pC->next;
+            pC->next = pA;
+            pA = temp;
+        }
+        else if (pA->data > pB->data) {
+            temp = pB->next;
+            pB->next = pC->next;
+            pC->next = pB;
+            pB = temp;
+        }
+        else { // pA->data == pB->data;
+            temp = pA->next;
+            pA->next = pC->next;
+            pC->next = pA;
+            pA = temp;
+            pB = pB->next;
+        }
+    }
+
+    while (pA) {
+        temp = pA->next;
+        pA->next = pC->next;
+        pC->next = pA;
+        pA = temp;
+    }
+    while (pB) {
+        temp = pB->next;
+        pB->next = pC->next;
+        pC->next = pB;
+        pB = temp;
+    }
+
+    return 1;
+}
+
+int main() {
+    ElemType ad[6] = { 1, 3, 5, 6, 8, 9 };
+    ElemType bd[6] = { 2, 3, 4, 5, 6, 7 };
+    LinkList A, pA, B, pB, C, pC, l;
+    int i;
+
+    //创建单链表A并赋值 
+    A = (LinkList)malloc(sizeof(LNode));  //头结点 
+    A->next = NULL;
+    pA = A;
+    for (i = 0; i < 6; i++) {
+        l = (LinkList)malloc(sizeof(LNode));
+        l->data = ad[i];
+        l->next = NULL;
+        pA->next = l;
+        pA = pA->next;
+    }
+
+    //创建单链表B并赋值
+    B = (LinkList)malloc(sizeof(LNode));  //头结点 
+    B->next = NULL;
+    pB = B;
+    for (i = 0; i < 6; i++) {
+        l = (LinkList)malloc(sizeof(LNode));
+        l->data = bd[i];
+        l->next = NULL;
+        pB->next = l;
+        pB = pB->next;
+    }
+
+    C = (LinkList)malloc(sizeof(LNode));  //头结点 
+    C->next = NULL;
+
+    //merge函数，单链表合并功能
+    merge(A, B, C);
+
+    //打印C的元素 
+    pC = C->next;
+    for (; pC != NULL; pC = pC->next) {
+        printf("%d ", pC->data);
+    }
+
+    return 0;
+}
+```
+
+
+
+##### 方法二：尾插+逆转
 
 ```c
 #include <stdio.h>
@@ -1522,7 +1634,103 @@ int main() {
 > 依旧是`Create_LinkList`的二重指针，`print_LinkList`，甚至直接用上一题的代码都行。
 > 所以这一题的重点就是`Split_List`。
 > 
->好像还要逆转一下B、C链表
+>这部分和第一题“单链表的合并”一样，可以直接头插，也可以尾插+逆转
+
+##### 方法一：直接头插
+
+> 这多简单，尾插+逆转太繁琐了
+
+```c
+#define _CRT_SECURE_NO_WARNINGS 1
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct LNode {
+    int data;
+    struct LNode* next;
+} LNode, * LinkList;
+
+void Create_LinkList(LinkList* L, int n) {
+    *L = (LNode*)malloc(sizeof(LNode));
+    (*L)->next = NULL;
+
+    LinkList p = *L;
+
+    int i;
+    for (i = 0; i < n; i++) {
+        LinkList newNode = (LinkList)malloc(sizeof(LNode));
+        scanf("%d", &(newNode->data));
+        newNode->next = NULL;
+        p->next = newNode;
+        p = p->next;
+    }
+}
+
+void print_LinkList(LinkList L) {
+    LinkList temp = L->next;
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+}
+
+void Split_List(LinkList* La, LinkList* Lb, LinkList* Lc) {
+    LinkList pA = (*La)->next;
+    LinkList pB = NULL;
+    LinkList pC = NULL;
+
+    LinkList temp = (LinkList)malloc(sizeof(LNode));
+    temp->next = NULL;
+
+    *Lb = (LNode*)malloc(sizeof(LNode));
+    (*Lb)->next = NULL;
+    pB = *Lb;
+
+    *Lc = (LNode*)malloc(sizeof(LNode));
+    (*Lc)->next = NULL;
+    pC = *Lc;
+
+    while (pA != NULL) {
+        if (pA->data < 0) {
+            temp = pA->next;
+            pA->next = pB->next;
+            pB->next = pA;
+            pA = temp;
+        }
+        else {
+            temp = pA->next;
+            pA->next = pC->next;
+            pC->next = pA;
+            pA = temp;
+        }
+        //pA = pA->next;
+    }
+}
+
+int main() {
+    // 创建链表
+    LinkList La, Lb, Lc;
+
+    // 输入数据
+    int sum;
+    printf("A链表的元素个数为：");
+    scanf("%d", &sum);
+    printf("\n请输入A链表的数据：\n");
+    Create_LinkList(&La, sum);
+
+    Split_List(&La, &Lb, &Lc);
+    printf("\nB(存储负数)、C（存储正数）链表分别为：\n");
+    print_LinkList(Lb);
+    printf("\n");
+    print_LinkList(Lc);
+    return 0;
+}
+```
+
+
+
+##### 方法二：尾插+逆转
 
 
 ```c

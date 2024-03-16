@@ -41,6 +41,7 @@ nav:
       - DEC/Data-Structure/单链表.md
       - DEC/Data-Structure/双向链表.md
       - DEC/Data-Structure/Grade Management System.md
+      - DEC/Data-Structure/栈和队列.md
 
       - Alpha:
         - DEC/Data-Structure/Alpha-链表.md
@@ -64,6 +65,7 @@ nav:
         - WEB/labs/CTFShow/CTFShow-文件包含.md
         - WEB/labs/CTFShow/PHP特性总结.md
         - WEB/labs/CTFShow/CTFShow-文件上传.md
+        - WEB/labs/CTFShow/CTFShow-Sql注入.md
     - 其他:
       - WEB/others/JavaScript笔记.md
       # - WEB/others/PHP反序列化.md
