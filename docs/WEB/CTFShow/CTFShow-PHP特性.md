@@ -1,5 +1,7 @@
-PHP 特性总结
+CTFShow PHP特性
 ========
+
+**题目范围：Web89 - Web115 | Web123 - Web150**
 
 
 
@@ -39,13 +41,19 @@ int preg_match ( string $pattern , string $subject [, array &$matches [, int $fl
 
 ```php
 <?php
-if (preg_match("/[0-9]/", $num)) {
-    die("no no no!");
-} else if (intval($num)) {
-    echo $flag;
+if (isset($_GET['num'])) {
+    $num = $_GET['num'];
+    if (preg_match("/[0-9]/", $num)) {
+        die("no no no!");
+    }
+    if (intval($num)) {
+        echo $flag;
+    }
 }
 ?>
 ```
+
+**重点：preg_match当检测的变量是数组的时候会报错并返回0。而intval函数当传入的变量也是数组的时候，会返回1 !!!**
 
 preg_match 第二个参数要求是字符串，如果传入数组则不会进入 if 语句
 
@@ -83,6 +91,8 @@ intval( mixed $value, int $base = 10) : int
 
 字符串有可能返回 0，虽然取决于字符串最左侧的字符。
 
+**Web 92：intval()函数如果$base为0，则$var中存在字母的话遇到字母就停止读取，但是e这个字母比较特殊，可以在PHP中不是科学计数法。所以为了绕过前面的==4476我们就可以构造 4476e123 其实不需要是e其他的字母也可以**
+
 ```php
 <?php
 if (isset($_GET['num'])) {
@@ -108,6 +118,8 @@ intval('4476e0')===4476    科学计数法
 intval('0x117c')===4476    16进制
 intval('010574')===4476    8进制 #当题目过滤字母时，2和16进制都不好用
 intval(' 010574')===4476   8进制+空格 #当要求存在0且0不是首位时
+intval('+010574')===4476   8进制+加号
+intval('%2b010574')===4476
 intval('0b1000101111100')===4476  2进制
 ```
 
@@ -137,7 +149,11 @@ if (preg_match('/^php$/im', $a)) {
 
 i 不区分 (ignore) 大小写；m 多 (more) 行匹配，若有换行符则以换行符分割，按行匹配
 
-payload:`%0aphp`，第一行匹配换行后有 php 故通过，第二个不符合 php 开头 php 结尾故不通过
+payload:`abc%0aphp`，第一行匹配换行后有 php 故通过，第二个不符合 php 开头 php 结尾故不通过（这里的'%0a'是url编码的换行符。）
+
+> 官方给的链接：（Apache HTTPD 换行解析漏洞(CVE-2017-15715)与拓展）
+>
+> https://blog.csdn.net/qq_46091464/article/details/108278486
 
 **正则表达式扩展**
 
@@ -202,6 +218,15 @@ if 语句只比对字符串，highlight_file 可以写路径，故 payload 有�
 /var/www/html/flag.php              绝对路径
 ./flag.php                          相对路径
 php://filter/resource=flag.php      php伪协议
+php://filter/read=convert.base64-encode/resource=flag.php
+```
+
+```
+payload：
+1. ?u=php://filter/read=convert.base64-encode/resource=flag.php
+2. ?u=php://filter/resource=flag.php
+3. ?u=./flag.php 
+4. ?u=/var/www/html/flag.php
 ```
 
 
@@ -371,6 +396,8 @@ if ($_GET['HTTP_FLAG'] == 'flag') {
 ```
 
 > 该函数首先包含了一个名为"flag.php"的文件。然后，根据`$_GET`是否存在，如果存在则将其赋值为`$_POST`，否则赋值为'flag'。接下来，判断`$_GET['flag']`是否等于'flag'，如果等于则将其赋值为`$_COOKIE`，否则赋值为'flag'。最后，判断`$_GET['flag']`是否等于'flag'，如果等于则将其赋值为`$SERVER`，否则赋值为'flag'。最后，根据`$GET['HTTP_FLAG']`是否等于'flag'，如果等于则输出`$flag`，否则输出`__FILE__`。(等于 flag 就输出 flag，不等于显示源码)
+>
+> **中间的代码没有作用，因为我们不提交 flag 参数**
 
 所以只需要传入一个任意的 GET 保证`$_GET`是被设置的。然后 POST 一个覆盖它 。
 

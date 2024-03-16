@@ -57,15 +57,15 @@ nav:
       - WEB/labs/xss-labs靶场打靶记录.md
       - WEB/labs/Sqli-labs笔记.md
       - WEB/labs/CTFHub技能树笔记.md
-      - CtfShow:
-        - WEB/labs/CTFShow/CTFshow-web.md
-        - WEB/labs/CTFShow/CTFShow-信息泄露.md
-        - WEB/labs/CTFShow/CTFShow-爆破.md
-        - WEB/labs/CTFShow/CTFShow-RCE.md
-        - WEB/labs/CTFShow/CTFShow-文件包含.md
-        - WEB/labs/CTFShow/PHP特性总结.md
-        - WEB/labs/CTFShow/CTFShow-文件上传.md
-        - WEB/labs/CTFShow/CTFShow-Sql注入.md
+    - CTFShow:
+      - WEB/CTFShow/CTFshow-web.md
+      - WEB/CTFShow/CTFShow-信息泄露.md
+      - WEB/CTFShow/CTFShow-爆破.md
+      - WEB/CTFShow/CTFShow-RCE.md
+      - WEB/CTFShow/CTFShow-文件包含.md
+      - WEB/CTFShow/CTFShow-PHP特性.md
+      - WEB/CTFShow/CTFShow-文件上传.md
+      - WEB/CTFShow/CTFShow-Sql注入.md
     - 其他:
       - WEB/others/JavaScript笔记.md
       # - WEB/others/PHP反序列化.md

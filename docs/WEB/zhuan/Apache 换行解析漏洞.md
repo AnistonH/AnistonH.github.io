@@ -2,7 +2,7 @@
 
 
 
-> 原文地址 [blog.csdn.net](https://blog.csdn.net/qq_46091464/article/details/108278486)
+> 原文地址： [Apache HTTPD 换行解析漏洞(CVE-2017-15715)与拓展](https://blog.csdn.net/qq_46091464/article/details/108278486)
 
 >  **(CVE-2017-15715)**
 
@@ -37,7 +37,7 @@
 
 ![](./Apache 换行解析漏洞.assets/2.png)  
 
-**在 1.php 后面插入一个 `\ x0A`（注意，不能是 \ x0D\x0A，只能是一个 \ x0A），不再拦截：**
+**在 1.php 后面插入一个 `\x0A`（注意，不能是 \x0D\x0A，只能是一个 \x0A），不再拦截：**
 
 (字符串1.php的16进制为312e706870)  
 

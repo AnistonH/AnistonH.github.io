@@ -58,7 +58,7 @@ GET方法改为POST方法最后添加一行，内容是需要包含的php代码�
 
 /?file=PHP://input HTTP/1.1
 
-POST数据部分：<?php system('ls *.php');?>
+POST数据部分：`<?php system('ls *.php');?>`
 
 
 
