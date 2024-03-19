@@ -18,6 +18,21 @@ nav:
   - 开发:
     - DEC/index.md
     
+    - 数据结构:
+      - Alpha:
+        - DEC/Data-Structure/Alpha-链表.md
+        - DEC/Data-Structure/Alpha-栈和队列.md
+      - 代码:
+        - DEC/Data-Structure/复杂度.md
+        - DEC/Data-Structure/顺序表.md
+        - DEC/Data-Structure/Triplets.md
+        - DEC/Data-Structure/单链表.md
+        - DEC/Data-Structure/单链表-实验报告二.md
+        - DEC/Data-Structure/双向链表.md
+        - DEC/Data-Structure/Grade Management System.md
+        - DEC/Data-Structure/栈和队列.md
+        - DEC/Data-Structure/循环队列.md
+
     - C语言:
       - Alpha:
         - DEC/C/Alpha-数组.md
@@ -34,24 +49,6 @@ nav:
         - DEC/C/文件读写常用函数总结.md
         - DEC/C/Scanf 输入字符串遇到空格.md
 
-    - 数据结构:
-      - DEC/Data-Structure/复杂度.md
-      - DEC/Data-Structure/顺序表.md
-      - DEC/Data-Structure/Triplets.md
-      - DEC/Data-Structure/单链表.md
-      - DEC/Data-Structure/单链表-实验报告二.md
-      - DEC/Data-Structure/双向链表.md
-      - DEC/Data-Structure/Grade Management System.md
-      - DEC/Data-Structure/栈和队列.md
-      - DEC/Data-Structure/循环队列.md
-
-      - Alpha:
-        - DEC/Data-Structure/Alpha-链表.md
-        - DEC/Data-Structure/Alpha-栈和队列.md
-
-
-
-
   - 网络安全:
     - WEB/index.md
     - 靶场:
@@ -60,6 +57,7 @@ nav:
       - WEB/labs/xss-labs靶场打靶记录.md
       - WEB/labs/Sqli-labs笔记.md
       - WEB/labs/CTFHub技能树笔记.md
+      - WEB/labs/XXE打靶.md
     - CTFShow:
       - WEB/CTFShow/CTFshow-web.md
       - WEB/CTFShow/CTFShow-信息泄露.md
