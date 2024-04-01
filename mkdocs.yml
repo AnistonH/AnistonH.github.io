@@ -22,6 +22,7 @@ nav:
       - Alpha:
         - DEC/Data-Structure/Alpha-链表.md
         - DEC/Data-Structure/Alpha-栈和队列.md
+        - DEC/Data-Structure/Alpha-串、数组、广义表.md
       - 代码:
         - DEC/Data-Structure/复杂度.md
         - DEC/Data-Structure/顺序表.md
@@ -83,6 +84,7 @@ nav:
       - WEB/zhuan/SSH-连接时间超时.md
       - WEB/zhuan/git-stash用法小结.md
       - WEB/zhuan/dirsearch使用指南.md
+      - WEB/zhuan/Feroxbuster.md
       - WEB/zhuan/DNS重绑定漏洞.md
       - WEB/zhuan/MySQL loaddata用法.md
       - WEB/zhuan/Apache 换行解析漏洞.md
@@ -92,9 +94,15 @@ nav:
 
   - 随笔:
       - ESSAY/index.md
+      - ESSAY/jottings/2404.md
       - ESSAY/jottings/2403.md
       - ESSAY/jottings/2402.md
       - ESSAY/jottings/2401.md
+
+  - 时间线:
+      - TimeLine/DEC.md
+      - TimeLine/WebSec.md
+
 
 
   - 网站:

