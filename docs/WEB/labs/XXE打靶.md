@@ -1,7 +1,5 @@
 # XXE 打靶记录
 
-> 编写于：2024-03-19
-
 
 
 靶场下载地址：https://download.vulnhub.com/xxe/XXE.zip

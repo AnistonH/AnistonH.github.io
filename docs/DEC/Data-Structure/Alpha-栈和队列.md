@@ -1,7 +1,5 @@
 # Alpha 栈和队列
 
-> 编写于：2024-03-19
-
 ## 入栈出栈操作合法性判断
 
 假设以 0 和 1 分别表示出栈和入栈操作。栈的初始为空，编写函数，判断入栈和出栈操作的合法性，当操作序列合法时，主函数输出 True，否则，输出 False。
@@ -913,6 +911,40 @@ int main() {
     else
         printf("\nNO\n");
     return 0;
+}
+```
+
+> 其实`Sub_Sequence()`貌似有点逻辑上的错误，就是不匹配的时候`pa`就直接递归到`pa->next`了，而正确做法应该是递归到`pa`开始匹配的下一个字符（不是匹配结束后的下一个字符）
+>
+> 但是这样子居然通过检查了。
+>
+> 但是我们还是修改一下吧，再引入一个`LinkList temp = pa;`
+
+```c
+int Sub_Sequence(LinkList La, LinkList Lb) {
+    // 判断字符串B是否是字符串A的子串
+    LinkList pa = La->next;
+    LinkList pb = Lb->next;
+
+    LinkList temp = pa;
+    while (temp && pb) {
+        if (temp->data == pb->data) {
+            temp = temp->next;
+            pb = pb->next;
+        }
+        else {
+            temp = pa->next;
+            pa = pa->next;
+            pb = Lb->next;
+        }
+    }
+
+    if (pb == NULL) {
+        return 1; // B是A的子串
+    }
+    else {
+        return 0; // B不是A的子串
+    }
 }
 ```
 

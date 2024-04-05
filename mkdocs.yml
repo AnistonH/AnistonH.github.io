@@ -68,9 +68,10 @@ nav:
       - WEB/CTFShow/CTFShow-PHP特性.md
       - WEB/CTFShow/CTFShow-文件上传.md
       - WEB/CTFShow/CTFShow-Sql注入.md
+      - WEB/CTFShow/CTFShow-XXE.md
     - 其他:
       - WEB/others/JavaScript笔记.md
-      # - WEB/others/PHP反序列化.md
+      - WEB/others/PHP反序列化.md
       - WEB/others/windterm连接kali.md
       - WEB/others/group-by报错注入.md
       - WEB/others/information_schema.md

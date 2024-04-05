@@ -1,7 +1,5 @@
 # PHP+MySQL博客（高级）
 
-> 编写于：2024-2-20
-
 
 
 #### 功能如下：（html+php+mysql+css）

@@ -1,7 +1,5 @@
 # Alpha 单链表
 
-> 编写于：2024-03-16
-
 ## 单链表的合并
 
 > 涉及：单链表的合并  删除重复数据  转置链表
@@ -1641,8 +1639,6 @@ int main() {
 > 这多简单，尾插+逆转太繁琐了
 
 ```c
-#define _CRT_SECURE_NO_WARNINGS 1
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -1661,9 +1657,13 @@ void Create_LinkList(LinkList* L, int n) {
     for (i = 0; i < n; i++) {
         LinkList newNode = (LinkList)malloc(sizeof(LNode));
         scanf("%d", &(newNode->data));
-        newNode->next = NULL;
-        p->next = newNode;
-        p = p->next;
+
+        if ((newNode->data) != 0) {
+            // 题目要求，如果输入 0，程序会将 0 在结果中删除
+            newNode->next = NULL;
+            p->next = newNode;
+            p = p->next;
+        }
     }
 }
 
@@ -1734,8 +1734,6 @@ int main() {
 
 
 ```c
-#define _CRT_SECURE_NO_WARNINGS 1
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -1754,9 +1752,13 @@ void Create_LinkList(LinkList* L, int n) {
     for (i = 0; i < n; i++) {
         LinkList newNode = (LinkList)malloc(sizeof(LNode));
         scanf("%d", &(newNode->data));
-        newNode->next = NULL;
-        p->next = newNode;
-        p = p->next;
+
+        if ((newNode->data) != 0) {
+            // 题目要求，如果输入 0，程序会将 0 在结果中删除
+            newNode->next = NULL;
+            p->next = newNode;
+            p = p->next;
+        }
     }
 }
 
