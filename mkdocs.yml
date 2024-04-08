@@ -13,7 +13,7 @@ nav:
     # - ME/profile.md
     # - ME/contact.md
     - ME/account.md
-    - ME/experience.md
+    # - ME/experience.md
     - ME/support.md
   - 开发:
     - DEC/index.md
@@ -23,6 +23,7 @@ nav:
         - DEC/Data-Structure/Alpha-链表.md
         - DEC/Data-Structure/Alpha-栈和队列.md
         - DEC/Data-Structure/Alpha-串、数组、广义表.md
+        - DEC/Data-Structure/Alpha-树和二叉树.md
       - 代码:
         - DEC/Data-Structure/复杂度.md
         - DEC/Data-Structure/顺序表.md
@@ -33,6 +34,7 @@ nav:
         - DEC/Data-Structure/Grade Management System.md
         - DEC/Data-Structure/栈和队列.md
         - DEC/Data-Structure/循环队列.md
+        - DEC/Data-Structure/稀疏矩阵的转置运算.md
 
     - C语言:
       - Alpha:

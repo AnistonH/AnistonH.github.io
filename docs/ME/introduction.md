@@ -21,6 +21,3 @@
 
 [更多点击查看](./account.md)
 
-## 经历
-
-[点击查看](./experience.md)
