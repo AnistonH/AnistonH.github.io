@@ -1,5 +1,374 @@
 # Alpha 单链表
 
+## 打印顺序表
+
+请编写一个程序，完善函数`PrintList`，实现创建一个顺序表，并实现打印顺序表的功能。
+
+**示例输出**
+
+```
+1
+2
+3
+```
+
+
+
+#### 题目
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAXSIZE 100
+typedef int ElemType;
+
+typedef struct{
+    ElemType data[MAXSIZE];
+    int length;
+}SqList;
+
+void PrintList(SqList L){
+    //请在此处编写代码
+    
+    
+    
+}
+
+int main(){
+    SqList L;
+    L.data[0] = 1;
+    L.data[1] = 2;
+    L.data[2] = 3;
+    L.length = 3;
+    PrintList(L);
+    return 0;
+}
+```
+
+#### 答案
+
+```c
+void PrintList(SqList L){
+    //请在此处编写代码
+    for(int i=0;i<L.length;i++){
+        printf("%d\n",L.data[i]);
+    }
+}
+```
+
+
+
+
+
+## 顺序表的插入
+
+请编写一个程序，完善函数`ListInsert`和`PrintList`，实现在顺序表中的指定位置插入元素的功能，并打印输出顺序表。
+
+**示例输出**
+
+```
+Insert success
+1
+4
+2
+3
+```
+
+
+
+#### 题目
+
+```C
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAXSIZE 100
+typedef int ElemType;
+
+typedef struct {
+    ElemType data[MAXSIZE];
+    int length;
+} SqList;
+
+bool ListInsert(SqList *L, int i, ElemType e) {
+    //请在此处编写代码
+    
+    
+}
+
+void PrintList(SqList L) {
+    //请在此处编写代码
+    
+    
+}
+
+int main() {
+    SqList L;
+    L.data[0] = 1;
+    L.data[1] = 2;
+    L.data[2] = 3;
+    L.length = 3;
+    bool ret = ListInsert(&L, 2, 4);
+    if (ret) {
+        printf("Insert success\n");
+        PrintList(L);
+    } else {
+        printf("Insert is false\n");
+    }
+    return 0;
+}
+```
+
+#### 答案
+
+```c
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAXSIZE 100
+typedef int ElemType;
+
+typedef struct {
+    ElemType data[MAXSIZE];
+    int length;
+} SqList;
+
+bool ListInsert(SqList *L, int i, ElemType e) {
+    //请在此处编写代码
+    if(i < 1 || i > L->length){
+        return false;
+    }
+    if(L->length >= MAXSIZE){
+        return false;
+    }
+
+    for(int j = L->length; j >= i; j--){
+        L->data[j] = L->data[j - 1];
+    }
+    
+    L->data[i-1] = e;
+    L->length++;
+    
+    return true;
+    
+}
+
+void PrintList(SqList L) {
+    //请在此处编写代码
+    for(int i = 0; i < L.length; i++){
+        printf("%d\n",L.data[i]);
+    }
+    
+}
+
+int main() {
+    SqList L;
+    L.data[0] = 1;
+    L.data[1] = 2;
+    L.data[2] = 3;
+    L.length = 3;
+    bool ret = ListInsert(&L, 2, 4);
+    if (ret) {
+        printf("Insert success\n");
+        PrintList(L);
+    } else {
+        printf("Insert is false\n");
+    }
+    return 0;
+}
+```
+
+
+
+
+
+## 删除顺序表元素
+
+请编写一个程序，完善函数`ListDelete`和`PrintList`，实现在顺序表的指定位置删除元素的功能，并打印输出顺序表。
+
+**示例输出**
+
+```
+Delete success
+1
+3
+```
+
+
+
+#### 题目
+
+```c
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAXSIZE 100
+typedef int ElemType;
+
+typedef struct {
+    ElemType data[MAXSIZE];
+    int length;
+} SqList;
+
+bool ListDelete(SqList *L, int i, ElemType *e) {
+    //请在此处编写代码
+    
+    
+}
+
+void PrintList(SqList L) {
+    //请在此处编写代码
+    
+    
+}
+
+int main() {
+    SqList L;
+    L.data[0] = 1;
+    L.data[1] = 2;
+    L.data[2] = 3;
+    L.length = 3;
+    ElemType e;
+    bool ret = ListDelete(&L, 2, &e);
+    if (ret) {
+        printf("Delete success\n");
+        PrintList(L);
+    } else {
+        printf("Delete is false\n");
+    }
+    return 0;
+}
+```
+
+#### 答案
+
+```c
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAXSIZE 100
+typedef int ElemType;
+
+typedef struct {
+    ElemType data[MAXSIZE];
+    int length;
+} SqList;
+
+bool ListDelete(SqList *L, int i, ElemType *e) {
+    //请在此处编写代码
+    if(i<1 || i>L->length){
+        return false;
+    }
+    
+    *e = L->data[i - 1];
+    
+    for(int j=i; j<L->length; j++){
+        L->data[j - 1] = L->data[j];
+    }
+    L->length--;
+    return true;
+}
+
+void PrintList(SqList L) {
+    //请在此处编写代码
+    for(int i=0; i<L.length; i++){
+        printf("%d\n",L.data[i]);
+    }
+    
+}
+
+int main() {
+    SqList L;
+    L.data[0] = 1;
+    L.data[1] = 2;
+    L.data[2] = 3;
+    L.length = 3;
+    ElemType e;
+    bool ret = ListDelete(&L, 2, &e);
+    if (ret) {
+        printf("Delete success\n");
+        PrintList(L);
+    } else {
+        printf("Delete is false\n");
+    }
+    return 0;
+}
+```
+
+
+
+
+
+## 按值查找顺序表元素
+
+请编写一个程序，完善函数`LocateElem`，实现在顺序表中查找指定元素位置的功能，并打印输出顺序表。
+
+**示例输出**
+
+```
+Locate success
+Position: 2
+```
+
+
+
+#### 题目
+
+```c
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAXSIZE 100
+typedef int ElemType;
+
+typedef struct{
+    ElemType data[MAXSIZE];
+    int length;
+}SqList;
+
+int LocateElem(SqList L, ElemType e){
+    //请在此处编写代码
+    
+    
+    
+}
+
+int main(){
+    SqList L;
+    L.data[0] = 1;
+    L.data[1] = 2;
+    L.data[2] = 3;
+    L.length = 3;
+    int ret = LocateElem(L, 2);
+    if(ret != -1){
+        printf("Locate success\n");
+        printf("Position: %d", ret);
+    } else{
+        printf("Locate is false\n");
+    }
+    return 0;
+}
+```
+
+#### 答案
+
+```c
+int LocateElem(SqList L, ElemType e){
+    //请在此处编写代码
+    for(int i=0; i < L.length; i++){
+        if(L.data[i] == e){
+            return i+1;
+        }
+    }
+    return -1;
+}
+```
+
+
+
+
+
 ## 单链表的合并
 
 > 涉及：单链表的合并  删除重复数据  转置链表

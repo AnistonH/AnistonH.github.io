@@ -87,6 +87,7 @@ nav:
       - WEB/zhuan/SSH-连接时间超时.md
       - WEB/zhuan/git-stash用法小结.md
       - WEB/zhuan/dirsearch使用指南.md
+      - WEB/zhuan/常见的php伪协议.md
       - WEB/zhuan/Feroxbuster.md
       - WEB/zhuan/DNS重绑定漏洞.md
       - WEB/zhuan/MySQL loaddata用法.md
