@@ -54,15 +54,6 @@ int main()
 #### 答案
 
 ```c
-#include <stdio.h>
-#include <stdlib.h>
-
-//统计输入字符串中出现的A-Z及a-z字符的个数
-//统计输入字符串中出现的0-9个数。
-//s：输入的字符串
-//pzm:指向保存A-Z和a-z个数的整型变量的指针 
-//psz:指向保存0-9个数的整型变量的指针
-
 void count(char s[], int* pzm, int* psz) {
     // 初始化字母和数字的个数为 0
     *pzm = 0;
@@ -80,16 +71,23 @@ void count(char s[], int* pzm, int* psz) {
         }
     }
 }
+```
 
-int main() {
-    char s[] = "abc11def001010DJK";
-    int zm = 0; // 字符串中 A-Z 或 a-z 字符的个数
-    int sz = 0; // 字符串中 0-9 的个数
-    count(s, &zm, &sz);
+### 标准答案
 
-    printf("字母个数: %d\n数字个数: %d", zm, sz);
-
-    return 0;
+```C
+void count(char s[], int* pzm, int* psz)
+{
+    int i = 0;
+    while (s[i] != '\0') {
+        if (('0' <= s[i]) && (s[i] <= '9')) {
+            (*psz)++;
+        } // 数字
+        else if (('a' <= s[i] && s[i] <= 'z') || ('A' <= s[i] && s[i] <= 'Z')) {
+            (*pzm)++;
+        } // 字母
+        i++;
+    }
 }
 ```
 
@@ -160,9 +158,7 @@ int main()
 > 总的来说，`strncpy` 在需要控制复制字符个数的情况下比较有用，但需要小心处理字符串结束符的情况。而 `strcpy` 则是常用的字符串复制函数，适用于复制整个字符串的场景，并确保目标字符串是一个有效的 C 字符串。
 
 ```c
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <string.h> // 别忘了这个
 
 void part(char* s, char* s1, char* s2, int n) {
     // 将 s 的前 n 个字符复制到 s1
@@ -173,20 +169,11 @@ void part(char* s, char* s1, char* s2, int n) {
     strcpy(s2, s + n);
 }
 
-int main() {
-    char s[] = "abc123456789";
-    char s1[10], s2[10];
-    part(s, s1, s2, 5);
-    printf("%s\n%s", s1, s2);
-    return 0;
-}
 ```
 
 > 第二种方法，手动实现`string.h`功能。
 
 ```c
-#include <stdio.h>
-
 void part(char* s, char* s1, char* s2, int n) {
     int i;
 
@@ -201,15 +188,41 @@ void part(char* s, char* s1, char* s2, int n) {
         s2[j] = s[i];
     }
     s2[i - n] = '\0'; // 设置 s2 的末尾为字符串结束符
+    // 可有可无
 }
+```
 
-int main() {
-    char s[] = "abc123456789";
-    char s1[10], s2[10];
-    int n = 5;
-    part(s, s1, s2, n);
-    printf("%s\n%s", s1, s2);
-    return 0;
+### 标准答案（不太好）
+
+```C
+void part(char* s, char* s1, char* s2, int n)
+{
+	char* p = s, * q = s1;
+	int i = 0;
+	if (*p == '\0') {//s为空 
+		return;
+	}
+
+	//s1 
+	while (*p != '\0' && i < n) {
+		*q = *p;
+		q++;
+		p++;
+		i++;
+	}
+	*q = '\0';
+	if (*p == '\0') {
+		return;
+	}
+
+	//s2	
+	q = s2;
+	while (*p != '\0') {
+		*q = *p;
+		q++;
+		p++;
+	}
+	*q = '\0';
 }
 ```
 
@@ -262,9 +275,6 @@ int main()
 #### 答案
 
 ```c
-#include <stdio.h>
-#include <stdlib.h>
-
 void insert(char* s, char* t, int pos) {
     int len_s = 0;
     int len_t = 0;
@@ -301,22 +311,54 @@ void insert(char* s, char* t, int pos) {
     // 在 s 的末尾添加字符串结束符
     s[len_s + len_t] = '\0';
 }
+```
 
-int main() {
-    char s[20] = "1234567890";
-    char t[20] = "abcd";
-    int pos = 6;
-    insert(s, t, pos);
-    printf("%s", s);
-    return 0;
+### 标准答案（不太好）
+
+```C
+void  insert(char* s, char* t, int pos)
+{
+	int i = 1, x = 0, j;
+	char* p = s, * q = t;
+	if (pos < 1) {
+		return;
+	}
+	while (*p != '\0' && i < pos) {
+		p++;
+		i++;
+	}
+	if (*p == '\0') {
+		return;
+	}
+	else
+		while (*p != '\0') {
+			p++;
+			i++;
+		}
+	while (*q != '\0') {
+		q++;
+		x++;
+	}
+	for (j = i; j >= pos; j--) {
+		*(p + x) = *p;
+		p--;
+	}
+	q--;
+
+	for (j = 1; j <= x; j++) {
+		*(p + x) = *q;
+		p--;
+		q--;
+	}
 }
+
 ```
 
 
 
 
 
-## KMP模式匹配
+## KMP模式匹配（待完成）
 
 请编写模式匹配函数`KMP`，借助 KMP 算法来实现如下功能：如果匹配成功，则返回对应的位置；如果匹配不成功，则返回-1。
 
@@ -379,31 +421,28 @@ int main() {
 >
 > 这个计算的是“首元素下标为0”，但是题目要求的是“首元素是下标为1”，所以最后return的时候需要+1。
 
-为了实现 KMP 算法来进行模式匹配，并返回匹配成功的位置或 -1，可以按照以下步骤完成 `KMP` 函数：
+为了实现`KMP`算法来进行模式匹配，并返回匹配成功的位置或 -1，可以按照以下步骤完成 `KMP` 函数：
 
 1. 计算模式字符串 `T` 的长度。
 2. 创建辅助数组 `next`，用于存储模式字符串中每个位置前缀的最长可匹配前缀子串的结束位置。
 3. 根据模式字符串 `T` 构建 `next` 数组。
-   - 初始化 `next[0]` 为 -1。
+   - 初始化 `next[0]` 为 `-1`。
    - 初始化两个指针 `i` 和 `j`，其中 `i = 0`，`j = -1`。
    - 通过比较 `T[i]` 和 `T[j]` 的字符来更新 `next[i+1]`：
      - 如果 `T[i]` 和 `T[j]` 相等，则将 `next[i+1]` 设置为 `next[j] + 1`，然后递增 `i` 和 `j`。
-     - 如果 `T[i]` 和 `T[j]` 不相等，将 `j` 更新为 `next[j]` 的值，直到 `j` 为 -1 或 `T[i]` 和 `T[j]` 相等。然后将 `next[i+1]` 设置为 `j + 1`，然后递增 `i`。
+     - 如果 `T[i]` 和 `T[j]` 不相等，将 `j` 更新为 `next[j]` 的值，直到 `j` 为 `-1` 或 `T[i]` 和 `T[j]` 相等。然后将 `next[i+1]` 设置为 `j + 1`，然后递增 `i`。
 4. 使用 `next` 数组进行字符串匹配。
    - 初始化两个指针 `i` 和 `j`，其中 `i = 0`，`j = 0`。
    - 通过比较 `S[i]` 和 `T[j]` 的字符进行匹配：
      - 如果 `S[i]` 和 `T[j]` 相等，则递增 `i` 和 `j`。
      - 如果 `S[i]` 和 `T[j]` 不相等：
-       - 如果 `j` 为 0，说明当前字符不匹配且无法继续回退，将 `i` 递增。
+       - 如果 `j` 为 `0`，说明当前字符不匹配且无法继续回退，将 `i` 递增。
        - 否则，将 `j` 更新为 `next[j]` 的值。
-5. 根据匹配的结果返回相应的位置或 -1。
+5. 根据匹配的结果返回相应的位置或 `-1`。
 
 下面是完整的代码实现：
 
 ```c
-#include <stdio.h>
-#include <string.h>
-
 int KMP(char *S, char *T) {
     int len_s = strlen(S);
     int len_t = strlen(T);
@@ -440,23 +479,46 @@ int KMP(char *S, char *T) {
         return -1; // 匹配不成功
     }
 }
+```
 
-int main() {
-    int result = KMP("aabaabbaaabab", "aaab");
-    printf("%d\n", result);
+### 标准答案
 
-    result = KMP("aabaabbaaabab", "aaabbb");
-    printf("%d\n", result);
-
-    return 0;
+```C
+void Next(char* T, int* next) {
+    int i = 1;
+    next[1] = 0;
+    int j = 0;
+    while (i < strlen(T)) {
+        if (j == 0 || T[i - 1] == T[j - 1]) {
+            i++;
+            j++;
+            next[i] = j;
+        }
+        else {
+            j = next[j];
+        }
+    }
 }
-```
 
-运行以上代码，将输出：
-
-```
-8
--1
+int KMP(char* S, char* T) {
+    int next[10];
+    Next(T, next);
+    int i = 1;
+    int j = 1;
+    while (i <= strlen(S) && j <= strlen(T)) {
+        if (j == 0 || S[i - 1] == T[j - 1]) {
+            i++;
+            j++;
+        }
+        else {
+            j = next[j];
+        }
+    }
+    if (j > strlen(T)) {
+        return i - (int)strlen(T);
+    }
+    return -1;
+}
 ```
 
 
@@ -565,10 +627,6 @@ int main() {
 > 按照输入顺序输出。
 
 ```c
-#include <stdio.h>
-#include <string.h>
-#define SIZE 1000
-
 void Account_char_count(char str[]) {
     int count[36] = { 0 };  // 用于统计字符频度，下标 0-25 对应 A-Z，下标 26-35 对应 0-9
     int visited[36] = { 0 };  // 记录字符是否已经输出过，0表示没有输出过，1表示输出过
@@ -604,20 +662,32 @@ void Account_char_count(char str[]) {
         }
     }
 }
+```
 
-int main() {
-    int i = 0;
-    char str[SIZE];
+### 标准答案（有点乱，自己的就OK）
 
-    printf("请输入待统计的字符串（合法字符为A~Z和0~9）：");
-    while ((str[i] = getchar()) != '\n') {
-        i++;
+```c
+void Account_char_count(char str[]) {
+    char account_chr[SIZE];//存放每个不同的字符 
+    int count[SIZE] = { 0 };//初始化每个字符的频度为0 
+    int i, j, n = 0;//n表示字符种类 
+    for (i = 0; str[i] != '\0'; i++) {
+        for (j = 0; j < n; j++)
+            if (str[i] == account_chr[j] || (account_chr[j] >= 'a' && account_chr[j] <= 'z' && str[i] + 32 == account_chr[j]))
+                break;//往account_chr数组中存放的字符不可以重复 
+        if (j < n)
+            count[j]++;//字符出现过，频度加1 
+        else {
+            if (str[i] >= 'A' && str[i] <= 'Z')
+                account_chr[j] = str[i];
+            else
+                account_chr[j] = str[i];
+            count[j]++;
+            n++; //新字符，放到 account_chr中，频度加1 
+        }
     }
-    str[i] = '\0';
-
-    Account_char_count(str);
-
-    return 0;
+    for (i = 0; i < n; i++)
+        printf("%c的频度为：%d\n", account_chr[i], count[i]);
 }
 ```
 
@@ -684,13 +754,6 @@ int main(){
 #### 答案
 
 ```c
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#define SIZE1 200
-#define SIZE2 50
-
 void insert(char* s, char* t, int pos) {
     int s_len = strlen(s);
     int t_len = strlen(t);
@@ -714,21 +777,39 @@ void insert(char* s, char* t, int pos) {
         printf("%c", s[i]);
     }
 }
+```
 
-int main() {
-    char s[SIZE1], t[SIZE2];
-    int pos;
+### 标准答案（不太好）
 
-    printf("请输入字符串s：");
-    scanf("%s", s);
-    printf("\n请输入字符串t：");
-    scanf("%s", t);
+```c
+void insert(char* s, char* t, int pos) {
+    //将字符串插入到另一个字符串的指定位置
 
-    printf("\n输入插入的位置（位置从1开始）：");
-    scanf("%d", &pos);
-    printf("\n字符串插入后的新字符串为：");
-    insert(s, t, pos);
-    return 0;
+    char* strs = s, * strt = t;
+
+    int i = 0;
+    while (*strs && i < pos - 1) {
+        strs++;
+        i++;
+    }
+    if (pos < 1 || *strs == '\0') {
+        printf("输入的pos值错误！\n");
+        exit(0);
+    }//判断是否输入错误，输入错误时，正常退出 
+
+    while (*strt != '\0') {
+        strt++;//找到t字符串的末位 
+    }
+    strs = s + pos - 1;
+    while (*strs != '\0') {
+        *(strt++) = *(strs++);//将字符串s的pos后的字符放到t中 
+    }
+    strs = s + pos - 1;
+    while (*t != '\0') {
+        *(strs++) = *(t++);//pos后的部分放回原位置 
+    }
+    *strt = *strs = '\0';//末尾制空
+    printf("%s", s);//输出字符串s 
 }
 ```
 
@@ -814,10 +895,6 @@ int main(){
 >
 
 ```c
-#include <stdio.h>
-
-#define MAX 100
-
 void Change(int A[], int n) {
     int left = 0;  // 左指针
     int right = n - 1;  // 右指针
@@ -841,21 +918,25 @@ void Change(int A[], int n) {
         }
     }
 }
+```
 
-int main() {
-    int A[MAX], i, n;
-    printf("请输入数组中元素个数：");
-    scanf("%d", &n);
-    for (i = 0; i < n; i++) {
-        printf("\n请输入第%d个元素个数：", i + 1);
-        scanf("%d", &A[i]);
+### 标准答案（都一样）
+
+```C
+void Change(int A[], int n) {
+    //将所有正数都排在负数前面
+    int i = 0, j = n - 1, temp;
+    while (i < j) {
+        if (i < j && A[i]>0)
+            i++;
+        if (i < j && A[j] < 0)
+            j--;
+        if (i < j) {
+            temp = A[i];
+            A[i++] = A[j];
+            A[j--] = temp;
+        }
     }
-
-    Change(A, n);
-    printf("\n调整次序后的元素序列为：");
-    for (i = 0; i < n; i++)
-        printf("%d ", A[i]);
-    return 0;
 }
 ```
 
@@ -907,86 +988,6 @@ int main(){
 
 #### 答案
 
-> 先来个错误答案，没有按照题目进行递归。
-
-```c
-#include <stdio.h>
-#include <string.h>
-#define MAXSIZE 100
-
-void swap(char* a, char* b) {
-    char temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-void Char_Reverse(char array[]) {
-    int len = strlen(array);
-    int start = 0;
-    //int end = len - 1; // 这种情况会让‘#’也参与到交换
-    int end = len - 2; // 这种情况不会让‘#’参与到交换
-
-    while (start < end) {
-        if (array[start] == '#') {
-            break;  // 遇到结束标志'#'，停止逆置
-        }
-        swap(&array[start], &array[end]);
-
-        start++;
-        end--;
-    }
-
-    array[len - 1] = '\0'; // 修改‘#’为‘\0’，因为示例中就没有输出‘#’
-}
-
-int main() {
-    char array[MAXSIZE];
-    printf("请输入一个字符串（以“#”结束）：");
-    scanf("%s", array);
-    Char_Reverse(array);
-    printf("字符串逆置之后为：%s", array);
-    return 0;
-}
-```
-
-> 下面这个是递归，但是还是通不过Alpha检查，感觉是平台问题。
-
-```c
-#include <stdio.h>
-#include <string.h>
-#define MAXSIZE 100
-
-void reverseHelper(char array[], int start, int end) {
-    if (start >= end) {
-        return;  // 递归结束条件：start >= end
-    }
-
-    char temp = array[start];
-    array[start] = array[end];
-    array[end] = temp;
-
-    reverseHelper(array, start + 1, end - 1);  // 递归调用，逆置剩余部分
-}
-
-void Char_Reverse(char array[]) {
-    int len = strlen(array);
-    reverseHelper(array, 0, len - 2); // 减2还是为了不让‘#’参与
-
-    array[len - 1] = '\0'; // 修改‘#’为‘\0’，因为示例中就没有输出‘#’
-}
-
-int main() {
-    char array[MAXSIZE];
-    printf("请输入一个字符串（以“#”结束）：");
-    scanf("%s", array);
-    Char_Reverse(array);
-    printf("字符串逆置之后为：%s", array);
-    return 0;
-}
-```
-
-> 正确答案来了！！！！
->
 > 需要改一下`main()`，要不然真的不知道怎么递归。
 
 ```c
@@ -1068,6 +1069,23 @@ int main() {
 >
 > 在上面的示例中，`str1` 是要搜索的字符串，`str2` 是要匹配的字符集合。函数返回的是 `str1` 中第一个匹配 `str2` 中任何字符的位置的索引。在这个示例中，字符 'W' 在 `str1` 中的索引位置为 6。
 
+### 标准答案（考试用这个）
+
+> 用了`static`。这递归还是很有水平的。
+
+```c
+void Char_Reverse(char array[]) {
+    char str;
+    static int i = 0;//数组下标
+    scanf("%c", &str);
+    if (str != '#') {
+        Char_Reverse(array);
+        array[i++] = str;//先存的放到后边
+    }
+    array[i] = '\0';
+}
+```
+
 
 
 
@@ -1121,9 +1139,6 @@ int main(){
 #### 答案
 
 ```c
-#include <stdio.h>
-#define N 100
-
 void copy(char s1[], char s2[]) {
     int i = 0;
 
@@ -1134,18 +1149,20 @@ void copy(char s1[], char s2[]) {
     }
 
     s1[i] = '\0'; // 添加字符串结束符
-
     printf("复制之后字符串s1为：%s\n", s1);
 }
+```
 
-int main() {
-    char s1[N], s2[N];
-    printf("请输入s1中的字符串：");
-    scanf("%s", s1);
-    printf("请输入s2中的字符串：");
-    scanf("%s", s2);
-    copy(s1, s2);
-    return 0;
+### 标准答案
+
+```c
+void copy(char s1[], char s2[]) {
+    int i;
+    for (i = 0; s2[i] != '\0'; i++) {
+        s1[i] = s2[i];
+    }
+    s1[i] = '\0';
+    printf("复制之后字符串s1为：%s\n", s1);
 }
 ```
 
@@ -1206,9 +1223,6 @@ int main(){
 > 先看一段错误代码，用的方法和上边的“将数组中的整数排在负数前面”，不知道为什么过不了检查。问题在于输出的顺序（完成了分离奇数偶数，但是奇数偶数中的顺序不对）
 
 ```c
-#include <stdio.h>
-#include <stdlib.h>
-
 void Separate(int arr[], int length) {
     int i = 0;
     int j = length - 1;
@@ -1232,30 +1246,15 @@ void Separate(int arr[], int length) {
         }
     }
 }
-
-int main() {
-    int arr[] = { 3, 2, 3, 4, 5, 9, 7, 8, 9 };
-    int length = sizeof(arr) / sizeof(arr[0]);
-
-    printf("变换次序后的数组为：");
-    Separate(arr, length);
-    for (int i = 0; i < length; i++) {
-        printf("%d ", arr[i]);
-    }
-    printf("\n");
-
-    return 0;
-}
 ```
 
 > ~~正确答案~~（bushi
 >
 > 能过检查点的答案。（不难看出，我对这个题非常无语）
 
-```c
-#include <stdio.h>
-#include <stdlib.h>
+> 还是看官方答案吧，人家的代码确实好！
 
+```c
 void Reverse(int arr[], int start, int end) {
     while (start < end) {
         int temp = arr[start];
@@ -1302,19 +1301,43 @@ void Separate(int arr[], int length) {
     
     free(tmpArr);
 }
+```
 
-int main() {
-    int arr[] = { 3, 2, 3, 4, 5, 9, 7, 8, 9 };
-    int length = sizeof(arr) / sizeof(arr[0]);
+### 标准答案（考试用这个）
 
-    printf("变换次序后的数组为：");
-    Separate(arr, length);
-    for (int i = 0; i < length; i++) {
-        printf("%d ", arr[i]);
+```c
+void Separate(int originalArray[], int length) {
+    // 将数组中的奇数和偶数分开存储到两个不同的数组中
+
+    int i = 0, oddIndex = 0, evenIndex = 0;
+    int odd[MAX] = { 0 }, even[MAX] = { 0 };
+
+    // 遍历原始数组
+    while (i < length) {
+        // 如果当前元素为奇数，存储到奇数数组中
+        if (originalArray[i] % 2 == 1) {
+            odd[oddIndex++] = originalArray[i++];
+        }
+        // 如果当前元素为偶数，存储到偶数数组中
+        else {
+            even[evenIndex++] = originalArray[i++];
+        }
     }
-    printf("\n");
 
-    return 0;
+    // 重置循环变量以便后续遍历
+    i = 0;
+    oddIndex--; // 因为之后用下标，从0开始
+    evenIndex--;
+
+    // 将奇数数组中的元素复制回原始数组
+    while (oddIndex != -1) {
+        originalArray[i++] = odd[oddIndex--];
+    }
+
+    // 将偶数数组中的元素复制回原始数组
+    while (evenIndex != -1) {
+        originalArray[i++] = even[evenIndex--];
+    }
 }
 ```
 
@@ -1376,70 +1399,7 @@ int main(){
 
 #### 答案
 
-> 有点难啊这题。
->
-> 下面这段代码，在`Visual Studio`上完全正确，但是就是通不过检查。
-
-```c
-#include<stdio.h>
-
-#define ROW 3
-#define COL 3                          
-
-void Find(int arr[][COL], int row, int col) {
-    int i, j;
-    int max_row, min_col;
-    int saddle_point_found = 0; // 标记是否找到了鞍点
-
-    // 遍历每一行
-    for (i = 0; i < row; i++) {
-        // 找到当前行中的最大值
-        max_row = arr[i][0];
-        for (j = 1; j < col; j++) {
-            if (arr[i][j] > max_row) {
-                max_row = arr[i][j];
-            }
-        }
-
-        // 找到当前行中最大值对应的列索引
-        for (j = 0; j < col; j++) {
-            if (arr[i][j] == max_row) {
-                // 检查该列中的元素是否是最小值
-                min_col = arr[0][j];
-                for (int k = 0; k < row; k++) {
-                    if (arr[k][j] < min_col) {
-                        min_col = arr[k][j];
-                    }
-                }
-
-                // 如果当前行中的最大值也是所在列的最小值，则找到了鞍点
-                if (min_col == max_row) {
-                    printf("该数组中存在鞍点arr[%d][%d] = %d\n", i, j, max_row);
-                    saddle_point_found = 1;
-                }
-                break; // 不再继续搜索该行
-            }
-        }
-    }
-
-    // 如果没有找到鞍点
-    if (!saddle_point_found) {
-        printf("该数组中不存在鞍点！\n");
-    }
-}
-
-int main() {
-    int arr[ROW][COL] = { {7, 8, 3},
-                          {5, 7, 5},
-                          {1, 8, 3} };
-    Find(arr, ROW, COL);
-    return 0;
-}
-```
-
-> 破案了，又是`main()`函数造成的问题，改一下主函数就OK了。
->
-> 我真的对这平台挺无语。
+> 官方答案是把咱放`main()`里面的东西放到了函数里面实现。
 
 ```c
 #include <stdio.h>
@@ -1526,4 +1486,100 @@ int main() {
 > 最后，我们调用`Find`函数，并将`arr`数组、`ROW`和`COL`作为参数传递给它，以便查找鞍点。
 >
 > 通过这段代码，用户可以输入一个3x3的整数数组，并根据输入的数组判断是否存在鞍点。如果存在鞍点，将输出鞍点的位置和值；如果不存在鞍点，将输出"该数组中不存在鞍点！"的提示信息。
+
+### 标准答案
+
+> 不是我说，虽然这叫做“**标准答案**”，但是这`col_min`初始化的指定有点问题，逻辑不对，VS运行出来也不对。
+
+```c
+void Find(int arr[][COL], int row, int col) {
+
+    int i, j;
+    printf("请输入数组：\n");
+
+    // 读取用户输入的数组
+    for (i = 0; i < ROW; i++) {
+        for (j = 0; j < COL; j++) {
+            scanf("%d", &arr[i][j]);
+        }
+  
+
+    int row_max = 0, col_min = 0;  // 保存行最大值和列最小值              
+    int tag = 0;  // 标记是否找到鞍点
+        
+    for (i = 0; i < ROW; i++) {
+        row_max = arr[i][0];   // 假设每行第一个元素为最大值 
+        col_min = arr[0][col]; // 假设每列第一个元素为最小值
+        
+        for (j = 0; j < COL; j++) {
+            // 查找当前行的最大值及其列下标
+            if (arr[i][j] > row_max) {
+                row_max = arr[i][j];
+                row = i;  // 记录当前行下标
+                col = j;  // 记录当前列下标
+            }
+        }
+        // 查找当前列的最小值
+        for (j = 1; j < COL; j++) {
+            if (arr[j][col] <= col_min)
+                col_min = arr[j][col];
+        }
+        // 判断是否存在鞍点
+        if (col_min == row_max) {
+            printf("该数组中存在鞍点 arr[%d][%d] = %d\n", row, col, row_max);
+            tag = 1;
+        }
+    }
+    // 如果没有找到鞍点，则输出不存在的提示
+    if (tag == 0)
+        printf("该数组中不存在鞍点！\n");
+}
+```
+
+### 自行改正（考试用这个）
+
+```C
+void Find(int arr[][COL], int row, int col) {
+    int i, j;
+    printf("请输入数组：\n");
+
+    for (i = 0; i < row; i++) {
+        for (j = 0; j < col; j++) {
+            scanf("%d", &arr[i][j]);
+        }
+    }
+
+    int tag = 0;
+    for (i = 0; i < row; i++) {
+        int row_max = arr[i][0]; // 初始化每行的最大值
+        int col_index = 0; // 记录最大值所在的列索引
+
+        // 找出当前行的最大值和其列索引
+        for (j = 1; j < col; j++) {
+            if (arr[i][j] > row_max) {
+                row_max = arr[i][j];
+                col_index = j;
+            }
+        }
+
+        // 检查当前列是否为该最大值所在的列中的最小值
+        int col_min = arr[0][col_index];
+        for (j = 0; j < row; j++) {
+            if (arr[j][col_index] < col_min) {
+                col_min = arr[j][col_index];
+            }
+        }
+
+        // 如果该列中的最小值与该行中的最大值相等，则找到鞍点
+        if (col_min == row_max) {
+            printf("该数组中存在鞍点 arr[%d][%d] = %d\n", i, col_index, row_max);
+            tag = 1;
+        }
+    }
+
+    if (tag == 0) {
+        printf("该数组中不存在鞍点！\n");
+    }
+}
+```
 

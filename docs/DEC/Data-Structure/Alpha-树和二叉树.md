@@ -88,19 +88,6 @@ int main()
 > （我发现我一直对数组里面这些求下标时候的`+1`、`-1`搞不太清楚）
 
 ```c
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-
-//二叉树的存储表示 
-typedef char TElemType;
-
-typedef struct BiTNode {
-    TElemType data;
-    struct BiTNode* lchild, * rchild;	//左右孩子指针 
-}BiTNode, * BiTree;
-
-
 //在中序序列inorder中查找元素value的索引
 int findIndex(TElemType inorder[], int low, int high, TElemType value) {
     int i;
@@ -143,39 +130,13 @@ BiTree CreateBitree(TElemType inorder[], TElemType postorder[], int lowin, int h
 
     return root;
 }
-
-
-//按前序递归遍历二叉树 
-void preorder(BiTree t)
-{
-    if (t)
-    {
-        printf("%c ", t->data);
-        if (t->lchild)
-            preorder(t->lchild);
-        if (t->rchild)
-            preorder(t->rchild);
-    }
-}
-
-
-int main()
-{
-    TElemType in[] = "DBEAFCG"; //中序 
-    TElemType post[] = "DEBFGCA"; //后序 
-    BiTree t;
-
-    t = CreateBitree(in, post, 0, strlen(in) - 1, 0, strlen(post) - 1);
-    // 参数分别为 中序序列，后序序列，中序序列的第一个元素下标，中序序列的最后一个元素下标，后序序列的第一个元素下标，后序序列的最后一个元素下标
-    preorder(t);
-
-    return 0;
-}
 ```
 
-> 先比如看下一个题，关于`CreateBitree()`有种更简洁的实现方法，也没有外置`findIndex()`（从第二题的示例代码偷的哈哈哈）
+> 标准答案，也就是下一个题的代码，关于`CreateBitree()`有种更简洁的实现方法，也没有外置`findIndex()`（从第二题的示例代码偷的哈哈哈）
 >
 > 不过都是一样的，写起来简洁一些而已
+
+### 标准答案（考试用这个）
 
 ```c
 BiTree CreateBitree(TElemType inorder[], TElemType postorder[], int lowin, int highin, int lowpost, int highpost)
@@ -187,6 +148,7 @@ BiTree CreateBitree(TElemType inorder[], TElemType postorder[], int lowin, int h
 	while (inorder[i] != postorder[highpost]) { // 在中序序列中查找根结点
 		i++;
 	}
+    
 	if (i == lowin) {
 		bt->lchild = NULL;  // 处理左子树
 	}
@@ -276,19 +238,6 @@ int main()
 > 都是递归，多多少少还是有点难理解的，起码对于我是如此。
 
 ```c
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-
-//二叉树的存储表示 
-typedef char TElemType;
-
-typedef struct BiTNode {
-	TElemType data;
-	struct BiTNode* lchild, * rchild;	//左右孩子指针 
-}BiTNode, * BiTree;
-
-
 //计算叶结点的个数 
 int CalLeafNum(BiTree t) {
 
@@ -307,62 +256,6 @@ int CalLeafNum(BiTree t) {
 
 	return leftCount + rightCount;
 }
-
-// 这样写也可以
-//int CalLeafNum(BiTree T) {
-//    //计算二叉树的叶子节点个数
-//    if (T == NULL) {
-//        return 0;
-//    }
-//    else if (T->lchild == NULL && T->rchild == NULL) {
-//        return 1;
-//    }
-//    else {
-//        return CalLeafNum(T->lchild) + CalLeafNum(T->rchild);
-//    }
-//}
-
-
-BiTree CreateBitree(TElemType inorder[], TElemType postorder[], int lowin, int highin, int lowpost, int highpost)
-{
-	BiTree bt = (BiTree)malloc(sizeof(BiTNode));// 申请结点
-	bt->data = postorder[highpost];// 后序遍历的最后一个结点是根结点
-
-	int i = lowin; // 定位根结点在中序序列中的位置，一定初始化为lowin
-	while (inorder[i] != postorder[highpost]) { // 在中序序列中查找根结点
-		i++;
-	}
-
-	// 递归构造左右子树
-	if (i == lowin) {
-		bt->lchild = NULL;  // 处理左子树
-	}
-	else {
-		bt->lchild = CreateBitree(inorder, postorder, lowin, i - 1, lowpost, lowpost + i - lowin - 1);
-	}
-
-	if (i == highin) {
-		bt->rchild = NULL;  // 处理右子树
-	}
-	else {
-		bt->rchild = CreateBitree(inorder, postorder, i + 1, highin, lowpost + i - lowin, highpost - 1);
-	}
-
-	return bt;
-}
-
-
-int main()
-{
-	TElemType in[] = "FDGBAHEC";//中序 
-	TElemType post[] = "FGDBHECA";	//后序 
-	BiTree t;
-
-	t = CreateBitree(in, post, 0, strlen(in) - 1, 0, strlen(post) - 1);
-	printf("%d", CalLeafNum(t));
-
-	return 0;
-}
 ```
 
 > 这个题用的是“计算叶结点的个数”，这里再附上一个“计算二叉树的节点个数”的算法：
@@ -378,6 +271,20 @@ int main()
 >     }
 > }
 > ```
+
+### 标准答案（都一样）
+
+```c
+int CalLeafNum(BiTree t) {
+	if (t == NULL) {
+		return 0;
+	}
+	if (t->lchild == NULL && t->rchild == NULL) {
+		return 1;
+	}
+	return CalLeafNum(t->lchild) + CalLeafNum(t->rchild);
+}
+```
 
 
 
@@ -457,19 +364,6 @@ int main()
 > 还是递归，全是递归。毕竟二叉树就是这么个思想。
 
 ```c
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-
-//二叉树的存储表示 
-typedef char TElemType;
-
-typedef struct BiTNode {
-	TElemType data;
-	struct BiTNode* lchild, * rchild;	//左右孩子指针 
-}BiTNode, * BiTree;
-
-
 //判断两棵二叉树是否相同
 int sametree(BiTree t1, BiTree t2) {
 	if (t1 == NULL && t2 == NULL) {
@@ -491,54 +385,6 @@ int sametree(BiTree t1, BiTree t2) {
 	return leftSame && rightSame; // 当左子树和右子树都相同时，认为两棵树相同
     // 因为是 leftSame && rightSame; 所以过程中只要有一个是0就会一直是0
 }
-
-
-BiTree CreateBitree(TElemType inorder[], TElemType postorder[], int lowin, int highin, int lowpost, int highpost)
-{
-	BiTree bt = (BiTree)malloc(sizeof(BiTNode));// 申请结点
-	bt->data = postorder[highpost];// 后序遍历的最后一个结点是根结点
-
-	int i = lowin; // 定位根结点在中序序列中的位置，一定初始化为lowin
-	while (inorder[i] != postorder[highpost]) { // 在中序序列中查找根结点
-		i++;
-	}
-
-	// 递归构造左右子树
-	if (i == lowin) {
-		bt->lchild = NULL;  // 处理左子树
-	}
-	else {
-		bt->lchild = CreateBitree(inorder, postorder, lowin, i - 1, lowpost, lowpost + i - lowin - 1);
-	}
-
-	if (i == highin) {
-		bt->rchild = NULL;  // 处理右子树
-	}
-	else {
-		bt->rchild = CreateBitree(inorder, postorder, i + 1, highin, lowpost + i - lowin, highpost - 1);
-	}
-
-	return bt;
-}
-
-
-int main()
-{
-	BiTree t1;
-	BiTree t2;
-
-	TElemType in[] = "DBEAFCG";//中序 
-	TElemType post[] = "DEBFGCA";	//后序 
-	t1 = CreateBitree(in, post, 0, strlen(in) - 1, 0, strlen(post) - 1);//建立第一个二叉树
-
-	TElemType in2[] = "DBEAFCG";//中序 
-	TElemType post2[] = "DEBFGCA";	//后序 
-	t2 = CreateBitree(in2, post2, 0, strlen(in2) - 1, 0, strlen(post2) - 1);//建立第二个二叉树
-
-	printf("%d", sametree(t1, t2));
-
-	return 0;
-}
 ```
 
 > 其实把下面这段代码删除，也能通过检查：
@@ -549,6 +395,27 @@ int main()
 > }
 > ```
 > 我很不理解。看看这个题的标题“两棵二叉树是否相同”以及下一个题的标题“判别两棵二叉树是否相等”，难道它只要求结构相同，没有要求数据也相同？？
+>
+> **考试千万别删除这一句！！！**
+
+### 标准答案（都一样）
+
+```C
+int sametree(BiTree t1, BiTree t2) {
+	if (t1 == NULL || t2 == NULL) {
+		if (t1 == NULL && t2 == NULL) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
+	}
+	if (t1->data != t2->data) {
+		return 0;
+	}
+	return sametree(t1->lchild, t2->lchild) && sametree(t1->rchild, t2->rchild);
+}
+```
 
 
 
@@ -632,15 +499,6 @@ int main() {
 > 其实也就是第一个`getchar();`有用，第二个可有可无。
 
 ```c
-#include <stdio.h>
-#include <stdlib.h>
-
-typedef struct BiTNode {
-    char data;
-    struct BiTNode* lchild, * rchild;
-} BiTNode, * Bitree;
-
-
 void Creat_Bitree(Bitree* T) {
     char ch;
     scanf("%c", &ch);
@@ -675,50 +533,39 @@ int Judge_Same_Tree(Bitree T1, Bitree T2) {
     return leftSame && rightSame; // 当左子树和右子树都相等时，认为两棵树相等
     // 因为是 leftSame && rightSame; 所以过程中只要有一个是0就会一直是0
 }
-
-
-int main() {
-    Bitree T1, T2;
-
-    printf("请以先序遍历的方式输入第一棵树（#表示结点没有子树）：");
-    Creat_Bitree(&T1);
-    getchar();
-
-    printf("\n请以先序遍历的方式输入第二棵树（#表示结点没有子树）：");
-    Creat_Bitree(&T2);
-    getchar();
-
-    printf("\n");
-    if (!Judge_Same_Tree(T1, T2)) {
-        printf("NO");
-    }
-    else {
-        printf("YES");
-    }
-
-    return 0;
-}
 ```
 
-> **核心代码：**
->
-> ```c
-> void Creat_Bitree(Bitree* T) {
->     char ch;
->     scanf("%c", &ch);
-> 
->     if (ch == '#') {
->         *T = NULL;
->     }
-> 
->     else {
->         *T = (Bitree)malloc(sizeof(BiTNode));
->         (*T)->data = ch;
->         Creat_Bitree(&((*T)->lchild));
->         Creat_Bitree(&((*T)->rchild));
->     }
-> }
-> ```
+### 标准答案（都一样）
+
+```C
+void Creat_Bitree(Bitree* T) {
+    char ch;
+    ch = getchar();
+    if (ch == '#')
+        *T = NULL; // 空树
+    else {
+        *T = (Bitree)malloc(sizeof(BiTNode)); // 创建结点
+        (*T)->data = ch;
+        Creat_Bitree(&(*T)->lchild); // 左子树
+        Creat_Bitree(&(*T)->rchild); // 右子树
+    }
+}
+
+int Judge_Same_Tree(Bitree T1, Bitree T2) {
+    if (T1 == NULL || T2 == NULL) {
+        if (T1 == NULL && T2 == NULL) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+    if (T1->data != T2->data) {
+        return 0;
+    }
+    return Judge_Same_Tree(T1->lchild, T2->lchild) && Judge_Same_Tree(T1->rchild, T2->rchild);
+}
+```
 
 
 
@@ -791,20 +638,6 @@ int main()
 #### 答案
 
 ```c
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-// 二叉树的存储表示
-typedef char TElemType;
-
-typedef struct BiTNode {
-    TElemType data;
-    struct BiTNode* lchild, * rchild;  // 左右孩子指针
-} BiTNode, * BiTree;
-
-// 计算二叉树的深度
-// 返回值：二叉树的深度
 int GetDepth(BiTree t) {
     if (t == NULL) {
         return 0;
@@ -815,63 +648,23 @@ int GetDepth(BiTree t) {
         return (leftDepth > rightDepth) ? (leftDepth + 1) : (rightDepth + 1);
     }
 }
-
-BiTree CreateBitree(TElemType inorder[], TElemType postorder[], int lowin, int highin, int lowpost, int highpost) {
-    BiTree bt = (BiTree)malloc(sizeof(BiTNode));  // 申请结点
-    bt->data = postorder[highpost];  // 后序遍历的最后一个结点是根结点
-
-    int i = lowin;
-    while (inorder[i] != postorder[highpost]) {  // 在中序序列中查找根结点
-        i++;
-    }
-
-    if (i == lowin) {
-        bt->lchild = NULL;  // 处理左子树
-    }
-    else {
-        bt->lchild = CreateBitree(inorder, postorder, lowin, i - 1, lowpost, lowpost + i - lowin - 1);  // 递归创建左子树
-    }
-
-    if (i == highin) {
-        bt->rchild = NULL;  // 处理右子树
-    }
-    else {
-        bt->rchild = CreateBitree(inorder, postorder, i + 1, highin, lowpost + i - lowin, highpost - 1);  // 递归创建右子树
-    }
-
-    return bt;
-}
-
-int main() {
-    TElemType in[] = "DBEAFCG";  // 中序
-    TElemType post[] = "DEBFGCA";  // 后序
-
-    BiTree t;
-    t = CreateBitree(in, post, 0, strlen(in) - 1, 0, strlen(post) - 1);
-
-    int depth = GetDepth(t);
-    printf("%d\n", depth);
-
-    return 0;
-}
 ```
 
-> **核心代码：**
->
-> ```c
-> int GetDepth(BiTree t) {
->     if (t == NULL) {
->         return 0;
->     }
->     else {
->         int leftDepth = GetDepth(t->lchild);
->         int rightDepth = GetDepth(t->rchild);
->         return (leftDepth > rightDepth) ? (leftDepth + 1) : (rightDepth + 1);
->     }
-> }
-> ```
+### 标准答案（都一样）
 
-
+```c
+int GetDepth(BiTree t) {
+	if (t == NULL) {
+		return 0;
+	}
+	int l = GetDepth(t->lchild);
+	int r = GetDepth(t->rchild);
+	if (l > r)
+		return l + 1;
+	else
+		return r + 1;
+}
+```
 
 
 
@@ -1029,17 +822,17 @@ int main()
 
 > ![image-20240411150715940](./Alpha.assets/erchashu.png)
 >
-> ### **中序**线索二叉树的遍历算法（有头节点）
+> ### 中序线索二叉树的遍历算法（有头节点）
 >
-> ① **结束的条件**? 
+> ① **结束的条件？**
 >
 > ​	树空或者指针指向头结点
 >
-> ② **中序遍历的第一个结点** ？
+> ② **中序遍历的第一个结点？**
 >
 > ​	左子树上处于“最左下”（没有左子树）的结点
 >
-> ③ **在中序线索二叉树中结点的后继** ？
+> ③ **在中序线索二叉树中结点的后继？****
 >
 > ​	若无右子树，则右线索所指结点为后继。否则，右子树的“最左下”孩子为后继；
 
@@ -1086,6 +879,30 @@ void InOrderThreat(BiThrTree t) {
 > 7. 最后，将指针 `p` 转向当前结点的右子树，继续遍历。如果右子树是线索，则会直接跳到下一个中序遍历的结点；如果右子树是指针，则会沿着指针向右移动。
 >
 > 总的来说，这段代码通过利用中序线索二叉树的线索信息，实现了中序遍历。通过 `LTag` 和 `RTag` 标记左右孩子的类型，可以方便地确定遍历的下一个结点。
+
+### 标准答案（都一样）
+
+```c
+//t是指向中序全线索化头结点的指针，该算法实现对线索二叉树中序遍历
+void InOrderThreat(BiThrTree t)
+{
+    BiThrTree p = t->lchild;  //p指向二叉树的根结点，当二叉树为空时，p指向t
+    //请在此完成代码
+    while (p != t)
+    {
+        while (p->LTag == Link)
+            p = p->lchild;//沿左子女向下
+        visit(p);//访问左子树为空的结点
+        while (p->RTag == Thread && p->rchild != t) {
+            p = p->rchild;
+            visit(p);
+        }//沿右线索访问后继结点
+        p = p->rchild;//转向右子树
+    }
+}
+```
+
+
 
 
 
@@ -1153,17 +970,6 @@ int main() {
 > 多理解理解`GetWidth()`，也挺有意思的。
 
 ```C
-#include<stdio.h>
-#include<stdlib.h>
-#define MAX 100 //定义队列的最大容量
-
-typedef struct BiTNode {
-    //定义结构体
-    char data;
-    struct BiTNode* lchild, * rchild;
-} BiTNode, * Bitree;
-
-
 void Creat_Bitree(Bitree* T) {
     //以先序遍历的方式创建二叉树
     char ch;
@@ -1178,7 +984,6 @@ void Creat_Bitree(Bitree* T) {
         Creat_Bitree(&(*T)->rchild);
     }
 }
-
 
 int GetHeight(Bitree T) {
     //求二叉树的高度
@@ -1208,7 +1013,6 @@ int GetWidth(Bitree T, int level, int* count) {
     }
 }
 
-
 int Account_Width(Bitree T) {
     //求二叉树最大宽度
     int max_width = 0;
@@ -1225,16 +1029,108 @@ int Account_Width(Bitree T) {
 
     return max_width;
 }
+```
 
-int main() {
-    Bitree T = NULL;
-    printf("请以先序遍历的方式输入第一棵树（#表示结点没有子树）：");
-    Creat_Bitree(&T);
-    printf("\n");
-    printf("该二叉树的最大宽度是：%d", Account_Width(T));
-    return 0;
+### 标准答案（待完成）
+
+> 标准答案用的是队列，和咱上面那个思路完全不同。（感觉没咱的好理解）
+>
+> 其实原本已有的代码就已经说了用队列。
+
+```C
+void Creat_Bitree(Bitree* T) {
+    //以先序遍历的方式创建二叉树
+    char ch;
+    ch = getchar();
+    if (ch == '#')
+        *T = NULL; //空树
+    else {
+        *T = (Bitree)malloc(sizeof(BiTNode)); //创建结点
+        (*T)->data = ch;
+        Creat_Bitree(&(*T)->lchild); // 左子树
+        Creat_Bitree(&(*T)->rchild); // 右子树
+    }
+}
+
+int Account_Width(Bitree T) {
+    if (T == NULL) {
+        return 0;
+    }
+    else {
+        Bitree Q[MAX]; // 创建队列Q，存放二叉树指针
+
+        int front = 1, rear = 1, right_node = 1; // right_node表示当前层最右结点在队列中的位置
+        int width_min = 0, width_max = 0; // width_min记录当前层宽度，width_max记录最大宽度
+
+        Q[rear] = T; // 根节点入队
+        while (front <= right_node) { // 队列不为空
+            Bitree p = Q[front++]; // 出队
+            width_min++; // 当前层宽度加1
+
+            if (p->lchild != NULL) {
+                Q[++rear] = p->lchild; // 左孩子入队
+            } 
+            if (p->rchild != NULL) {
+                Q[++rear] = p->rchild; // 右孩子入队
+            }
+
+            if (front > right_node) { // 当前层遍历完毕
+                right_node = rear; // 更新最右结点位置
+                if (width_min > width_max) {
+                    width_max = width_min; // 更新最大宽度
+                }
+                width_min = 0; // 重置当前层宽度
+            }
+        }
+
+        return width_max; // 返回最大宽度
+    }
 }
 ```
+
+> `Account_Width`函数使用层序遍历的方式计算二叉树的最大宽度。下面是函数算法的详细解释：
+>
+> 1. 首先，函数检查输入的二叉树指针`T`是否为空，如果为空则直接返回0，表示树的宽度为0。
+>
+> 2. 接下来，函数定义一个队列`Q`，用来存放二叉树的结点指针。队列的大小由宏定义`MAX`决定。
+>
+> 3. 函数声明一些变量，包括队列的前端位置`front`、后端位置`rear`和当前层的最右结点位置`right_node`。初始时，这些变量都设置为1，表示队列中只有根节点。
+>
+> 4. 定义两个变量`width_now`和`width_max`，分别用于记录当前层的宽度和最大宽度。初始时，它们都设置为0。
+>
+> 5. 将二叉树的根节点指针`T`入队。
+>
+> 6. 进入一个循环，循环条件是队列的前端位置小于等于当前层最右结点位置。这意味着队列中还有结点需要处理。
+>
+> 7. 在循环中，首先出队一个结点`p`，表示当前层的一个结点。
+>
+> 8. 将当前层宽度`width_now`加1，表示当前层的宽度增加了一个结点。
+>
+> 9. 检查结点`p`的左孩子是否存在，如果存在，则将左孩子入队。
+>
+> 10. 检查结点`p`的右孩子是否存在，如果存在，则将右孩子入队。
+>
+> 11. 如果队列的前端位置已经超过了当前层最右结点位置，说明当前层遍历完毕。
+>
+> 12. 更新当前层最右结点位置`right_node`为队列的后端位置`rear`，表示下一层的最右结点位置。
+>
+> 13. 检查当前层的宽度`width_now`是否大于最大宽度`width_max`，如果是，则更新最大宽度为当前层宽度。
+>
+> 14. 重置当前层宽度`width_now`为0，准备统计下一层的宽度。
+>
+> 15. 循环结束后，返回最大宽度`width_max`作为函数的结果。
+>
+> 总结起来，`Account_Width`函数通过层序遍历二叉树的方式，使用队列来辅助遍历过程，统计每一层的宽度并记录最大宽度，最终返回二叉树的最大宽度。
+
+> **为什么如果队列的前端位置已经超过了当前层最右结点位置，说明当前层遍历完毕？**
+>
+> 在这个算法中，队列的前端位置`front`和当前层最右结点位置`right_node`是相关的。
+>
+> 当我们进行层序遍历时，每次从队列中取出一个结点进行处理，然后将其左右孩子（如果存在）入队。
+>
+> 在一次层序遍历中，队列中的结点都是同一层的结点。因此，当队列的前端位置`front`超过了当前层最右结点位置`right_node`时，表示当前层的所有结点都已经出队，也就是当前层的遍历已经完成。
+>
+> 这是因为在层序遍历中，我们是按照从左到右的顺序将结点入队的，而每个结点的左孩子和右孩子会在后续的操作中被加入队列。因此，当队列的前端位置超过了当前层最右结点位置时，说明当前层的所有结点都已经出队，也就意味着当前层的遍历已经完成。
 
 
 
@@ -1302,15 +1198,6 @@ int main() {
 > 好难啊……
 
 ```c
-#include <stdio.h>
-#include <stdlib.h>
-
-typedef struct BiTNode {
-    // 定义结构体
-    char data;
-    struct BiTNode* lchild, * rchild;
-} BiTNode, * Bitree;
-
 // 创建二叉树
 void Creat_Bitree(Bitree* T) {
     char ch;
@@ -1340,15 +1227,37 @@ void DoubleTraverse_Tree(Bitree T) {
         DoubleTraverse_Tree(T->rchild); // 递归双序遍历右子树
     }
 }
+```
 
-int main() {
-    Bitree T = NULL;
-    printf("请以先序遍历的方式输入一棵树（#表示结点没有子树）：");
-    Creat_Bitree(&T);
-    printf("双序遍历二叉树的结果为：");
-    DoubleTraverse_Tree(T);
-    printf("\n");
-    return 0;
+### 标准答案
+
+```C
+void Creat_Bitree(Bitree* T) {
+    //以先序遍历的方式创建二叉树
+    char ch;
+    ch = getchar();
+    if (ch == '#')
+        *T = NULL; //空树
+    else {
+        *T = (Bitree)malloc(sizeof(BiTNode)); //创建结点
+        (*T)->data = ch;
+        Creat_Bitree(&(*T)->lchild); // 左子树
+        Creat_Bitree(&(*T)->rchild); // 右子树
+    }
+}
+
+void DoubleTraverse_Tree(Bitree T) {
+    //双序遍历二叉树
+    if (T == NULL)
+        return;
+    else if (T->lchild == NULL && T->rchild == NULL)
+        printf("%c", T->data); //叶子结点
+    else {
+        printf("%c", T->data);
+        DoubleTraverse_Tree(T->lchild); //递归左子树
+        printf("%c", T->data);
+        DoubleTraverse_Tree(T->rchild); //遍历右子树
+    }
 }
 ```
 
@@ -1424,69 +1333,40 @@ int main() {
 }
 ```
 
-#### 答案
+### 标准答案
 
-> 不是很理解`Node_Route()`这个递归.
->
-> 其实想清楚`path_length`值的变化就会好很多。
-
-```C
-#include <stdio.h>
-#include <stdlib.h>
-
-#define MAX 100
-
-typedef struct BiTNode {
-    // 定义结构体
-    char data;
-    struct BiTNode* lchild, * rchild;
-} BiTNode, * Bitree;
-
+```c
 void Creat_Bitree(Bitree* T) {
-    // 以先序遍历的方式创建二叉树
+    //以先序遍历的方式创建二叉树
     char ch;
-    scanf("%c", &ch);
-    if (ch == '#') {
-        *T = NULL;
-    }
+    ch = getchar();
+    if (ch == '#')
+        *T = NULL; //空树
     else {
-        *T = (Bitree)malloc(sizeof(BiTNode));
+        *T = (Bitree)malloc(sizeof(BiTNode)); //创建结点
         (*T)->data = ch;
-        Creat_Bitree(&((*T)->lchild));
-        Creat_Bitree(&((*T)->rchild));
+        Creat_Bitree(&(*T)->lchild); // 左子树
+        Creat_Bitree(&(*T)->rchild); // 右子树
     }
 }
 
 void Node_Route(Bitree T, char* path, int path_length) {
-    // 二叉树中从每个叶子结点到根结点的路径
-    if (T == NULL) { // 空树
+    //二叉树中从每个叶子结点到根结点的路径
+    if (T == NULL) {
         return;
     }
-    
-    path[path_length] = T->data; // 将当前节点加入路径
-    path_length++;
-
     if (T->lchild == NULL && T->rchild == NULL) {
-        // 叶子节点，输出路径
+        printf("%c ", T->data);
         for (int i = path_length - 1; i >= 0; i--) {
-            printf("%c ", path[i]); // 逆序输出路径
+            printf("%c ", path[i]);
         }
         printf("\n");
     }
     else {
+        path[path_length++] = T->data;
         Node_Route(T->lchild, path, path_length);
         Node_Route(T->rchild, path, path_length);
     }
-}
-
-int main() {
-    Bitree T = NULL;
-    char path[MAX];
-    printf("请以先序遍历的方式输入一棵树（#表示结点没有子树）：");
-    Creat_Bitree(&T);
-    printf("该二叉树中从每个叶子结点到根结点的路径为：\n");
-    Node_Route(T, path, 0);
-    return 0;
 }
 ```
 
@@ -1494,7 +1374,7 @@ int main() {
 
 
 
-## 判别二叉树是不是完全二叉树（伪正确）
+## 判别二叉树是不是完全二叉树
 
 请编写一个程序，实现判断一棵二叉树是否是完全二叉树的功能。每棵二叉树采用先序遍历的方式输入，其中用’#'表示空结点。
 
@@ -1569,207 +1449,46 @@ int main() {
 
 #### 答案
 
-> 先看看要求完成的这四个函数：`Creat_Bitree()`老演员了；`Count_LeafNodes()`计算叶子节点个数，请见第二题：“二叉树的叶子节点”；`Count_LeafNodes()`计算二叉树的节点个数其实在第二题最后也提了一下。（其实根本不需要`Count_LeafNodes()`和`Count_LeafNodes()`，整体删除了也能通过检查）
->
-> 其实他俩存在的意义是辅助判断二叉树是否为完全二叉树，你看`main()`里面的传参就知道了。
-
-> 所以重点就是`Judge_FullBiTree()`判断二叉树是否为完全二叉树了。
->
 > 参考文章（超链接）：[判断是否为完全二叉树(两种方法)](https://blog.csdn.net/yuiop123455/article/details/109542938)
 
+### 标准答案
+
 ```c
-#include <stdio.h>
-#include <stdlib.h>
-
-typedef struct BiTNode {
-    //定义结构体
-    char data;
-    struct BiTNode* lchild, * rchild;
-} BiTNode, * Bitree;
-
-
 void Creat_Bitree(Bitree* T) {
     //以先序遍历的方式创建二叉树
     char ch;
-    scanf("%c", &ch);
-
-    if (ch == '#') {
-        *T = NULL;
-    }
+    ch = getchar();
+    if (ch == '#')
+        *T = NULL; //空树
     else {
-        *T = (Bitree)malloc(sizeof(BiTNode));
+        *T = (Bitree)malloc(sizeof(BiTNode)); //创建结点
         (*T)->data = ch;
-        Creat_Bitree(&(*T)->lchild);
-        Creat_Bitree(&(*T)->rchild);
+        Creat_Bitree(&(*T)->lchild); // 左子树
+        Creat_Bitree(&(*T)->rchild); // 右子树
     }
 }
 
-
-int Count_Nodes(Bitree T) { // 其实根本不需要这个函数，整体删除了也能通过检查
+int Count_Nodes(Bitree T) {
     //计算二叉树的节点个数
-    if (T == NULL) {
+    if (T == NULL)
         return 0;
-    }
-    else {
-        return 1 + Count_Nodes(T->lchild) + Count_Nodes(T->rchild);
-    }
+    return 1 + Count_Nodes(T->lchild) + Count_Nodes(T->rchild);
 }
 
-
-int Count_LeafNodes(Bitree T) { // 其实根本不需要这个函数，整体删除了也能通过检查
+int Count_LeafNodes(Bitree T) {
     //计算二叉树的叶子节点个数
-    if (T == NULL) {
+    if (T == NULL)
         return 0;
-    }
-    else if (T->lchild == NULL && T->rchild == NULL) {
+    if (T->lchild == NULL && T->rchild == NULL)
         return 1;
-    }
-    else {
-        return Count_LeafNodes(T->lchild) + Count_LeafNodes(T->rchild);
-    }
-}
-
-
-int Judge_FullBiTree(Bitree T) {
-    //判断是否是完全二叉树
-    //返回值：1表示是完全二叉树，0表示不是完全二叉树
-    if (T == NULL) {
-        return 1; // 空树是完全二叉树
-    }
-    else if (T->lchild == NULL && T->rchild == NULL) { // 叶子节点是完全二叉树
-        return 1;
-    }
-    else if (T->lchild == NULL || T->rchild == NULL) { // 只有一个子树的节点不是完全二叉树
-        return 0;
-    }
-    else {
-        return Judge_FullBiTree(T->lchild) && Judge_FullBiTree(T->rchild);
-    }
-}
-
-
-int main() {
-    Bitree T = NULL;
-    printf("请以先序遍历的方式输入一棵树（#表示结点没有子树）：");
-    Creat_Bitree(&T);
-
-    int nodeCount = Count_Nodes(T); // 计算二叉树的节点个数
-    int leafCount = Count_LeafNodes(T); // 计算二叉树的叶子节点个数
-
-    if (Judge_FullBiTree(T, 1, nodeCount)) {
-        printf("YES");
-    }
-    else {
-        printf("NO");
-    }
-
-    return 0;
-}
-```
-
-> 有一说一，这次居然`POE`、`ChatGPT`、`Kimi`加起来都打不过`Fitten Code`，据说`Fitten Code`会一直有免费版本面向个人用户，但愿如此吧。（`Fitten Code`好像是清华的？不过`Kimi`貌似也是清华的。）
->
-> 呃……不过这代码其实也不正确，但是能过检查。（伪正确）
-
-### 错误示范 1
-
-```c
-int Judge_FullBiTree(Bitree T) {
-    if (T == NULL) {
-        return 1; // 空树是完全二叉树
-    }
-    // 如果左子树为空，且右子树不为空，则不是完全二叉树
-    if (T->lchild == NULL && T->rchild != NULL) {
-        return 0;
-    }
-    // 如果左子树不为空，递归判断左子树是否为完全二叉树
-    if (!Judge_FullBiTree(T->lchild)) {
-        return 0;
-    }
-    // 如果当前节点有右孩子，且右孩子不为空，则继续递归判断右子树
-    if (T->rchild != NULL) {
-        return Judge_FullBiTree(T->rchild);
-    }
-    return 1; // 其他情况都是完全二叉树
-}
-```
-
-> 完全二叉树是指除了最后一层外，其他每一层的节点数都达到最大值，且最后一层的节点依次从左到右排列。但是这段代码存在一些问题：
->
-> 1. 对于判断完全二叉树的条件不够完整。完全二叉树的定义还需要考虑最后一层的节点，而当前代码并没有对最后一层节点的排列顺序进行判断。
-> 2. 只判断了左子树为空时右子树不为空的情况，但在完全二叉树中，左子树为空时右子树必须全部为空才满足条件。
-> 3. 不完整的条件导致可能错误地将非完全二叉树识别为完全二叉树。
-
-
-
-### 伪正确代码
-
-> 下面这个能过检查，但是我认为这并不正确，比如最后一层某些节点只有左子树而没有右子树，也是完全二叉树呀，这时候`else if (T->lchild == NULL || T->rchild == NULL)`就不正确了。
->
-> 但是他确实能通过检查……
-
-```c
-int Judge_FullBiTree(Bitree T) {
-    //判断是否是完全二叉树
-    //返回值：1表示是完全二叉树，0表示不是完全二叉树
-    if (T == NULL) {
-        return 1; // 空树是完全二叉树
-    }
-    else if (T->lchild == NULL && T->rchild == NULL) { // 叶子节点是完全二叉树
-        return 1;
-    }
-    else if (T->lchild == NULL || T->rchild == NULL) { // 只有一个子树的节点不是完全二叉树
-        return 0;
-    }
-    else {
-        return Judge_FullBiTree(T->lchild) && Judge_FullBiTree(T->rchild);
-    }
-}
-```
-
-> 修改如下，可是这又通不过检查了……很无语。
-
-```c
-int Count_Height(Bitree T) {
-    // 计算二叉树的高度
-    if (T == NULL) {
-        return 0;
-    }
-    else {
-        int left_height = Count_Height(T->lchild);
-        int right_height = Count_Height(T->rchild);
-        return (left_height > right_height) ? (left_height + 1) : (right_height + 1);
-    }
+    return Count_LeafNodes(T->lchild) + Count_LeafNodes(T->rchild);
 }
 
 int Judge_FullBiTree(Bitree T) {
-    //判断是否是完全二叉树
-    //返回值：1表示是完全二叉树，0表示不是完全二叉树
-
-    if (T == NULL) {
-        return 1; // 空树是完全二叉树
-    }
-    else {
-        int result_left = Judge_FullBiTree(T->lchild);
-        int result_right = Judge_FullBiTree(T->rchild);
-
-        // 如果左子树和右子树都是完全二叉树，继续判断其他情况
-        if (result_left && result_right) {
-            int left_height = Count_Height(T->lchild);
-            int right_height = Count_Height(T->rchild);
-
-            // 如果左子树是完全二叉树，且右子树是满二叉树且高度相差不超过1，则返回1
-            if (result_left && result_right && abs(left_height - right_height) <= 1) {
-                return 1;
-            }
-            // 如果左子树是完全二叉树，且右子树是完全二叉树且高度差为1，则返回1
-            else if (result_left && Judge_FullBiTree(T->rchild) && left_height == right_height + 1) {
-                return 1;
-            }
-        }
-    }
-    // 其他情况均返回0
-    return 0;
+    //判断二叉树是否为完全二叉树
+    int nodes = Count_Nodes(T);
+    int leafNodes = Count_LeafNodes(T);
+    return (nodes == leafNodes * 2 - 1);
 }
 ```
 

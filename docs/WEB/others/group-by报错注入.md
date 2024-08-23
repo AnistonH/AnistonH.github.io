@@ -1,15 +1,15 @@
 #### 文章目录
 
-*   [深入理解 group by 报错注入](#group_by_1)
-*   *   [一、理解 floor，group by +count(*),rand,count 函数的作用](#floorgroup_by_countrandcount_6)
-    *   *   [1.group by+count(*)](#1group_bycount_8)
-        *   [2.rand()](#2rand_13)
-        *   [3.floor()](#3floor_21)
-        *   [4.count() 返回指定列的值的数量](#4count_29)
-        *   [5.floor(rand()*2)](#5floorrand2_32)
-    *   [二、group by 分组的原理](#group_by_43)
-    *   [三、group by 报错注入](#group_by_62)
-    *   *   [group by 报错原理：](#group_by_72)
+*   深入理解 group by 报错注入
+*   *   一、理解 floor，group by +count(*),rand,count 函数的作用
+    *   *   1.group by+count(*)
+        *   2.rand()
+        *   3.floor()
+        *   4.count() 返回指定列的值的数量
+        *   5.floor(rand()*2)
+    *   二、group by 分组的原理
+    *   三、group by 报错注入
+    *   *   group by 报错原理：
 
 深入理解 group by 报错注入
 ------------------

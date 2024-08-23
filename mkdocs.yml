@@ -1,20 +1,21 @@
 # [Info]
 # 左上角标题
-site_name: 侯霖钰的个人网站
+site_name: Aniston的个人网站
 site_url: https://AnistonH.github.io
-site_author: 侯霖钰
-site_description: 侯霖钰的个人网站
+site_author: Aniston
+site_description: Aniston的个人网站
 
 # [Navigtion]
 nav:
   - 我:
     - ME/index.md
     - ME/introduction.md
-    # - ME/profile.md
-    # - ME/contact.md
+    - ME/profile.md
+    - ME/contact.md
     - ME/account.md
-    # - ME/experience.md
+    - ME/experience.md
     - ME/support.md
+
   - 开发:
     - DEC/index.md
     
@@ -24,6 +25,9 @@ nav:
         - DEC/Data-Structure/Alpha-栈和队列.md
         - DEC/Data-Structure/Alpha-串、数组、广义表.md
         - DEC/Data-Structure/Alpha-树和二叉树.md
+        - DEC/Data-Structure/Alpha-图.md
+        - DEC/Data-Structure/Alpha-排序.md
+        - DEC/Data-Structure/Alpha-查找.md
       - 代码:
         - DEC/Data-Structure/复杂度.md
         - DEC/Data-Structure/顺序表.md
@@ -35,6 +39,7 @@ nav:
         - DEC/Data-Structure/栈和队列.md
         - DEC/Data-Structure/循环队列.md
         - DEC/Data-Structure/稀疏矩阵的转置运算.md
+        - DEC/Data-Structure/Next数组-观察法.md
 
     - C语言:
       - Alpha:
@@ -81,16 +86,19 @@ nav:
       - WEB/others/mysql向日志文件写webshell.md
       - WEB/others/PHP+MySQL博客(初级).md
       - WEB/others/PHP+MySQL博客(高级).md
+      - WEB/others/Python正则.md
+      - WEB/others/信息收集.md
     - 转载:
       - WEB/zhuan/文件头.md
       - WEB/zhuan/HTTP报文.md
       - WEB/zhuan/SSH-连接时间超时.md
       - WEB/zhuan/git-stash用法小结.md
       - WEB/zhuan/dirsearch使用指南.md
-      - WEB/zhuan/常见的php伪协议.md
+      - WEB/zhuan/php伪协议.md
       - WEB/zhuan/Feroxbuster.md
       - WEB/zhuan/DNS重绑定漏洞.md
       - WEB/zhuan/MySQL loaddata用法.md
+      - WEB/zhuan/php伪协议.md
       - WEB/zhuan/Apache 换行解析漏洞.md
     - 培训任务:
       - WEB/peixun/pwn培训.md
@@ -98,6 +106,8 @@ nav:
 
   - 随笔:
       - ESSAY/index.md
+      - ESSAY/jottings/2408.md
+      - ESSAY/jottings/2405.md
       - ESSAY/jottings/2404.md
       - ESSAY/jottings/2403.md
       - ESSAY/jottings/2402.md

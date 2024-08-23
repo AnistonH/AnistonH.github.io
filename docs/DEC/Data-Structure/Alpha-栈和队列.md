@@ -65,6 +65,8 @@ int main()
 
 #### 答案
 
+> 两个需要注意的地方吧，第一是`ch[i] != '\0'`，别写成`'\n'`。第二是`if (ch[i] == '1')`，注意是字符，不是数字。
+
 ```c
 #include <stdio.h>
 #include <stdlib.h>
@@ -114,6 +116,37 @@ int main()
         printf("False\n");
 
     return 0;
+}
+```
+
+### 标准答案（不太好）
+
+```c
+ //判断入栈出栈操作序列是否是合法序列。如是，返回1，否则返回0
+//输入参数：操作序列
+int Judge(char ch[])
+{
+	int i, top;
+	i = 0;
+	top = 0;
+
+	while (ch[i] != '\0')
+	{
+		switch (ch[i])
+		{
+		case '1':
+			top++;
+			break;
+		case '0':
+			top--;
+			if (top < 0) {
+				return 0;
+			}
+			break;
+		}
+		i++;
+	}
+	return 1;
 }
 ```
 
@@ -220,6 +253,8 @@ int main () {
 >
 > 一定要自己完善一下`main()`，否则过不了检查。
 
+> 考试别用自己的代码，因为标准答案不需要改`main()`也能通过检查。因为标准答案都把一系列操作集成到`IsHuiwen()`里面了。
+
 ```c
 #include <stdio.h>
 #include <stdlib.h>	  // 使用动态内存分配函数
@@ -299,6 +334,57 @@ int main() {
         printf("\n该字符串不是回文字符串！\n");
 
     return 0;
+}
+```
+
+### 标准答案（考试用这个）
+
+```C
+int IsEmpty(SeqStack* s) {
+    //判断栈是否为空
+    return (s->top == -1 ? 1 : 0);
+}
+
+int IsHuiwen() {
+    //判断回文数
+    int i = 0, j = 0;
+    char chr1, chr2, str[100];				  //定义数组，进栈时记录每个元素的次序
+    SeqStack* s;							  //定义栈
+    s = (SeqStack*)malloc(sizeof(SeqStack)); //给栈分配内存
+    s->top = -1;							  //置栈顶指针为-1
+
+    while ((chr1 = getchar()) != '\n') {      //输入字符串，按回车键结束
+        Push_Stack(s, chr1); //入栈
+        str[i] = chr1;		 //入栈的时候依次记录下每个字符对应的数组下标
+        i++;
+    }
+
+    while (!IsEmpty(s)) {
+        Pop_Stack(s, &chr2);  //出栈
+        if (chr2 != str[j++]) //出栈的时候，将字符依次与入栈记录的字符比较
+            return 0;		  //比较之后不相同，返回0
+    }
+    return 1;
+}
+
+int Push_Stack(SeqStack* s, char chr) {
+    //进行入栈操作
+    if (s->top == StackSize - 1)
+        return 0; //栈满返回0
+    s->top++;
+    s->data[s->top] = chr; //入栈时，栈顶指针先+1，再输入数据
+    return 1;
+}
+
+int Pop_Stack(SeqStack* s, char* chr) {
+    //取出栈顶元素
+    if (s->top == -1)
+        return 0; //栈空返回0
+    else {
+        *chr = s->data[s->top];
+        s->top--; //出栈时，先输出数据，栈顶指针再-1，
+        return 1;
+    }
 }
 ```
 
@@ -419,22 +505,27 @@ int main() {
 
 > 注意，它是个环！
 
+> **注意：**如果把`EnQueue()`函数中的`malloc`操作中的`(sizeof(struct queue))`改为`(sizeof(queue))`则会编译报错。
+>
+> - **问题出现的地方**：
+>
+>     - 在你的 `EnQueue` 函数中，你尝试使用 `sizeof(queue)` 来获取 `queue` 数据类型所占内存的大小。
+>     - 然而，`queue` 并不是一个具体的数据类型，它只是一个别名。
+>     - 实际上，`queue` 在你的代码中是通过 `typedef` 定义的别名，代表的是 `struct queue` 这个结构体。
+>
+> - **解决方案**：
+>
+>     - 为了获取 `struct queue` 所占内存的大小，你应该使用 `sizeof(struct queue)` 或者 `sizeof(*queue->rear)`。
+>
+>     - 这样，`sizeof` 运算符就会返回正确的结构体 `queue` 所占内存的大小，而不会引发编译错误。
+>
+> 
+>
+> **不过这个错误只是在VS编译时会出现，并没有在Alpha中体现，标准答案也是直接**`sizeof(queue)`，我很不理解这个错误，平时不都是用别名吗。很抽象……
+>
+> 而且`InitQueue()`也不需要添加`struct`，但是`EmptyQueue()`不添加就会报错。
+
 ```c
-#include <stdio.h>
-#include <stdlib.h>
-
-typedef int ElemType;
-
-typedef struct queue {
-    ElemType data;
-    struct queue* next;
-} queue, * LinkQueue;
-
-typedef struct {
-    LinkQueue rear;
-    int length;
-} SqQueue;
-
 void InitQueue(SqQueue* queue) {
     // 初始化队列，空队列
     queue->rear = (LinkQueue)malloc(sizeof(struct queue));
@@ -465,47 +556,53 @@ void DelQueue(SqQueue* queue, ElemType* elem) {
     }
 
     LinkQueue front = queue->rear->next->next;
-    if (front == queue->rear) { // 空环的时候，其实有没有这一步不影响
-        queue->rear = queue->rear->next;
-    }
-
     *elem = front->data;
     queue->rear->next->next = front->next;
     free(front);
     queue->length--;
 }
+```
 
-int main() {
-    int x, n;
-    SqQueue Q;
-    ElemType elem;
-    InitQueue(&Q);
+### 标准答案
 
-    // 判断队列是否为空
-    if (EmptyQueue(&Q))
-        printf("目前是一个空队列！\n");
+> 标准答案全程没有用过`length`，这个应该改进一下
+
+```c
+void InitQueue(SqQueue* queue) {
+    // 初始化队列，空队列
+    queue->rear = (LinkQueue)malloc(sizeof(queue));
+    queue->rear->next = queue->rear;
+}
+
+int EmptyQueue(SqQueue* queue) {
+    // 判空操作
+    if (queue->rear->next == queue->rear)
+        return 1;
     else
-        printf("目前该队列中有元素，不为空！\n");
+        return 0;
+}
 
-    // 入队
-    printf("输入入队元素个数：");
-    scanf("%d", &n);
-    for (int i = 1; i <= n; i++) {
-        printf("输入第%d个入队元素：", i);
-        scanf("%d", &x);
-        EnQueue(&Q, x);
-    }
+void EnQueue(SqQueue* queue, ElemType elem) {
+    // 入队操作
+    LinkQueue que = (LinkQueue)malloc(sizeof(queue));
+    if (!que)
+        return;
+    
+    que->data = elem;
+    que->next = queue->rear->next;
+    queue->rear->next = que;
+    queue->rear = que;
+}
 
-    printf("出队元素：");
-    // 出队
-    for (int j = 1; j <= n; j++) {
-        DelQueue(&Q, &elem);
-        printf("%d", elem);
-    }
-
-    // 释放内存
-    free(Q.rear);
-    return 0;
+void DelQueue(SqQueue* queue, ElemType* elem) {
+    // 出队操作
+    if (queue->rear->next == queue->rear)
+        printf("为空队列！");
+    
+    LinkQueue front = queue->rear->next->next;
+    *elem = front->data;
+    queue->rear->next->next = front->next;
+    free(front);
 }
 ```
 
@@ -569,31 +666,17 @@ int main(){
 }
 ```
 
-#### 答案
+### 标准答案
 
-```c
-#include <stdio.h>
-
+```C
 int Ack(int m, int n) {
-    if (m == 0) {
+    //Ack函数 ，递归算法 
+    if (m == 0)
         return n + 1;
-    }
-    else if (m != 0 && n == 0) {
+    else if (m != 0 && n == 0)
         return Ack(m - 1, 1);
-    }
-    else {
+    else if (m != 0 && n != 0)
         return Ack(m - 1, Ack(m, n - 1));
-    }
-}
-
-int main() {
-    int m, n, x;
-    printf("请输入m,n：");
-    scanf("%d,%d", &m, &n);
-    x = Ack(m, n);
-    printf("Ack(%d,%d)=%d\n", m, n, x);
-
-    return 0;
 }
 ```
 
@@ -707,13 +790,9 @@ int Ack_re(int m, int n) {
 8|  ..........................
 ```
 
-**代码：**
+**正确代码：**
 
 ```c
-#include <stdio.h>
-#define M 100
-#define N 100
-
 int Ack_re(int m, int n) {
     int arr[M][N];
     int i, j;
@@ -735,18 +814,25 @@ int Ack_re(int m, int n) {
     return arr[m][n];
 }
 
-int main() {
-    int m, n, x;
-    printf("请输入m,n：");
-    scanf("%d,%d", &m, &n);
-    x = Ack_re(m, n);
-    printf("Ack_re(%d,%d)=%d\n", m, n, x);
-
-    return 0;
-}
 ```
 
+### 标准答案
 
+```c
+int Ack_re(int m, int n) {
+    //Ack函数 ， 非递归
+    int akm[M][N];
+    int i, j;
+    for (j = 0; j < N; j++)
+        akm[0][j] = j + 1;
+    for (i = 1; i < M; i++) {
+        akm[i][0] = akm[i - 1][1];
+        for (j = 1; j < N; j++)
+            akm[i][j] = akm[i - 1][akm[i][j - 1]];
+    }
+    return (akm[m][n]);
+}
+```
 
 
 
@@ -828,24 +914,16 @@ int main() {
 
 #### 答案
 
-> 在Sub_Sequence函数中，使用两个指针pa和pb分别指向链表A和链表B的头节点。
-> 通过比较pa和pb指向的节点的值，若相等，则两个指针同时后移一位；若不相等，则将pb重新指向链表B的头节点，并将pa后移一位。
+> 在`Sub_Sequence`函数中，使用两个指针`pa`和`pb`分别指向链表A和链表B的头节点。
+> 通过比较`pa`和`pb`指向的节点的值，若相等，则两个指针同时后移一位；若不相等，则将`pb`重新指向链表B的头节点，并将pa后移一位。
 > 重复上述步骤，直到链表A遍历完毕或者链表B遍历完毕。
 > 若链表B遍历完毕，则说明B是A的子串；否则，B不是A的子串。
 >
 > 
 >
-> `print_LinkList`也没有调用呀，怎么还让补全呢哈哈哈哈
+> `print_LinkList()`也没有调用呀，怎么还让补全呢哈哈哈哈
 
 ```c
-#include <stdio.h>
-#include <stdlib.h>
-
-typedef struct LNode {
-    int data;
-    struct LNode* next;
-} LNode, * LinkList;
-
 void Create_LinkList(LinkList* L, int n) {
     // 创建链表
     *L = (LinkList)malloc(sizeof(LNode));
@@ -894,24 +972,6 @@ int Sub_Sequence(LinkList La, LinkList Lb) {
         return 0; // B不是A的子串
     }
 }
-
-int main() {
-    // 创建2个链表
-    LinkList La, Lb;
-    // 输入数据
-    int m, n;
-    printf("两个链表的元素个数分别为：");
-    scanf("%d,%d", &m, &n); // 输入以逗号分隔开
-    printf("请输入第1个链表的数据：\n");
-    Create_LinkList(&La, m);
-    printf("请输入第2个链表的数据：\n");
-    Create_LinkList(&Lb, n);
-    if (Sub_Sequence(La, Lb))
-        printf("\nYES\n");
-    else
-        printf("\nNO\n");
-    return 0;
-}
 ```
 
 > 其实`Sub_Sequence()`貌似有点逻辑上的错误，就是不匹配的时候`pa`就直接递归到`pa->next`了，而正确做法应该是递归到`pa`开始匹配的下一个字符（不是匹配结束后的下一个字符）
@@ -945,6 +1005,56 @@ int Sub_Sequence(LinkList La, LinkList Lb) {
     else {
         return 0; // B不是A的子串
     }
+}
+```
+
+### 标准答案
+
+```c
+void Create_LinkList(LinkList* L, int n) {
+    // 创建链表
+    *L = (LinkList)malloc(sizeof(LNode)); // 创建头结点
+    (*L)->next = NULL;
+    LinkList rear; // 尾指针
+    rear = *L;     // 指向头结点
+    for (int i = 0; i < n; i++) {
+        LinkList p = (LinkList)malloc(sizeof(LNode)); // 给新结点创建空间
+        p->next = NULL;
+        printf("单链表中第%2d个元素是：", i + 1);   // 下标是从0开始的，得加1
+        scanf("%d", &p->data);
+        rear->next = p; // 新结点插入链表尾部
+        rear = p;       // rear指向新的尾节点
+    }
+}
+
+void print_LinkList(LinkList L) {
+    // 输出链表
+    LinkList p = L;
+    while (p->next != NULL) {
+        p = p->next; // 跳过头结点输出下一个结点中存储的数值
+        printf("%d", p->data);
+    }
+}
+
+int Sub_Sequence(LinkList La, LinkList Lb) {
+    // 判断字符串B是否是字符串A的子串
+
+    LinkList pa = La, pb = Lb, first = pa; // first记录每一次的子串首元素
+    while (pa && pb) {
+        if (pa->data == pb->data) {
+            pa = pa->next;
+            pb = pb->next;
+        }
+        else {
+            first = first->next; // 下一个first验证
+            pa = first;          // pa从first遍历
+            pb = Lb;             // pb从开始遍历
+        }
+    }
+    if (pb == NULL) // A未结束，B结束了
+        return 1;    // YES
+    else             // A完了，B没完
+        return 0;    // NO
 }
 ```
 
