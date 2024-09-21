@@ -1,0 +1,4514 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Aniston的个人网站">
+      
+      
+        <meta name="author" content="Aniston">
+      
+      
+        <link rel="canonical" href="https://AnistonH.github.io/DEC/C/%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E6%80%BB%E7%BB%93/">
+      
+      
+        <link rel="prev" href="../%E5%B8%B8%E8%80%83%E5%87%BD%E6%95%B0%E6%80%BB%E7%BB%93/">
+      
+      
+        <link rel="next" href="../Scanf%20%E8%BE%93%E5%85%A5%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%81%87%E5%88%B0%E7%A9%BA%E6%A0%BC/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.36">
+    
+    
+      
+        <title>文件读写常用函数总结 - Aniston的个人网站</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.06209087.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
+    
+      <link rel="stylesheet" href="../../../mkdocs/css/no-footer.css">
+    
+      <link rel="stylesheet" href="../../../mkdocs/css/unordered-list-symbols.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="Aniston的个人网站" class="md-header__button md-logo" aria-label="Aniston的个人网站" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Aniston的个人网站
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              文件读写常用函数总结
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="orange"  aria-label="切换至夜间模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换至夜间模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="orange"  aria-label="切换至日间模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换至日间模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/AnistonH/AnistonH.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AnistonH.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../ME/" class="md-tabs__link">
+          
+  
+    
+  
+  我
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
+          
+  
+    
+  
+  开发
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../WEB/" class="md-tabs__link">
+          
+  
+    
+  
+  网络安全
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../ESSAY/" class="md-tabs__link">
+          
+  
+    
+  
+  随笔
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../TimeLine/" class="md-tabs__link">
+          
+  
+    
+  
+  时间线
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../WEBSITE/" class="md-tabs__link">
+          
+  
+    
+  
+  网站
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Aniston的个人网站" class="md-nav__button md-logo" aria-label="Aniston的个人网站" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Aniston的个人网站
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AnistonH/AnistonH.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AnistonH.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_1" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../ME/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    我
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            我
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人介绍
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/profile/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人信息
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/contact/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人联系方式
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/account/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人公众账号
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/experience/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人经历
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/support/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    打赏支持
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    开发
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            开发
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    数据结构
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            数据结构
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2_1" id="__nav_2_2_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Alpha
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            Alpha
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Data-Structure/Alpha-%E9%93%BE%E8%A1%A8/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 单链表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Data-Structure/Alpha-%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 栈和队列
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Data-Structure/Alpha-%E4%B8%B2%E3%80%81%E6%95%B0%E7%BB%84%E3%80%81%E5%B9%BF%E4%B9%89%E8%A1%A8/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 串、数组、广义表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Data-Structure/Alpha-%E6%A0%91%E5%92%8C%E4%BA%8C%E5%8F%89%E6%A0%91/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 数和二叉树
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Data-Structure/Alpha-%E5%9B%BE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 图
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Data-Structure/Alpha-%E6%8E%92%E5%BA%8F/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 排序
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Data-Structure/Alpha-%E6%9F%A5%E6%89%BE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 查找
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2_2" id="__nav_2_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    代码
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            代码
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Data-Structure/%E5%A4%8D%E6%9D%82%E5%BA%A6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    复杂度例题
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Data-Structure/%E9%A1%BA%E5%BA%8F%E8%A1%A8/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    顺序表SeqList
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Data-Structure/Triplets/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    三元组
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Data-Structure/%E5%8D%95%E9%93%BE%E8%A1%A8/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    单链表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Data-Structure/%E5%8D%95%E9%93%BE%E8%A1%A8-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%E4%BA%8C/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    单链表-实验报告二
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Data-Structure/%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    双向链表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Data-Structure/Grade%20Management%20System/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    成绩管理系统
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Data-Structure/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    栈和队列
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Data-Structure/%E5%BE%AA%E7%8E%AF%E9%98%9F%E5%88%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    循环队列
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Data-Structure/%E7%A8%80%E7%96%8F%E7%9F%A9%E9%98%B5%E7%9A%84%E8%BD%AC%E7%BD%AE%E8%BF%90%E7%AE%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    稀疏矩阵的转置
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Data-Structure/Next%E6%95%B0%E7%BB%84-%E8%A7%82%E5%AF%9F%E6%B3%95/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Next数组-观察法
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    C语言
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            C语言
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_1" id="__nav_2_3_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Alpha
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            Alpha
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Alpha-%E6%95%B0%E7%BB%84/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 数组
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Alpha-%E5%87%BD%E6%95%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 函数
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Alpha-%E6%8C%87%E9%92%88/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 指针
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E6%95%B0%E7%BB%84%E5%BF%85%E5%81%9A%E9%A2%98/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    数组必做题
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E6%9C%9F%E6%9C%AB%E5%BF%85%E5%81%9A%E9%A2%98/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    期末必做题
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_2" id="__nav_2_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    作业
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            作业
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E9%93%BE%E8%A1%A8%E4%BD%9C%E4%B8%9A/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    链表作业
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E4%BD%9C%E4%B8%9A/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文件操作作业
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_3" id="__nav_2_3_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    知识点
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            知识点
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E4%BD%8D%E8%BF%90%E7%AE%97%E6%80%BB%E7%BB%93/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    位运算总结（转载）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E5%B8%B8%E8%80%83%E5%87%BD%E6%95%B0%E6%80%BB%E7%BB%93/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    C 语言常考函数总结
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    文件读写常用函数总结
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    文件读写常用函数总结
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      目录
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fopen" class="md-nav__link">
+    <span class="md-ellipsis">
+      fopen 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fclose" class="md-nav__link">
+    <span class="md-ellipsis">
+      fclose 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fseek" class="md-nav__link">
+    <span class="md-ellipsis">
+      fseek 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fprintf" class="md-nav__link">
+    <span class="md-ellipsis">
+      fprintf 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fsanf" class="md-nav__link">
+    <span class="md-ellipsis">
+      fsanf 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#feof" class="md-nav__link">
+    <span class="md-ellipsis">
+      feof 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fgetc" class="md-nav__link">
+    <span class="md-ellipsis">
+      fgetc 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fputc" class="md-nav__link">
+    <span class="md-ellipsis">
+      fputc 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fwrite" class="md-nav__link">
+    <span class="md-ellipsis">
+      fwrite 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fread" class="md-nav__link">
+    <span class="md-ellipsis">
+      fread 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ftell" class="md-nav__link">
+    <span class="md-ellipsis">
+      ftell 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rewind" class="md-nav__link">
+    <span class="md-ellipsis">
+      rewind 函数
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Scanf%20%E8%BE%93%E5%85%A5%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%81%87%E5%88%B0%E7%A9%BA%E6%A0%BC/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 scanf 时对空格处理？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../WEB/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    网络安全
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            网络安全
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    靶场
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            靶场
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/labs/Pikachu%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pikachu靶场打靶记录
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/labs/upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Upload labs靶场打靶记录
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/labs/xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Xss labs靶场打靶记录
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/labs/Sqli-labs%E7%AC%94%E8%AE%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sqli labs笔记
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/labs/CTFHub%E6%8A%80%E8%83%BD%E6%A0%91%E7%AC%94%E8%AE%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFHub技能树笔记
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/labs/XXE%E6%89%93%E9%9D%B6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    XXE 打靶记录
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    CTFShow
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            CTFShow
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/CTFShow/CTFshow-web/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow-WEB
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/CTFShow/CTFShow-%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow 信息泄露
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/CTFShow/CTFShow-%E7%88%86%E7%A0%B4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow 爆破
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/CTFShow/CTFShow-RCE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow RCE
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/CTFShow/CTFShow-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow 文件包含
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/CTFShow/CTFShow-PHP%E7%89%B9%E6%80%A7/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFShow PHP特性
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/CTFShow/CTFShow-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow 文件上传
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/CTFShow/CTFShow-Sql%E6%B3%A8%E5%85%A5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow Sql注入
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/CTFShow/CTFShow-XXE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow XXE
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    其他
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            其他
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/others/JavaScript%E7%AC%94%E8%AE%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    JavaScript笔记
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/others/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PHP反序列化
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/others/windterm%E8%BF%9E%E6%8E%A5kali/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Windterm连接kali
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/others/group-by%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Group by报错注入
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/others/information_schema/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Information schema
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/others/sql%E6%B3%A8%E5%85%A5-UDF%E6%8F%90%E6%9D%83/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sql注入—udf 提权
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/others/mysql%E5%90%91%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%E5%86%99webshell/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Mysql向日志文件写webshell
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/others/PHP%2BMySQL%E5%8D%9A%E5%AE%A2%28%E5%88%9D%E7%BA%A7%29/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PHP+MySQL博客（初级）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/others/PHP%2BMySQL%E5%8D%9A%E5%AE%A2%28%E9%AB%98%E7%BA%A7%29/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PHP+MySQL博客（高级）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/others/Python%E6%AD%A3%E5%88%99/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    python正则表达式
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/others/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    信息收集
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    转载
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            转载
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/zhuan/%E6%96%87%E4%BB%B6%E5%A4%B4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文件头、尾总结
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/zhuan/HTTP%E6%8A%A5%E6%96%87/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HTTP 报文
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/zhuan/SSH-%E8%BF%9E%E6%8E%A5%E6%97%B6%E9%97%B4%E8%B6%85%E6%97%B6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SSH:连接时间超时
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/zhuan/git-stash%E7%94%A8%E6%B3%95%E5%B0%8F%E7%BB%93/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    git-stash 用法小结
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/zhuan/dirsearch%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    dirsearch 使用指南
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/zhuan/php%E4%BC%AA%E5%8D%8F%E8%AE%AE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    常见的 php 伪协议
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/zhuan/Feroxbuster/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Feroxbuster使用说明
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/zhuan/DNS%E9%87%8D%E7%BB%91%E5%AE%9A%E6%BC%8F%E6%B4%9E/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DNS 重绑定漏洞
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/zhuan/MySQL%20loaddata%E7%94%A8%E6%B3%95/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MySQL loaddata用法
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/zhuan/php%E4%BC%AA%E5%8D%8F%E8%AE%AE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    常见的 php 伪协议
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/zhuan/Apache%20%E6%8D%A2%E8%A1%8C%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Apache 换行解析漏洞
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    培训任务
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            培训任务
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/peixun/pwn%E5%9F%B9%E8%AE%AD/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pwn培训
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEB/peixun/reverse%E5%9F%B9%E8%AE%AD/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    reverse培训
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../ESSAY/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    随笔
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            随笔
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ESSAY/jottings/2405/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    侯霖钰的随笔记 | 2405
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ESSAY/jottings/2404/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    侯霖钰的随笔记 | 2404
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ESSAY/jottings/2403/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    侯霖钰的随笔记 | 2403
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ESSAY/jottings/2402/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    侯霖钰的随笔记 | 2402
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ESSAY/jottings/2401/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    侯霖钰的随笔记 | 2401
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../TimeLine/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    时间线
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            时间线
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../TimeLine/Line/DEC/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    开发 时间线
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../TimeLine/Line/WebSec/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    网络安全 时间线
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../WEBSITE/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    网站
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            网站
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEBSITE/build/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    网站构建说明
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEBSITE/help/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文章编写帮助
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEBSITE/test/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    测试文档
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      目录
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fopen" class="md-nav__link">
+    <span class="md-ellipsis">
+      fopen 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fclose" class="md-nav__link">
+    <span class="md-ellipsis">
+      fclose 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fseek" class="md-nav__link">
+    <span class="md-ellipsis">
+      fseek 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fprintf" class="md-nav__link">
+    <span class="md-ellipsis">
+      fprintf 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fsanf" class="md-nav__link">
+    <span class="md-ellipsis">
+      fsanf 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#feof" class="md-nav__link">
+    <span class="md-ellipsis">
+      feof 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fgetc" class="md-nav__link">
+    <span class="md-ellipsis">
+      fgetc 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fputc" class="md-nav__link">
+    <span class="md-ellipsis">
+      fputc 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fwrite" class="md-nav__link">
+    <span class="md-ellipsis">
+      fwrite 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fread" class="md-nav__link">
+    <span class="md-ellipsis">
+      fread 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ftell" class="md-nav__link">
+    <span class="md-ellipsis">
+      ftell 函数
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rewind" class="md-nav__link">
+    <span class="md-ellipsis">
+      rewind 函数
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+    
+      
+    
+    <a href="https://github.com/AnistonH/AnistonH.github.io/raw/main/docs/DEC/C/文件读写常用函数总结.md" title="查看本页的源代码" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+  <h1>文件读写常用函数总结</h1>
+
+<hr />
+<h4 id="_1">目录<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h4>
+<ul>
+<li>C 语言文件读写常用函数总结</li>
+<li>
+<ul>
+<li>fopen 函数</li>
+<li>fclose 函数</li>
+<li>fseek 函数</li>
+<li>fprintf 函数</li>
+<li>fsanf 函数</li>
+<li>feof 函数</li>
+<li>fgetc 函数</li>
+<li>fputc 函数</li>
+<li>fwrite 函数</li>
+<li>ftell 函数</li>
+<li>rewind 函数</li>
+</ul>
+</li>
+</ul>
+<h2 id="fopen">fopen 函数<a class="headerlink" href="#fopen" title="Permanent link">&para;</a></h2>
+<ul>
+<li>头文件：stdio.h</li>
+<li>原型： FILE <em>fopen(const char </em>filename, const char *mode);</li>
+<li>作用： 使用给定的模式 mode 打开 filename 所指向的文件。</li>
+<li>参数：<ul>
+<li>filename: 所需打开文件的文件名。</li>
+<li>mode: 访问模式，如下表。</li>
+</ul>
+</li>
+</ul>
+<table><thead><tr><th>参数</th><th>功能</th></tr></thead><tbody><tr><td>r</td><td>以只读方式打开文件，该文件必须存在。</td></tr><tr><td>r+</td><td>以读 / 写方式打开文件，该文件必须存在。</td></tr><tr><td>rb+</td><td>以读 / 写方式打开一个二进制文件，只允许读 / 写数据。</td></tr><tr><td>rt+</td><td>以读 / 写方式打开一个文本文件，允许读和写。</td></tr><tr><td>w</td><td>打开只写文件，若文件存在则文件长度清为零，即该文件内容会消失；若文件不存在则创建该文件。</td></tr><tr><td>w+</td><td>打开可读 / 写文件，若文件存在则文件长度清为零，即该文件内容会消失；若文件不存在则创建该文件。</td></tr><tr><td>a</td><td>以附加的方式打开只写文件。若文件不存在，则会创建该文件；如果文件存在，则写入的数据会被加到文件尾后，即文件原先的内容会被保留（EOF 符保留）。</td></tr><tr><td>a+</td><td>以附加方式打开可读 / 写的文件。若文件不存在，则会创建该文件，如果文件存在，则写入的数据会被加到文件尾后，即文件原先的内容会被保留（EOF 符不保留）。</td></tr><tr><td>wb</td><td>以只写方式打开或新建一个二进制文件，只允许写数据。</td></tr><tr><td>wb+</td><td>以读 / 写方式打开或新建一个二进制文件，允许读和写。</td></tr><tr><td>wt+</td><td>以读 / 写方式打开或新建一个文本文件，允许读和写。</td></tr><tr><td>at+</td><td>以读 / 写方式打开一个文本文件，允许读或在文本末追加数据。</td></tr><tr><td>ab+</td><td>以读 / 写方式打开一个二进制文件，允许读或在文件末追加数据。</td></tr></tbody></table>
+
+<ul>
+<li>返回值：<br />
+    文件顺利打开后，指向该流的文件指针就会被返回。如果文件打开失败则返回 NULL，并把错误代码存在 error 中。</li>
+<li>运用</li>
+</ul>
+<div class="language-C highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">C</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+</span><span id="__span-0-2"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+</span><span id="__span-0-3">
+</span><span id="__span-0-4"><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+</span><span id="__span-0-5"><span class="p">{</span>
+</span><span id="__span-0-6"><span class="w">    </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">fp</span><span class="p">;</span>
+</span><span id="__span-0-7"><span class="w">    </span><span class="n">fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="s">&quot;abc.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="p">);</span><span class="cm">/* 以只读的方式打开，&quot;abc.txt&quot;文件 */</span>
+</span><span id="__span-0-8"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">NULL</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">fp</span><span class="p">)</span><span class="w"> </span><span class="cm">/* 打开失败 */</span>
+</span><span id="__span-0-9"><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-0-10"><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;错误！&quot;</span><span class="p">);</span>
+</span><span id="__span-0-11"><span class="w">        </span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="cm">/* 中止程序 */</span>
+</span><span id="__span-0-12"><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-0-13"><span class="w">    </span><span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span><span class="w"> </span><span class="cm">/* 关闭文件 */</span>
+</span><span id="__span-0-14"><span class="w">    </span><span class="n">fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"> </span><span class="cm">/* 需要指向空，否则会指向原打开文件地址 */</span>
+</span><span id="__span-0-15"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-0-16"><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="fclose">fclose 函数<a class="headerlink" href="#fclose" title="Permanent link">&para;</a></h2>
+<ul>
+<li>头文件：stdio.h</li>
+<li>原型： int fclose(FILE *fp);</li>
+<li>作用： 把缓冲区内最后剩余的数据输出到内核缓冲区，并释放文件指针和有关的缓冲区。</li>
+<li>参数：<ul>
+<li>fp: 指向 FILE 对象的指针，该 FILE 对象指定了要被关闭的流</li>
+</ul>
+</li>
+<li>返回值：如果流成功关闭，fclose 返回 0，否则返回 EOF（-1）。</li>
+<li>运用：</li>
+</ul>
+<div class="language-C highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">C</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+</span><span id="__span-1-2"><span class="p">{</span>
+</span><span id="__span-1-3"><span class="w">    </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">fp</span><span class="p">;</span>
+</span><span id="__span-1-4"><span class="w">    </span><span class="n">fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="s">&quot;abc.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="p">);</span><span class="cm">/* 以只读的方式打开，&quot;abc.txt&quot;文件 */</span>
+</span><span id="__span-1-5"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">NULL</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">fp</span><span class="p">)</span><span class="w"> </span><span class="cm">/* 打开失败 */</span>
+</span><span id="__span-1-6"><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-1-7"><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;错误！&quot;</span><span class="p">);</span>
+</span><span id="__span-1-8"><span class="w">        </span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="cm">/* 中止程序 */</span>
+</span><span id="__span-1-9"><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-1-10"><span class="w">    </span><span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span><span class="w"> </span><span class="cm">/* 关闭文件 */</span>
+</span><span id="__span-1-11"><span class="w">    </span><span class="n">fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"> </span><span class="cm">/* 需要指向空，否则会指向原打开文件地址 */</span>
+</span><span id="__span-1-12"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-1-13"><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="fseek">fseek 函数<a class="headerlink" href="#fseek" title="Permanent link">&para;</a></h2>
+<ul>
+<li>头文件：stdio.h</li>
+<li>原型： int fseek(FILE *stream, long offset, int fromwhere);</li>
+<li>作用： 重定位流 (数据流 / 文件) 上的文件内部位置指针<ul>
+<li>注意：文件指针指向文件 / 流。位置指针指向文件内部的字节位置，随着文件的读取会移动，文件指针如果不重新赋值将不会改变或指向别的文件。</li>
+</ul>
+</li>
+<li>参数：<ul>
+<li>stream：文件指针</li>
+<li>offset：偏移量，正数表示正向偏移，负数表示负向偏移</li>
+<li>origin：设定从文件的哪里开始偏移, 可能取值为：SEEK_CUR、 SEEK_END 或 SEEK_SET<ul>
+<li>SEEK_SET： 文件开头</li>
+<li>SEEK_CUR： 当前位置</li>
+<li>SEEK_END： 文件结尾<br />
+<strong>其中 SEEK_SET,SEEK_CUR 和 SEEK_END 对应数字依次为 0，1 和 2.</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>返回值：成功，返回 0，失败返回非 0 值，并设置 error 的值，可以用 perror() 函数输出错误。</li>
+<li>运用</li>
+</ul>
+<div class="language-C highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">C</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><span class="n">fseek</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span><span class="mf">100L</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="w">  </span><span class="c1">//把fp指针移动到离文件开头100字节处；</span>
+</span><span id="__span-2-2"><span class="w">    </span><span class="n">fseek</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span><span class="mf">100L</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span><span class="w">  </span><span class="c1">//把fp指针移动到离文件当前位置100字节处；</span>
+</span><span id="__span-2-3"><span class="w">    </span><span class="n">fseek</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span><span class="mi">-100L</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="c1">//把fp指针退回到离文件结尾100字节处。</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="fprintf">fprintf 函数<a class="headerlink" href="#fprintf" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p>头文件：stdio.h</p>
+</li>
+<li>
+<p>原型： int fprintf (FILE<em> stream, const char</em>format, [argument])</p>
+</li>
+<li>
+<p>作用： 根据指定的格式 (format)，向输出流(stream) 写入数据(argument)<strong>(和 printf 差不多，多了第一个参数，找到文件，printf 是输出东西到你的黑框框里面，这个是写到文件里面)</strong></p>
+</li>
+<li>
+<p>注意：fprintf()会根据参数 format 字符串来转换并格式化数据，然后将结果输出到参数 stream 指定的文件中，直到出现字符串结束 (’\0’) 为止。</p>
+</li>
+<li>
+<p>返回值：若写入成功，返回值是<strong>写入文件中的字符个数</strong>（或字节个数），否则返回EOF（-1）。</p>
+</li>
+<li>
+<p>参数：</p>
+<ul>
+<li>stream ：指向 FILE 对象的指针，该 FILE 对象标识了流。</li>
+<li>format ： C 字符串，包含了要被写入到流 stream 中的文本。它可以包含嵌入的 format 标签，format 标签可被随后的附加参数中指定的值替换，并按需求进行格式化。</li>
+<li>[argument]：附加参数列表</li>
+<li>运用</li>
+</ul>
+</li>
+</ul>
+<div class="language-C highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">C</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">fp</span><span class="p">;</span>
+</span><span id="__span-3-2"><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+</span><span id="__span-3-3"><span class="w">    </span><span class="n">fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="s">&quot;abc.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;r+&quot;</span><span class="p">);</span><span class="cm">/* 以读/写的方式打开，&quot;abc.txt&quot;文件 */</span>
+</span><span id="__span-3-4"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">NULL</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">fp</span><span class="p">)</span><span class="w"> </span><span class="cm">/* 打开失败 */</span>
+</span><span id="__span-3-5"><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-3-6"><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;错误！&quot;</span><span class="p">);</span>
+</span><span id="__span-3-7"><span class="w">        </span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="cm">/* 中止程序 */</span>
+</span><span id="__span-3-8"><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-3-9"><span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Hello world</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">//向文件中写入Hello world.</span>
+</span><span id="__span-3-10"><span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">);</span><span class="w"> </span><span class="c1">//向文件中写入a.</span>
+</span><span id="__span-3-11"><span class="w">    </span><span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span><span class="w"> </span><span class="cm">/* 关闭文件 */</span>
+</span><span id="__span-3-12"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="fsanf">fsanf 函数<a class="headerlink" href="#fsanf" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p>头文件：stdio.h</p>
+</li>
+<li>
+<p>原型： int fscanf(FILE <em>stream, char </em>format[,argument…]);</p>
+</li>
+<li>
+<p>作用： 从一个流中执行格式化输入，fscanf 遇到空格和换行时结束，注意空格时也结束。这与 fgets 有区别，fgets 遇到空格不结束。<strong>（和 sanf 类似不过多了第一个参数用来找文件，scanf 需要我们从键盘输入，fscanf 文件里面的内容相当于我们键盘输入的内容）</strong></p>
+</li>
+<li>
+<p>返回值：整型，成功返回读入的参数的个数，失败返回 EOF(-1)。</p>
+</li>
+<li>
+<p>运用</p>
+</li>
+</ul>
+<div class="language-C highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">C</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><span class="c1">//文件abc.txt里面是 10</span>
+</span><span id="__span-4-2"><span class="w">    </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">fp</span><span class="p">;</span>
+</span><span id="__span-4-3"><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="p">;</span>
+</span><span id="__span-4-4"><span class="w">    </span><span class="n">fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="s">&quot;abc.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;r+&quot;</span><span class="p">);</span><span class="cm">/* 以读/写的方式打开，&quot;abc.txt&quot;文件 */</span>
+</span><span id="__span-4-5"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">NULL</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">fp</span><span class="p">)</span><span class="w"> </span><span class="cm">/* 打开失败 */</span>
+</span><span id="__span-4-6"><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-4-7"><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;错误！&quot;</span><span class="p">);</span>
+</span><span id="__span-4-8"><span class="w">        </span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="cm">/* 中止程序 */</span>
+</span><span id="__span-4-9"><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-4-10"><span class="w">    </span><span class="n">fscanf</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">a</span><span class="p">);</span><span class="w">       </span><span class="c1">//从文件中读出一个整型</span>
+</span><span id="__span-4-11"><span class="w">    </span><span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span><span class="w"> </span><span class="cm">/* 关闭文件 */</span>
+</span><span id="__span-4-12"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="feof">feof 函数<a class="headerlink" href="#feof" title="Permanent link">&para;</a></h2>
+<ul>
+<li>头文件：stdio.h</li>
+<li>原型： int feof(FILE *stream);</li>
+<li>参数： 指向 FILE 对象的指针。</li>
+<li>作用： 判断是否到达文件末尾</li>
+<li>返回值：如果文件结束，则返回非 0 值，否则返回 0，</li>
+</ul>
+<div class="language-C highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">C</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-5-1"><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">fp</span><span class="p">;</span>
+</span><span id="__span-5-2"><span class="w">    </span><span class="n">fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="s">&quot;abc.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="p">);</span><span class="c1">//打开文件</span>
+</span><span id="__span-5-3"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">NULL</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">fp</span><span class="p">)</span><span class="w"> </span><span class="cm">/* 打开失败 */</span>
+</span><span id="__span-5-4"><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-5-5"><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;错误！&quot;</span><span class="p">);</span>
+</span><span id="__span-5-6"><span class="w">        </span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="cm">/* 中止程序 */</span>
+</span><span id="__span-5-7"><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-5-8"><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">feof</span><span class="p">(</span><span class="n">fp</span><span class="p">))</span><span class="w"> </span><span class="c1">//判断是否到达文件末尾</span>
+</span><span id="__span-5-9"><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;We have reached the end of file</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span id="__span-5-10"><span class="w">      </span><span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+</span><span id="__span-5-11"><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span></code></pre></div></td></tr></table></div>
+<blockquote>
+<p>以下是对 <strong>feof函数</strong> 的详解</p>
+</blockquote>
+<p><strong>一、feof()是什么？</strong>
+feof()是检测流上的文件结束符的函数，如果文件结束，则返回非0值，否则返回0</p>
+<p>一般在文件操作，中经常使用feof()判断文件是否结束。</p>
+<p><strong>二、feof()的经典错误</strong>
+根据这个函数的定义，一般大家都是这样使用的，但是这样使用，文件中无论是否有内容，都会被判断为“文件不为空”。</p>
+<div class="language-c highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">C</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-6-1"><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span>
+</span><span id="__span-6-2"><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span><span id="__span-6-3"><span class="p">{</span>
+</span><span id="__span-6-4"><span class="w">    </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="p">;</span>
+</span><span id="__span-6-5"><span class="w">    </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="s">&quot;open.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="p">);</span>
+</span><span id="__span-6-6"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">feof</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+</span><span id="__span-6-7"><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-6-8"><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;文件为空。&quot;</span><span class="p">);</span>
+</span><span id="__span-6-9"><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-6-10"><span class="w">    </span><span class="k">else</span>
+</span><span id="__span-6-11"><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-6-12"><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;文件不为空。&quot;</span><span class="p">);</span>
+</span><span id="__span-6-13"><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-6-14"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-6-15"><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<p><strong>三、feof()的原理</strong></p>
+<p><strong>1.EOF</strong>
+EOF是一个计算机术语，为End Of File的缩写，在操作系统中表示资料源无更多的资料可读取。资料源通常称为档案或串流。通常在文本的最后存在此字符表示资料结束。</p>
+<p>这个定义的意思是，文档的结尾都有一个隐藏字符”EOF”，当程序读取它的时候，就会知道文件已经到达结尾。通常使用while循环加EOF判断作为读取结束的标志。</p>
+<p>EOF 的值通常为 -1，但它依系统有所不同。</p>
+<p><strong>2.feof()</strong>
+feof() 函数，并不是通过读取到文件的EOF来评判，这个文件是否为空。
+对 feof() 来说,它的工作原理是，站在光标所在位置，向后看看还有没有字符。如果有，返回0；如果没有，返回非0。它并不会读取相关信息，只是查看光标后是否还有内容。</p>
+<p><strong>四、直接使用时的错误分析：</strong>
+对于一个空文件来说，当程序打开它的时候，它的光标会停在文件的开头，但是由于文件里什么内容都没有存（但是EOF是存在的），即整个文件就存贮了一个EOF。当程序打开文件，并直接调用 feof() 时，这个函数就会站在光标的位置向后张望，结果就看见了EOF，然后就当然返回0了。</p>
+<p><strong>五、如何正确使用</strong>
+既然我们明白了原理，那么如何正确的使用它呢？</p>
+<div class="language-C highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">C</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-7-1"><span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span>
+</span><span id="__span-7-2"><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span><span id="__span-7-3"><span class="p">{</span>
+</span><span id="__span-7-4"><span class="w">    </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="p">;</span>
+</span><span id="__span-7-5"><span class="w">    </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="s">&quot;open.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="p">);</span>
+</span><span id="__span-7-6"><span class="w">    </span><span class="n">getc</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+</span><span id="__span-7-7"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">feof</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+</span><span id="__span-7-8"><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-7-9"><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;文件为空。&quot;</span><span class="p">);</span>
+</span><span id="__span-7-10"><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-7-11"><span class="w">    </span><span class="k">else</span>
+</span><span id="__span-7-12"><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-7-13"><span class="w">        </span><span class="n">rewind</span><span class="p">(</span><span class="n">p</span><span class="p">);</span><span class="c1">//将光标跳回到文件开头</span>
+</span><span id="__span-7-14"><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
+</span><span id="__span-7-15"><span class="w">        </span><span class="n">fscanf</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">a</span><span class="p">);</span>
+</span><span id="__span-7-16"><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">);</span>
+</span><span id="__span-7-17"><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-7-18"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-7-19"><span class="w"> </span><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<p>对于文件来说，无论是空文件，还是存有信息的文件，当文件被打开，光标处于默认的开头时，光标后都有信息，这时候调用 feof() 来查看光标后是否还有内容，就没意义。
+所以我们需要从相同中找不同，先使用 getc() ,从文件中读取一个字符，让光标向后移动一个字符。这时空文件的光标就已经移动到EOF的后面，这时使用 feof() 就会返回1了。这才是 feof() 的正确用法。
+但是要注意，一定要将光标回到文件的开头，因为之前判断文件是否为空时，将光标向前移动了一位，必须要将光标恢复到开头，这样才能保证文件的正常读取。</p>
+<h2 id="fgetc">fgetc 函数<a class="headerlink" href="#fgetc" title="Permanent link">&para;</a></h2>
+<ul>
+<li>头文件：stdio.h</li>
+<li>原型： int fgetc(FILE *stream)</li>
+<li>参数： 指向 FILE 对象的指针。</li>
+<li>作用： 从文件指针 stream 指向的文件中读取一个字符，读取一个字节后，光标位置后移一个字节。</li>
+<li>返回值：该字符对应的 ascll 码。如果读到文件末尾或者读取出错时返回 EOF</li>
+</ul>
+<div class="language-C highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">C</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-8-1"><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">fp</span><span class="p">;</span>
+</span><span id="__span-8-2"><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ch</span><span class="p">;</span>
+</span><span id="__span-8-3"><span class="w">    </span><span class="n">fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="s">&quot;abc.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="p">);</span><span class="c1">//打开文件</span>
+</span><span id="__span-8-4"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">NULL</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">fp</span><span class="p">)</span><span class="w"> </span><span class="cm">/* 打开失败 */</span>
+</span><span id="__span-8-5"><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-8-6"><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;错误！&quot;</span><span class="p">);</span>
+</span><span id="__span-8-7"><span class="w">        </span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="cm">/* 中止程序 */</span>
+</span><span id="__span-8-8"><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-8-9"><span class="w">    </span><span class="n">ch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fgetc</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span><span class="w"> </span><span class="c1">//将第一个字符读取出来，对应ascll赋值给ch</span>
+</span><span id="__span-8-10"><span class="w">    </span><span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+</span><span id="__span-8-11"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="fputc">fputc 函数<a class="headerlink" href="#fputc" title="Permanent link">&para;</a></h2>
+<ul>
+<li>头文件：stdio.h</li>
+<li>原型： int fputs(const char *s，FILE * stream)</li>
+<li>参数：<ul>
+<li>stream: 指向 FILE 对象的指针。</li>
+<li>s: 写入文件的字符</li>
+</ul>
+</li>
+<li>作用： 向文件中写入一个字符或一个字节的数据，文件内部写指针会自动后移一个字节的位置。</li>
+<li>返回值：返回写入文件的字符的 ASCII 码值，出错时，返回 EOF</li>
+</ul>
+<div class="language-C highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">C</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-9-1"><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">fp</span><span class="p">;</span>
+</span><span id="__span-9-2"><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ch</span><span class="p">;</span>
+</span><span id="__span-9-3"><span class="w">    </span><span class="n">fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="s">&quot;abc.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="p">);</span><span class="c1">//打开文件</span>
+</span><span id="__span-9-4"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">NULL</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">fp</span><span class="p">)</span><span class="w"> </span><span class="cm">/* 打开失败 */</span>
+</span><span id="__span-9-5"><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-9-6"><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;错误！&quot;</span><span class="p">);</span>
+</span><span id="__span-9-7"><span class="w">        </span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="cm">/* 中止程序 */</span>
+</span><span id="__span-9-8"><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-9-9"><span class="w">    </span><span class="n">fputc</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span><span class="n">fp</span><span class="p">);</span><span class="c1">//将ch写入文件</span>
+</span><span id="__span-9-10"><span class="w">    </span><span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+</span><span id="__span-9-11"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="fwrite">fwrite 函数<a class="headerlink" href="#fwrite" title="Permanent link">&para;</a></h2>
+<ul>
+<li>头文件：stdio.h</li>
+<li>原型： size_t fwrite(const void <em>ptr, size_t size, size_t nmemb, FILE </em>stream)</li>
+<li>作用： 把 ptr 所指向的数组中的数据写入到给定流 stream 中。</li>
+<li>参数：<ul>
+<li>ptr: 这是指向要被写入的元素数组的指针，获取数据地址。</li>
+<li>size: 这是要被写入的每个元素的大小，以字节为单位。</li>
+<li>nmemb: 这是元素的个数，每个元素的大小为 size 字节。</li>
+<li>stream: 这是指向 FILE 对象的指针，该 FILE 对象指定了一个输出流。</li>
+</ul>
+</li>
+<li>返回值：如果成功，该函数返回一个 size_t 对象，表示元素的总数，该对象是一个整型数据类型。如果该数字与 nmemb 参数不同，则会显示一个错误。</li>
+</ul>
+<div class="language-C highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">C</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-10-1"><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+</span><span id="__span-10-2"><span class="p">{</span>
+</span><span id="__span-10-3"><span class="w">    </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">fp</span><span class="p">;</span>
+</span><span id="__span-10-4"><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">msg</span><span class="p">[]</span><span class="o">=</span><span class="s">&quot;this is a test&quot;</span><span class="p">;</span>
+</span><span id="__span-10-5"><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+</span><span id="__span-10-6">
+</span><span id="__span-10-7"><span class="w">    </span><span class="n">fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="s">&quot;abc.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;r+&quot;</span><span class="p">);</span><span class="cm">/* 以读/写的方式打开，&quot;abc.txt&quot;文件 */</span>
+</span><span id="__span-10-8"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">NULL</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">fp</span><span class="p">)</span><span class="w"> </span><span class="cm">/* 打开失败 */</span>
+</span><span id="__span-10-9"><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-10-10"><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;错误！&quot;</span><span class="p">);</span>
+</span><span id="__span-10-11"><span class="w">        </span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="cm">/* 中止程序 */</span>
+</span><span id="__span-10-12"><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-10-13">
+</span><span id="__span-10-14"><span class="w">    </span><span class="n">fwrite</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">strlen</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">fp</span><span class="p">);</span><span class="w"> </span><span class="c1">//将msg写入文件fp中  </span>
+</span><span id="__span-10-15">
+</span><span id="__span-10-16"><span class="w">    </span><span class="n">fseek</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">SEEK_SET</span><span class="p">);</span><span class="c1">//将fp指针移动到文件开头处</span>
+</span><span id="__span-10-17">
+</span><span id="__span-10-18"><span class="w">    </span><span class="n">fread</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">strlen</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">fp</span><span class="p">);</span><span class="c1">//从文件中读取出来strlen(msg)+1个字节东西，放入buf中</span>
+</span><span id="__span-10-19">
+</span><span id="__span-10-20"><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">buf</span><span class="p">);</span>
+</span><span id="__span-10-21">
+</span><span id="__span-10-22"><span class="w">    </span><span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span><span class="w"> </span><span class="cm">/* 关闭文件 */</span>
+</span><span id="__span-10-23"><span class="w">    </span><span class="n">fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"> </span><span class="cm">/* 需要指向空，否则会指向原打开文件地址 */</span>
+</span><span id="__span-10-24">
+</span><span id="__span-10-25"><span class="w">    </span><span class="n">system</span><span class="p">(</span><span class="s">&quot;pause&quot;</span><span class="p">);</span>
+</span><span id="__span-10-26"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-10-27"><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="fread">fread 函数<a class="headerlink" href="#fread" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p>头文件：stdio.h</p>
+</li>
+<li>
+<p>原型： size_t fread( void <em>buffer, size_t size, size_t count, FILE </em>stream );</p>
+</li>
+<li>
+<p>作用： 从给定输入流 stream 读取最多 count 个对象到数组 buffer 中（<strong>相当于对每个对象调用 size 次 fgetc</strong>），把 buffer 当作 unsigned char 数组并顺序保存结果。（也就是从文件中读取内容）</p>
+</li>
+<li>
+<p>注意： fread 不区分文件尾和错误，因此调用者必须用 feof 和 ferror 才能判断发生了什么。</p>
+</li>
+<li>
+<p>参数：</p>
+<ul>
+<li>buffer:<br />
+    指向要读取的数组中首个对象的指针</li>
+<li>size<br />
+    每个对象的大小（单位是字节）</li>
+<li>count<br />
+    要读取的对象个数</li>
+<li>stream<br />
+    输入流</li>
+<li>返回值：返回成功读取的对象个数，若出现错误或到达文件末尾，则可能小于 count。<br />
+若 size 或 count 为零，则 fread 返回零且不进行其他动作。</li>
+</ul>
+</li>
+<li>
+<p>运用</p>
+</li>
+</ul>
+<div class="language-C highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">C</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-11-1"><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+</span><span id="__span-11-2"><span class="p">{</span>
+</span><span id="__span-11-3"><span class="w">    </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">fp</span><span class="p">;</span>
+</span><span id="__span-11-4"><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">msg</span><span class="p">[]</span><span class="o">=</span><span class="s">&quot;this is a test&quot;</span><span class="p">;</span>
+</span><span id="__span-11-5"><span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+</span><span id="__span-11-6">
+</span><span id="__span-11-7"><span class="w">    </span><span class="n">fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="s">&quot;abc.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;r+&quot;</span><span class="p">);</span><span class="cm">/* 以读/写的方式打开，&quot;abc.txt&quot;文件 */</span>
+</span><span id="__span-11-8"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">NULL</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">fp</span><span class="p">)</span><span class="w"> </span><span class="cm">/* 打开失败 */</span>
+</span><span id="__span-11-9"><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-11-10"><span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;错误！&quot;</span><span class="p">);</span>
+</span><span id="__span-11-11"><span class="w">        </span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="cm">/* 中止程序 */</span>
+</span><span id="__span-11-12"><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-11-13">
+</span><span id="__span-11-14"><span class="w">    </span><span class="n">fwrite</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">strlen</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">fp</span><span class="p">);</span><span class="w"> </span><span class="c1">//将msg写入文件fp中  </span>
+</span><span id="__span-11-15">
+</span><span id="__span-11-16"><span class="w">    </span><span class="n">fseek</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">SEEK_SET</span><span class="p">);</span><span class="c1">//将fp指针移动到文件开头处</span>
+</span><span id="__span-11-17">
+</span><span id="__span-11-18"><span class="w">    </span><span class="n">fread</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">strlen</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">fp</span><span class="p">);</span><span class="c1">//从文件中读取出来strlen(msg)+1个字节东西，放入buf中</span>
+</span><span id="__span-11-19">
+</span><span id="__span-11-20"><span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">buf</span><span class="p">);</span>
+</span><span id="__span-11-21">
+</span><span id="__span-11-22"><span class="w">    </span><span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span><span class="w"> </span><span class="cm">/* 关闭文件 */</span>
+</span><span id="__span-11-23"><span class="w">    </span><span class="n">fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"> </span><span class="cm">/* 需要指向空，否则会指向原打开文件地址 */</span>
+</span><span id="__span-11-24">
+</span><span id="__span-11-25"><span class="w">    </span><span class="n">system</span><span class="p">(</span><span class="s">&quot;pause&quot;</span><span class="p">);</span>
+</span><span id="__span-11-26"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-11-27"><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="ftell">ftell 函数<a class="headerlink" href="#ftell" title="Permanent link">&para;</a></h2>
+<ul>
+<li>头文件：stdio.h</li>
+<li>原型： long int ftell(FILE *stream)</li>
+<li>作用： C 库函数 <strong>long int ftell(FILE *stream)</strong> 返回给定流 stream 的当前文件位置。</li>
+<li>
+<p>参数：</p>
+<ul>
+<li>stream<br />
+    这是指向 FILE 对象的指针，该 FILE 对象标识了流。</li>
+<li>返回值：该函数返回位置标识符的当前值。如果发生错误，则返回 -1L，全局变量 errno 被设置为一个正值。</li>
+<li>运用</li>
+</ul>
+</li>
+</ul>
+<div class="language-C highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">C</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-12-1"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+</span><span id="__span-12-2">
+</span><span id="__span-12-3"><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="w"> </span><span class="p">()</span>
+</span><span id="__span-12-4"><span class="p">{</span>
+</span><span id="__span-12-5"><span class="w">   </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">fp</span><span class="p">;</span>
+</span><span id="__span-12-6"><span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="n">len</span><span class="p">;</span>
+</span><span id="__span-12-7">
+</span><span id="__span-12-8"><span class="w">   </span><span class="n">fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="s">&quot;file.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="p">);</span>
+</span><span id="__span-12-9"><span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="w"> </span><span class="n">fp</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="p">)</span><span class="w"> </span>
+</span><span id="__span-12-10"><span class="w">   </span><span class="p">{</span>
+</span><span id="__span-12-11"><span class="w">      </span><span class="n">perror</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;打开文件错误&quot;</span><span class="p">);</span>
+</span><span id="__span-12-12"><span class="w">      </span><span class="k">return</span><span class="p">(</span><span class="mi">-1</span><span class="p">);</span>
+</span><span id="__span-12-13"><span class="w">   </span><span class="p">}</span>
+</span><span id="__span-12-14"><span class="w">   </span><span class="n">fseek</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">SEEK_END</span><span class="p">);</span>
+</span><span id="__span-12-15">
+</span><span id="__span-12-16"><span class="w">   </span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ftell</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+</span><span id="__span-12-17"><span class="w">   </span><span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+</span><span id="__span-12-18">
+</span><span id="__span-12-19"><span class="w">   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;file.txt 的总大小 = %d 字节</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">);</span>
+</span><span id="__span-12-20">
+</span><span id="__span-12-21"><span class="w">   </span><span class="k">return</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span id="__span-12-22"><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="rewind">rewind 函数<a class="headerlink" href="#rewind" title="Permanent link">&para;</a></h2>
+<ul>
+<li>头文件：stdio.h</li>
+<li>原型： void rewind(FILE *stream)</li>
+<li>作用： C 库函数 <strong>void rewind(FILE *stream)</strong> 设置文件位置为给定流 <strong>stream</strong> 的文件的开头。</li>
+<li>
+<p>参数：</p>
+<ul>
+<li>stream<br />
+    这是指向 FILE 对象的指针，该 FILE 对象标识了流。</li>
+<li>返回值：该函数不返回任何值。</li>
+<li>运用</li>
+</ul>
+</li>
+</ul>
+<div class="language-C highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">C</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-13-1"><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+</span><span id="__span-13-2">
+</span><span id="__span-13-3"><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+</span><span id="__span-13-4"><span class="p">{</span>
+</span><span id="__span-13-5"><span class="w">   </span><span class="kt">char</span><span class="w"> </span><span class="n">str</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;This is runoob.com&quot;</span><span class="p">;</span>
+</span><span id="__span-13-6"><span class="w">   </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">fp</span><span class="p">;</span>
+</span><span id="__span-13-7"><span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="n">ch</span><span class="p">;</span>
+</span><span id="__span-13-8">
+</span><span id="__span-13-9"><span class="w">   </span><span class="cm">/* 首先让我们在文件中写入一些内容 */</span>
+</span><span id="__span-13-10"><span class="w">   </span><span class="n">fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;file.txt&quot;</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="s">&quot;w&quot;</span><span class="w"> </span><span class="p">);</span>
+</span><span id="__span-13-11"><span class="w">   </span><span class="n">fwrite</span><span class="p">(</span><span class="n">str</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">str</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">fp</span><span class="w"> </span><span class="p">);</span>
+</span><span id="__span-13-12"><span class="w">   </span><span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+</span><span id="__span-13-13">
+</span><span id="__span-13-14"><span class="w">   </span><span class="n">fp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;file.txt&quot;</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="w"> </span><span class="p">);</span>
+</span><span id="__span-13-15"><span class="w">   </span><span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-13-16"><span class="w">   </span><span class="p">{</span>
+</span><span id="__span-13-17"><span class="w">      </span><span class="n">ch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fgetc</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+</span><span id="__span-13-18"><span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="w"> </span><span class="n">feof</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span><span class="w"> </span><span class="p">)</span>
+</span><span id="__span-13-19"><span class="w">      </span><span class="p">{</span>
+</span><span id="__span-13-20"><span class="w">          </span><span class="k">break</span><span class="w"> </span><span class="p">;</span>
+</span><span id="__span-13-21"><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-13-22"><span class="w">      </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ch</span><span class="p">);</span>
+</span><span id="__span-13-23"><span class="w">   </span><span class="p">}</span>
+</span><span id="__span-13-24"><span class="w">   </span><span class="n">rewind</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+</span><span id="__span-13-25"><span class="w">   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span id="__span-13-26"><span class="w">   </span><span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-13-27"><span class="w">   </span><span class="p">{</span>
+</span><span id="__span-13-28"><span class="w">      </span><span class="n">ch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fgetc</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+</span><span id="__span-13-29"><span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="w"> </span><span class="n">feof</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span><span class="w"> </span><span class="p">)</span>
+</span><span id="__span-13-30"><span class="w">      </span><span class="p">{</span>
+</span><span id="__span-13-31"><span class="w">          </span><span class="k">break</span><span class="w"> </span><span class="p">;</span>
+</span><span id="__span-13-32"><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-13-33"><span class="w">      </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ch</span><span class="p">);</span>
+</span><span id="__span-13-34">
+</span><span id="__span-13-35"><span class="w">   </span><span class="p">}</span>
+</span><span id="__span-13-36"><span class="w">   </span><span class="n">fclose</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+</span><span id="__span-13-37">
+</span><span id="__span-13-38"><span class="w">   </span><span class="k">return</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span id="__span-13-39"><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      侯霖钰 AnistonH
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/AnistonH" target="_blank" rel="noopener" title="GitHub | AnistonH" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://space.bilibili.com/527117890" target="_blank" rel="noopener" title="Bilibili | 邓紫棋山西分棋" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M488.6 104.1c16.7 18.1 24.4 39.7 23.3 65.7v202.4c-.4 26.4-9.2 48.1-26.5 65.1-17.2 17-39.1 25.9-65.5 26.7H92.02c-26.45-.8-48.21-9.8-65.28-27.2C9.682 419.4.767 396.5 0 368.2V169.8c.767-26 9.682-47.6 26.74-65.7C43.81 87.75 65.57 78.77 92.02 78h29.38L96.05 52.19c-5.75-5.73-8.63-13-8.63-21.79 0-8.8 2.88-16.06 8.63-21.797C101.8 2.868 109.1 0 117.9 0q13.2 0 21.9 8.603L213.1 78h88l74.5-69.397C381.7 2.868 389.2 0 398 0q13.2 0 21.9 8.603c5.7 5.737 8.6 12.997 8.6 21.797 0 8.79-2.9 16.06-8.6 21.79L394.6 78h29.3c26.4.77 48 9.75 64.7 26.1m-38.8 69.7c-.4-9.6-3.7-17.4-10.7-23.5-5.2-6.1-14-9.4-22.7-9.8H96.05c-9.59.4-17.45 3.7-23.58 9.8-6.14 6.1-9.4 13.9-9.78 23.5v194.4c0 9.2 3.26 17 9.78 23.5s14.38 9.8 23.58 9.8H416.4c9.2 0 17-3.3 23.3-9.8s9.7-14.3 10.1-23.5zm-264.3 42.7c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.2 6.3-14 9.5-23.6 9.5s-17.5-3.2-23.6-9.5-9.4-14-9.8-23.2v-33.3c.4-9.1 3.8-16.9 10.1-23.2s13.2-9.6 23.3-10c9.2.4 17 3.7 23.3 10m191.5 0c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2s-14 9.5-23.6 9.5-17.4-3.2-23.6-9.5c-7-6.3-9.4-14-9.7-23.2v-33.3c.3-9.1 3.7-16.9 10-23.2s14.1-9.6 23.3-10c9.2.4 17 3.7 23.3 10"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://AnistonH.github.io/ME/support/" target="_blank" rel="noopener" title="打赏支持" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M96 64c0-17.7 14.3-32 32-32h384c70.7 0 128 57.3 128 128s-57.3 128-128 128h-32c0 53-43 96-96 96H192c-53 0-96-43-96-96zm384 160h32c35.3 0 64-28.7 64-64s-28.7-64-64-64h-32zM32 416h512c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.sections", "navigation.prefetch", "navigation.instant.prefetch", "navigation.progress", "navigation.instant.progress", "navigation.path", "navigation.tabs", "navigation.top", "navigation.indexes", "navigation.expand", "search.suggest", "search.highlight", "content.code.copy", "content.action.view"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.56dfad97.min.js"></script>
+      
+        <script src="../../../mkdocs/javascripts/katex.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>

